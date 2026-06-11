@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentria Consulting — Tecnología que trabaja para tu pyme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --papel:#FBFAF6;
+  --tinta:#19233B;
+  --tinta-suave:#5A6378;
+  --verde-fiscal:#1F7A57;
+  --verde-claro:#E3F1EA;
+  --teal:#4D9B8F;
+  --lima:#8AB83D;
+  --sello:#C8442C;
+  --linea:#E3E0D6;
+  --blanco:#FFFFFF;
+  --radio:14px;
+  --sombra:0 10px 30px rgba(25,35,59,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  background:var(--papel);
+  color:var(--tinta);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Sora',sans-serif;line-height:1.15}
+.mono{font-family:'IBM Plex Mono',monospace}
+.contenedor{max-width:1120px;margin:0 auto;padding:0 24px}
+a{color:inherit}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--verde-fiscal);outline-offset:2px;border-radius:4px}
+
+/* ---------- LOGO ---------- */
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo svg{display:block}
+.logo-texto{display:flex;flex-direction:column;line-height:1}
+.logo-texto .nombre{font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;color:var(--tinta);letter-spacing:-.01em}
+.logo-texto .sub{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.34em;color:var(--teal);text-transform:uppercase;margin-top:3px}
+
+/* ---------- NAV ---------- */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(251,250,246,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--linea);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.nav-links{display:flex;align-items:center;gap:26px;list-style:none}
+.nav-links a{text-decoration:none;font-size:.95rem;color:var(--tinta-suave);font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--tinta)}
+.btn{
+  border:none;border-radius:10px;padding:11px 22px;font-weight:600;font-size:.95rem;
+  transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primario{background:var(--verde-fiscal);color:#fff;box-shadow:0 4px 14px rgba(31,122,87,.3)}
+.btn-fantasma{background:transparent;color:var(--tinta);border:1.5px solid var(--linea)}
+.btn-fantasma:hover{border-color:var(--tinta)}
+.menu-burger{display:none;background:none;border:none;font-size:1.6rem;color:var(--tinta)}
+
+/* ---------- HERO ---------- */
+.hero{padding:80px 0 90px;display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--verde-claro);color:var(--verde-fiscal);
+  font-size:.8rem;font-weight:600;padding:6px 14px;border-radius:99px;
+  letter-spacing:.04em;text-transform:uppercase;margin-bottom:22px;
+}
+.hero h1{font-size:clamp(2.2rem,4.5vw,3.3rem);font-weight:800;margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--verde-fiscal);position:relative;white-space:nowrap}
+.hero h1 em::after{
+  content:'';position:absolute;left:0;right:0;bottom:4px;height:10px;
+  background:var(--verde-claro);z-index:-1;border-radius:3px;
+}
+.hero p{font-size:1.12rem;color:var(--tinta-suave);max-width:500px;margin-bottom:32px}
+.hero-acciones{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px}
+.btn-grande{padding:15px 30px;font-size:1.02rem;border-radius:12px}
+.hero-datos{display:flex;gap:36px}
+.dato .num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1.5rem;color:var(--tinta)}
+.dato .lbl{font-size:.85rem;color:var(--tinta-suave);max-width:160px}
+
+/* Tarjeta animada del hero: una automatización en marcha */
+.flujo-wrap{position:relative;display:flex;justify-content:center}
+.flujo{
+  background:var(--blanco);width:100%;max-width:420px;
+  border-radius:6px;box-shadow:var(--sombra);
+  padding:30px 28px 40px;position:relative;
+  border-top:6px solid var(--verde-fiscal);
+}
+.flujo::after{
+  content:'';position:absolute;left:0;right:0;bottom:-10px;height:10px;
+  background:radial-gradient(circle at 10px -4px, transparent 12px, var(--blanco) 13px);
+  background-size:22px 20px;background-position:bottom;
+}
+.flujo-cab{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.flujo-cab .tit{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.85rem;letter-spacing:.08em}
+.flujo-cab .ia-chip{
+  font-size:.7rem;font-weight:600;background:var(--verde-claro);color:var(--verde-fiscal);
+  padding:4px 10px;border-radius:99px;display:flex;align-items:center;gap:5px;
+}
+.punto-ia{width:7px;height:7px;border-radius:50%;background:var(--verde-fiscal);animation:pulso 1.4s infinite}
+@keyframes pulso{0%,100%{opacity:1}50%{opacity:.3}}
+.flujo-linea{
+  display:flex;justify-content:space-between;gap:14px;font-size:.86rem;
+  padding:9px 0;border-bottom:1px dashed var(--linea);
+  font-family:'IBM Plex Mono',monospace;
+}
+.flujo-linea .campo{color:var(--tinta-suave);flex-shrink:0}
+.flujo-linea .valor{font-weight:500;min-height:1.3em;text-align:right}
+.cursor-escritura{display:inline-block;width:8px;height:1.05em;background:var(--verde-fiscal);vertical-align:text-bottom;animation:parpadeo .8s infinite}
+@keyframes parpadeo{0%,49%{opacity:1}50%,100%{opacity:0}}
+.flujo-total{display:flex;justify-content:space-between;padding-top:16px;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1rem}
+.sello-ok{
+  position:absolute;right:18px;bottom:34px;
+  border:3px solid var(--sello);color:var(--sello);
+  font-family:'Sora',sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.1em;
+  padding:7px 16px;border-radius:6px;transform:rotate(-9deg) scale(0);
+  opacity:0;text-transform:uppercase;
+}
+.sello-ok.visible{animation:estampar .45s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes estampar{
+  0%{transform:rotate(-9deg) scale(2.4);opacity:0}
+  100%{transform:rotate(-9deg) scale(1);opacity:.9}
+}
+
+/* ---------- SECCIONES ---------- */
+section{padding:84px 0}
+.sec-cab{max-width:640px;margin:0 auto 56px;text-align:center}
+.sec-cab .eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.8rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--verde-fiscal);font-weight:600;display:block;margin-bottom:12px;
+}
+.sec-cab h2{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:700;margin-bottom:14px}
+.sec-cab p{color:var(--tinta-suave)}
+
+/* Servicios */
+#servicios{background:var(--verde-claro);border-block:1px solid var(--linea)}
+.servicios-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.servicio{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:32px 30px;position:relative;transition:transform .2s, box-shadow .2s}
+.servicio:hover{transform:translateY(-4px);box-shadow:var(--sombra)}
+.servicio h3{font-size:1.15rem;margin:16px 0 10px}
+.servicio p{font-size:.95rem;color:var(--tinta-suave)}
+.servicio .icono-s{
+  width:52px;height:52px;border-radius:12px;background:var(--verde-claro);
+  display:grid;place-items:center;font-size:1.5rem;
+}
+.servicio ul{margin-top:14px;list-style:none;display:flex;flex-direction:column;gap:7px}
+.servicio ul li{font-size:.88rem;color:var(--tinta-suave);display:flex;gap:9px;align-items:baseline}
+.servicio ul li::before{content:'✓';color:var(--verde-fiscal);font-weight:700;flex-shrink:0}
+
+/* Cómo trabajamos */
+#como-trabajamos{background:var(--blanco);border-bottom:1px solid var(--linea)}
+.pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.paso{
+  background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+  padding:30px 26px;transition:transform .2s, box-shadow .2s;
+}
+.paso:hover{transform:translateY(-4px);box-shadow:var(--sombra)}
+.paso .num{
+  font-family:'IBM Plex Mono',monospace;font-size:.8rem;font-weight:600;
+  color:var(--verde-fiscal);background:var(--verde-claro);
+  padding:5px 11px;border-radius:99px;display:inline-block;margin-bottom:18px;
+}
+.paso h3{font-size:1.15rem;margin-bottom:10px}
+.paso p{font-size:.95rem;color:var(--tinta-suave)}
+.compromiso{
+  margin-top:46px;background:var(--verde-claro);border:1px solid var(--linea);
+  border-radius:var(--radio);padding:26px 30px;display:flex;gap:18px;align-items:flex-start;
+}
+.compromiso .icono{font-size:1.6rem}
+.compromiso strong{display:block;margin-bottom:4px;font-family:'Sora',sans-serif}
+.compromiso p{font-size:.95rem;color:var(--tinta-suave)}
+
+/* Aplicaciones */
+.apps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.app-card{
+  background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
+  padding:26px 24px;transition:transform .2s, box-shadow .2s;
+}
+.app-card:hover{transform:translateY(-4px);box-shadow:var(--sombra)}
+.app-card .icono-f{font-size:1.7rem}
+.app-card h3{font-size:1.02rem;margin:12px 0 8px}
+.app-card p{font-size:.88rem;color:var(--tinta-suave)}
+.apps-cta{text-align:center;margin-top:40px}
+.apps-cta p{color:var(--tinta-suave);font-size:.95rem;margin-bottom:16px}
+
+/* Opiniones */
+.opiniones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.opinion{
+  background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
+  padding:28px 26px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--sombra);
+}
+.estrellas{color:#E8A33D;letter-spacing:2px;font-size:1rem}
+.opinion blockquote{font-size:.98rem;color:var(--tinta);flex:1}
+.opinion-autor{display:flex;align-items:center;gap:12px}
+.avatar{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  font-family:'Sora',sans-serif;font-weight:700;color:#fff;font-size:.95rem;flex-shrink:0;
+}
+.opinion-autor .nombre{font-weight:600;font-size:.93rem}
+.opinion-autor .rol{font-size:.82rem;color:var(--tinta-suave)}
+
+/* Contacto / diagnóstico */
+#contacto{background:var(--tinta);color:var(--papel)}
+#contacto .sec-cab h2{color:#fff}
+#contacto .sec-cab p{color:#A8B0C2}
+#contacto .sec-cab .eyebrow{color:#6FCBA0}
+.form-card{
+  max-width:560px;margin:0 auto;background:var(--blanco);color:var(--tinta);
+  border-radius:var(--radio);padding:40px 38px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+.campo-grupo{margin-bottom:20px}
+.fila-doble{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;font-size:.88rem;font-weight:600;margin-bottom:7px}
+input,select,textarea{
+  width:100%;padding:12px 14px;border:1.5px solid var(--linea);border-radius:10px;
+  font-family:inherit;font-size:.95rem;background:var(--papel);color:var(--tinta);
+  transition:border-color .2s;
+}
+textarea{resize:vertical;min-height:96px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--verde-fiscal);background:#fff}
+.error-msg{color:var(--sello);font-size:.8rem;margin-top:5px;display:none}
+.campo-grupo.con-error input,.campo-grupo.con-error select{border-color:var(--sello)}
+.campo-grupo.con-error .error-msg{display:block}
+.check-linea{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:var(--tinta-suave)}
+.check-linea input{width:auto;margin-top:3px}
+.btn-bloque{width:100%;margin-top:8px}
+.exito{display:none;text-align:center;padding:30px 10px}
+.exito.visible{display:block}
+.exito .icono{
+  width:64px;height:64px;border-radius:50%;background:var(--verde-claro);
+  display:grid;place-items:center;margin:0 auto 18px;font-size:1.8rem;color:var(--verde-fiscal);
+}
+.exito h3{margin-bottom:8px}
+.exito p{color:var(--tinta-suave);font-size:.95rem}
+
+/* ---------- MODAL ---------- */
+.modal-fondo{
+  position:fixed;inset:0;background:rgba(25,35,59,.55);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+}
+.modal-fondo.abierto{display:flex}
+.modal{
+  background:var(--blanco);border-radius:18px;width:100%;max-width:430px;
+  padding:36px 34px;position:relative;animation:subir .25s ease;
+}
+@keyframes subir{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.cerrar-modal{
+  position:absolute;top:16px;right:16px;background:none;border:none;
+  font-size:1.4rem;color:var(--tinta-suave);line-height:1;padding:6px;
+}
+.tabs{display:flex;background:var(--papel);border-radius:10px;padding:5px;margin-bottom:26px;border:1px solid var(--linea)}
+.tab{
+  flex:1;border:none;background:transparent;padding:10px;border-radius:8px;
+  font-weight:600;font-size:.92rem;color:var(--tinta-suave);transition:all .2s;
+}
+.tab.activo{background:var(--blanco);color:var(--tinta);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.panel{display:none}
+.panel.activo{display:block}
+.aviso-modal{font-size:.85rem;padding:11px 14px;border-radius:9px;margin-bottom:16px;display:none}
+.aviso-modal.error{display:block;background:#FBEAE5;color:var(--sello)}
+.aviso-modal.ok{display:block;background:var(--verde-claro);color:var(--verde-fiscal)}
+.olvido{display:block;text-align:right;font-size:.83rem;color:var(--verde-fiscal);text-decoration:none;margin:-10px 0 18px}
+.olvido:hover{text-decoration:underline}
+
+/* ---------- FOOTER ---------- */
+footer{border-top:1px solid var(--linea);padding:40px 0;background:var(--blanco)}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer p{font-size:.88rem;color:var(--tinta-suave)}
+.footer-links{display:flex;gap:22px;list-style:none}
+.footer-links a{font-size:.88rem;color:var(--tinta-suave);text-decoration:none}
+.footer-links a:hover{color:var(--tinta)}
+
+/* ---------- ANIMACIÓN SCROLL ---------- */
+.revelar{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease}
+.revelar.visto{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  .revelar{opacity:1;transform:none}
+}
+
+/* ---------- APP / PANEL PRIVADO ---------- */
+.app{position:fixed;inset:0;background:var(--papel);z-index:60;display:none;flex-direction:column}
+.app.abierta{display:flex}
+.app-top{background:var(--blanco);border-bottom:1px solid var(--linea)}
+.app-top-inner{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:16px;flex-wrap:wrap;padding-block:8px}
+.app-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.app-tab{border:none;background:transparent;padding:9px 16px;border-radius:9px;font-weight:600;font-size:.92rem;color:var(--tinta-suave);transition:all .15s}
+.app-tab.activo{background:var(--verde-claro);color:var(--verde-fiscal)}
+.app-user{display:flex;align-items:center;gap:12px;font-size:.9rem;color:var(--tinta-suave)}
+.app-user strong{color:var(--tinta)}
+.app-cuerpo{flex:1;overflow-y:auto;padding:34px 0 70px}
+.app-panel{display:none}
+.app-panel.activo{display:block;animation:subir .25s ease}
+.app-panel>h2{font-size:1.45rem;margin-bottom:6px}
+.app-panel>.sub{color:var(--tinta-suave);font-size:.95rem;margin-bottom:24px}
+.tarjeta{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:26px;box-shadow:var(--sombra)}
+.tarjeta h3{font-size:1.05rem;margin-bottom:16px}
+.grid-app{display:grid;grid-template-columns:340px 1fr;gap:26px;align-items:start}
+.tabla{width:100%;border-collapse:collapse;font-size:.92rem}
+.tabla th{text-align:left;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tinta-suave);padding:10px 12px;border-bottom:2px solid var(--linea)}
+.tabla td{padding:11px 12px;border-bottom:1px solid var(--linea);vertical-align:middle}
+.tabla .num-cel{font-family:'IBM Plex Mono',monospace;text-align:right;white-space:nowrap}
+.btn-mini{background:var(--papel);border:1px solid var(--linea);border-radius:8px;padding:6px 12px;font-size:.82rem;font-weight:600;color:var(--tinta);transition:border-color .15s}
+.btn-mini:hover{border-color:var(--tinta)}
+.btn-mini.peligro{color:var(--sello)}
+.chip{display:inline-block;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.chip.verde{background:var(--verde-claro);color:var(--verde-fiscal)}
+.chip.azul{background:#E6ECF8;color:#3A5BA0}
+.vacio{color:var(--tinta-suave);font-size:.9rem;padding:18px;text-align:center}
+.doc-anadir{display:grid;grid-template-columns:1fr 86px auto;gap:10px;align-items:end;margin-bottom:18px}
+.doc-totales{margin-top:16px;border-top:2px solid var(--linea);padding-top:12px;font-family:'IBM Plex Mono',monospace;font-size:.95rem}
+.doc-totales div{display:flex;justify-content:space-between;padding:4px 0}
+.doc-totales .total-final{font-weight:600;font-size:1.1rem;color:var(--verde-fiscal)}
+.aviso-doc{display:none;font-size:.85rem;background:#FBEAE5;color:var(--sello);padding:10px 14px;border-radius:9px;margin-top:14px}
+#listaClientes{display:flex;flex-direction:column;gap:18px}
+.cliente-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.cliente-nombre{font-family:'Sora',sans-serif;font-weight:700;font-size:1.08rem}
+.cliente-contacto{font-size:.86rem;color:var(--tinta-suave)}
+.cliente-chips{display:flex;gap:8px;flex-wrap:wrap}
+.lista-visitas{list-style:none;display:flex;flex-direction:column;gap:9px;margin:14px 0;border-top:1px dashed var(--linea);padding-top:14px}
+.visita{display:flex;gap:10px;align-items:baseline;font-size:.89rem;flex-wrap:wrap}
+.visita-fecha{font-size:.82rem;color:var(--tinta-suave)}
+.cliente-acciones{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.form-visita{margin-top:14px;background:var(--papel);border:1px dashed var(--linea);border-radius:10px;padding:14px}
+.form-visita-campos{display:grid;grid-template-columns:160px 1fr auto;gap:10px;align-items:center}
+.grid-app.grid-doc{grid-template-columns:1fr 1fr}
+
+/* Lanzador de aplicaciones (pantalla inicial del panel) */
+.lanzador-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}
+.lanzador-card{
+  background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
+  padding:30px 28px;text-align:left;transition:transform .2s, box-shadow .2s, border-color .2s;
+  display:flex;flex-direction:column;gap:10px;cursor:pointer;font-family:inherit;
+}
+.lanzador-card:hover{transform:translateY(-4px);box-shadow:var(--sombra);border-color:var(--verde-fiscal)}
+.lanzador-card .icono{
+  width:54px;height:54px;border-radius:13px;background:var(--verde-claro);
+  display:grid;place-items:center;font-size:1.6rem;
+}
+.lanzador-card h3{font-size:1.08rem}
+.lanzador-card p{font-size:.9rem;color:var(--tinta-suave);flex:1}
+.lanzador-card .abrir{font-size:.88rem;font-weight:600;color:var(--verde-fiscal)}
+.lanzador-aviso{
+  margin-top:34px;background:var(--blanco);border:1px dashed var(--linea);border-radius:var(--radio);
+  padding:20px 24px;font-size:.92rem;color:var(--tinta-suave);display:flex;gap:14px;align-items:flex-start;
+}
+.volver-apps{
+  background:none;border:none;color:var(--verde-fiscal);font-weight:600;font-size:.9rem;
+  display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;padding:0;
+}
+.volver-apps:hover{text-decoration:underline}
+
+@media (max-width:900px){
+  .grid-app,.grid-app.grid-doc{grid-template-columns:1fr}
+  .servicios-grid{grid-template-columns:1fr}
+  .apps-grid{grid-template-columns:repeat(2,1fr)}
+  .lanzador-grid{grid-template-columns:1fr}
+  .doc-anadir,.form-visita-campos{grid-template-columns:1fr}
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:48px;padding:56px 0 70px}
+  .pasos,.opiniones-grid{grid-template-columns:1fr}
+  .nav-links{
+    display:none;position:absolute;top:72px;left:0;right:0;
+    background:var(--blanco);flex-direction:column;padding:20px 24px;gap:18px;
+    border-bottom:1px solid var(--linea);align-items:flex-start;
+  }
+  .nav-links.abierto{display:flex}
+  .menu-burger{display:block}
+  .fila-doble{grid-template-columns:1fr}
+  .form-card{padding:30px 24px}
+}
+@media (max-width:560px){
+  .apps-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="contenedor nav-inner">
+    <a href="#" class="logo" aria-label="Sentria Consulting, inicio">
+      <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M46 14C40 7 28 5 20 11c-8 6-9 17-3 24 2.4 2.8 5.6 4.6 9 5.2-4-3.4-5.4-9.2-3-14 2.6-5.2 8.8-7.6 14.2-5.6L46 14Z" fill="#19233B"/>
+        <path d="M37.2 20.6c-5.4-2-11.6.4-14.2 5.6-2.4 4.8-1 10.6 3 14 1.6.3 3.3.3 5 0 5-1 9-4.8 10.3-9.6l-4.1-10Z" fill="#4D9B8F"/>
+        <path d="M18 50c6 7 18 9 26 3 8-6 9-17 3-24-2.4-2.8-5.6-4.6-9-5.2 4 3.4 5.4 9.2 3 14-2.6 5.2-8.8 7.6-14.2 5.6L18 50Z" fill="#8AB83D"/>
+      </svg>
+      <span class="logo-texto">
+        <span class="nombre">Sentria</span>
+        <span class="sub">Consulting</span>
+      </span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#como-trabajamos">Cómo trabajamos</a></li>
+      <li><a href="#aplicaciones">Aplicaciones</a></li>
+      <li><a href="#opiniones">Clientes</a></li>
+      <li><button class="btn btn-fantasma" onclick="abrirModal('login')">Área de clientes</button></li>
+      <li><button class="btn btn-primario" onclick="document.getElementById('contacto').scrollIntoView()">Pide tu diagnóstico</button></li>
+    </ul>
+    <button class="menu-burger" id="burger" aria-label="Abrir menú">☰</button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="contenedor hero">
+  <div>
+    <span class="hero-eyebrow">✦ Consultoría tecnológica para pymes</span>
+    <h1>La tecnología que las grandes empresas ya usan, <em>a tu medida</em>.</h1>
+    <p>En Sentria ayudamos a pequeñas empresas a recuperar horas cada semana: integramos IA en tu flujo de trabajo, chatbots de WhatsApp conectados a tu correo, cuadros de mando con Power BI y automatizaciones con Office. Mejoras concretas, <strong>sin cambiarte el ERP</strong> ni poner tu negocio patas arriba.</p>
+    <div class="hero-acciones">
+      <button class="btn btn-primario btn-grande" onclick="document.getElementById('contacto').scrollIntoView()">Solicita un diagnóstico gratuito</button>
+      <a href="#servicios" class="btn btn-fantasma btn-grande" style="text-decoration:none;display:inline-flex;align-items:center">Ver servicios ↓</a>
+    </div>
+    <div class="hero-datos">
+      <div class="dato"><div class="num" data-contador="40">0</div><div class="lbl">pymes acompañadas</div></div>
+      <div class="dato"><div class="num" data-contador="12">0</div><div class="lbl">horas ahorradas de media al mes</div></div>
+      <div class="dato"><div class="num" data-contador="0">0</div><div class="lbl">cambios de ERP necesarios</div></div>
+    </div>
+  </div>
+
+  <!-- Elemento firma: una automatización resolviéndose en directo -->
+  <div class="flujo-wrap">
+    <div class="flujo" aria-hidden="true">
+      <div class="flujo-cab">
+        <div>
+          <div class="tit">AUTOMATIZACIÓN #038</div>
+          <div class="mono" style="font-size:.75rem;color:var(--tinta-suave)">en directo · sin intervención humana</div>
+        </div>
+        <div class="ia-chip"><span class="punto-ia"></span> IA trabajando…</div>
+      </div>
+      <div class="flujo-linea"><span class="campo">Canal</span><span class="valor" id="fl-canal"></span></div>
+      <div class="flujo-linea"><span class="campo">Cliente</span><span class="valor" id="fl-cliente"></span></div>
+      <div class="flujo-linea"><span class="campo">Consulta</span><span class="valor" id="fl-consulta"></span></div>
+      <div class="flujo-linea"><span class="campo">Respuesta</span><span class="valor" id="fl-respuesta"></span></div>
+      <div class="flujo-linea"><span class="campo">Aviso interno</span><span class="valor" id="fl-aviso"></span></div>
+      <div class="flujo-total"><span>TIEMPO TOTAL</span><span id="fl-tiempo"></span></div>
+      <div class="sello-ok" id="sello">Resuelto</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ SERVICIOS ============ -->
+<section id="servicios">
+  <div class="contenedor">
+    <div class="sec-cab revelar">
+      <span class="eyebrow">Servicios</span>
+      <h2>Mejoras que se notan desde el primer mes</h2>
+      <p>No vendemos proyectos faraónicos. Detectamos las tareas que te roban tiempo por pura rutina y las automatizamos con las herramientas que ya tienes o con soluciones ligeras que se integran en ellas.</p>
+    </div>
+    <div class="servicios-grid">
+      <article class="servicio revelar">
+        <div class="icono-s">🤖</div>
+        <h3>IA integrada en tu flujo de trabajo</h3>
+        <p>Adaptamos modelos de inteligencia artificial a tus procesos reales: clasificar correos, extraer datos de documentos, redactar respuestas o preparar resúmenes. La IA se adapta a cómo trabajas tú, no al revés.</p>
+        <ul>
+          <li>Lectura y clasificación automática de documentos</li>
+          <li>Asistentes internos entrenados con tu información</li>
+          <li>Integración con las herramientas que ya usas</li>
+        </ul>
+      </article>
+      <article class="servicio revelar">
+        <div class="icono-s">💬</div>
+        <h3>Chatbots de WhatsApp conectados a tu correo</h3>
+        <p>Tu negocio responde aunque tú estés en una obra, en consulta o atendiendo el mostrador. Un chatbot en WhatsApp resuelve las preguntas frecuentes y deriva lo importante a tu correo, con todo el contexto.</p>
+        <ul>
+          <li>Atención 24/7 por WhatsApp Business</li>
+          <li>Derivación automática al correo con resumen incluido</li>
+          <li>Citas, pedidos y consultas sin perder ninguna</li>
+        </ul>
+      </article>
+      <article class="servicio revelar">
+        <div class="icono-s">📊</div>
+        <h3>Data analytics con Power BI</h3>
+        <p>Tus datos ya existen: en facturas, Excel y tu programa de gestión. Los convertimos en cuadros de mando con Power BI para que veas ventas, márgenes y clientes de un vistazo y decidas con números, no con intuición.</p>
+        <ul>
+          <li>Cuadros de mando a medida de tu negocio</li>
+          <li>Conexión con tus Excel y sistemas actuales</li>
+          <li>Informes automáticos cada semana o cada mes</li>
+        </ul>
+      </article>
+      <article class="servicio revelar">
+        <div class="icono-s">⚙️</div>
+        <h3>Automatización de flujos con Office</h3>
+        <p>Eliminamos el «copiar y pegar» entre Excel, Outlook y carpetas compartidas. Con Microsoft 365 y Power Automate, los datos viajan solos: recordatorios, aprobaciones, plantillas y archivado sin tocar nada.</p>
+        <ul>
+          <li>Flujos con Power Automate, Excel y Outlook</li>
+          <li>Plantillas y documentos que se rellenan solos</li>
+          <li>Avisos y recordatorios automáticos al equipo</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CÓMO TRABAJAMOS ============ -->
+<section id="como-trabajamos">
+  <div class="contenedor">
+    <div class="sec-cab revelar">
+      <span class="eyebrow">Cómo trabajamos</span>
+      <h2>Mejoramos lo que tienes, no te cambiamos el ERP</h2>
+      <p>Sabemos que una pyme no puede parar dos meses para «transformarse digitalmente». Por eso trabajamos por mejoras pequeñas, medibles y acumulativas.</p>
+    </div>
+    <div class="pasos">
+      <article class="paso revelar">
+        <span class="num">PASO 1</span>
+        <h3>🔍 Diagnóstico gratuito</h3>
+        <p>Nos sentamos contigo una hora y repasamos tu día a día: dónde se pierde tiempo, qué se hace a mano y qué se podría delegar a la tecnología. Te entregamos un informe claro con propuestas priorizadas.</p>
+      </article>
+      <article class="paso revelar">
+        <span class="num">PASO 2</span>
+        <h3>🔧 Mejora concreta y acotada</h3>
+        <p>Elegimos juntos una mejora con impacto rápido: un chatbot, un cuadro de mando, una automatización. La implantamos sobre tus herramientas actuales, con presupuesto cerrado y sin interrumpir tu trabajo.</p>
+      </article>
+      <article class="paso revelar">
+        <span class="num">PASO 3</span>
+        <h3>📈 Medición y acompañamiento</h3>
+        <p>Medimos las horas ahorradas y el resultado real. Formamos a tu equipo, ajustamos lo que haga falta y, si quieres seguir, planificamos la siguiente mejora. Tú decides el ritmo.</p>
+      </article>
+    </div>
+    <div class="compromiso revelar">
+      <div class="icono">🤝</div>
+      <div>
+        <strong>Nuestro compromiso: cambios pequeños, resultados grandes</strong>
+        <p>No te pediremos cambiar de programa de gestión ni aprender un sistema nuevo de cero. Si una mejora no encaja en tu rutina, no la implantamos. Así de simple.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APLICACIONES PROPIAS ============ -->
+<section id="aplicaciones">
+  <div class="contenedor">
+    <div class="sec-cab revelar">
+      <span class="eyebrow">Aplicaciones propias</span>
+      <h2>Herramientas que ya hemos construido para negocios como el tuyo</h2>
+      <p>Además de los proyectos a medida, hemos desarrollado aplicaciones propias que nuestros clientes usan a diario para gestionar su negocio. Están incluidas en tu área de clientes al trabajar con nosotros.</p>
+    </div>
+    <div class="apps-grid">
+      <article class="app-card revelar">
+        <div class="icono-f">🧾</div>
+        <h3>Presupuestos y facturas</h3>
+        <p>Crea presupuestos y facturas en segundos a partir de tus productos. Base, IVA y total se calculan solos.</p>
+      </article>
+      <article class="app-card revelar">
+        <div class="icono-f">📦</div>
+        <h3>Catálogo de productos</h3>
+        <p>Da de alta tu material y servicios con precio y unidad. Lo registras una vez y lo reutilizas en cada documento.</p>
+      </article>
+      <article class="app-card revelar">
+        <div class="icono-f">👥</div>
+        <h3>Gestión de clientes</h3>
+        <p>Ficha de cada cliente con datos de contacto e historial completo de visitas y trabajos realizados.</p>
+      </article>
+      <article class="app-card revelar">
+        <div class="icono-f">📅</div>
+        <h3>Agenda de visitas</h3>
+        <p>Agenda la próxima visita desde la ficha del cliente y ten siempre a la vista la siguiente cita pendiente.</p>
+      </article>
+    </div>
+    <div class="apps-cta revelar">
+      <p>¿Ya eres cliente de Sentria? Accede a tus aplicaciones desde el área de clientes.</p>
+      <button class="btn btn-primario btn-grande" onclick="abrirModal('login')">Entrar al área de clientes</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPINIONES ============ -->
+<section id="opiniones" style="background:var(--blanco);border-block:1px solid var(--linea)">
+  <div class="contenedor">
+    <div class="sec-cab revelar">
+      <span class="eyebrow">Clientes</span>
+      <h2>Pequeñas empresas que ya trabajan con menos rutina</h2>
+      <p>Negocios de todos los sectores que han ganado horas cada semana sin cambiar su forma de trabajar.</p>
+    </div>
+    <div class="opiniones-grid" id="opinionesGrid"><!-- renderizado con JS --></div>
+  </div>
+</section>
+
+<!-- ============ CONTACTO / DIAGNÓSTICO ============ -->
+<section id="contacto">
+  <div class="contenedor">
+    <div class="sec-cab revelar">
+      <span class="eyebrow">Empieza hoy</span>
+      <h2>Solicita tu diagnóstico gratuito y sin compromiso</h2>
+      <p>Cuéntanos cómo es tu negocio y te diremos, con honestidad, dónde puedes ahorrar tiempo. Si no podemos ayudarte, también te lo diremos.</p>
+    </div>
+
+    <div class="form-card revelar">
+      <form id="formContacto" novalidate>
+        <div class="fila-doble">
+          <div class="campo-grupo">
+            <label for="con-nombre">Nombre *</label>
+            <input type="text" id="con-nombre" autocomplete="given-name" placeholder="María">
+            <p class="error-msg">Escribe tu nombre.</p>
+          </div>
+          <div class="campo-grupo">
+            <label for="con-apellidos">Apellidos *</label>
+            <input type="text" id="con-apellidos" autocomplete="family-name" placeholder="García López">
+            <p class="error-msg">Escribe tus apellidos.</p>
+          </div>
+        </div>
+        <div class="campo-grupo">
+          <label for="con-email">Correo electrónico *</label>
+          <input type="email" id="con-email" autocomplete="email" placeholder="maria@tuempresa.es">
+          <p class="error-msg">Introduce un correo válido.</p>
+        </div>
+        <div class="fila-doble">
+          <div class="campo-grupo">
+            <label for="con-empresa">Empresa *</label>
+            <input type="text" id="con-empresa" autocomplete="organization" placeholder="Tu Empresa S.L.">
+            <p class="error-msg">Escribe el nombre de tu empresa.</p>
+          </div>
+          <div class="campo-grupo">
+            <label for="con-perfil">Tamaño del negocio *</label>
+            <select id="con-perfil">
+              <option value="">Selecciona una opción</option>
+              <option value="autonomo">Autónomo / freelance</option>
+              <option value="micro">Microempresa (1–9 empleados)</option>
+              <option value="pyme">Pyme (10–50 empleados)</option>
+              <option value="otro">Otro</option>
+            </select>
+            <p class="error-msg">Selecciona el tamaño de tu negocio.</p>
+          </div>
+        </div>
+        <div class="campo-grupo">
+          <label for="con-interes">¿Qué te interesa más?</label>
+          <select id="con-interes">
+            <option value="">No lo tengo claro todavía</option>
+            <option value="ia">IA integrada en mi flujo de trabajo</option>
+            <option value="chatbot">Chatbot de WhatsApp conectado al correo</option>
+            <option value="powerbi">Data analytics con Power BI</option>
+            <option value="office">Automatizar flujos con Office</option>
+            <option value="apps">Vuestras aplicaciones de gestión</option>
+          </select>
+        </div>
+        <div class="campo-grupo">
+          <label for="con-mensaje">Cuéntanos brevemente tu situación (opcional)</label>
+          <textarea id="con-mensaje" placeholder="Ej.: Pierdo dos tardes al mes pasando pedidos de WhatsApp a Excel…"></textarea>
+        </div>
+        <div class="campo-grupo check-linea">
+          <input type="checkbox" id="con-terminos">
+          <label for="con-terminos" style="font-weight:400;margin:0">Acepto la <a href="#" style="color:var(--verde-fiscal)">política de privacidad</a> para que Sentria pueda contactarme. *</label>
+        </div>
+        <p class="error-msg" id="error-terminos" style="margin-bottom:14px">Debes aceptar la política de privacidad para continuar.</p>
+        <button type="submit" class="btn btn-primario btn-grande btn-bloque">Solicitar mi diagnóstico gratuito</button>
+      </form>
+
+      <div class="exito" id="contactoExito">
+        <div class="icono">✓</div>
+        <h3>¡Solicitud enviada!</h3>
+        <p>Gracias por tu interés. Te escribiremos a <strong id="exitoEmail"></strong> en menos de 24&nbsp;h laborables para concertar el diagnóstico.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="contenedor footer-inner">
+    <p>© 2026 Sentria Consulting · Tecnología cercana para pequeñas empresas</p>
+    <ul class="footer-links">
+      <li><a href="#">Privacidad</a></li>
+      <li><a href="#">Términos</a></li>
+      <li><a href="#">Contacto</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- ============ APP / ÁREA DE CLIENTES (visible tras iniciar sesión) ============ -->
+<div class="app" id="app">
+  <div class="app-top">
+    <div class="contenedor app-top-inner">
+      <a href="#" class="logo" onclick="event.preventDefault(); cambiarPanel('apps')">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M46 14C40 7 28 5 20 11c-8 6-9 17-3 24 2.4 2.8 5.6 4.6 9 5.2-4-3.4-5.4-9.2-3-14 2.6-5.2 8.8-7.6 14.2-5.6L46 14Z" fill="#19233B"/>
+          <path d="M37.2 20.6c-5.4-2-11.6.4-14.2 5.6-2.4 4.8-1 10.6 3 14 1.6.3 3.3.3 5 0 5-1 9-4.8 10.3-9.6l-4.1-10Z" fill="#4D9B8F"/>
+          <path d="M18 50c6 7 18 9 26 3 8-6 9-17 3-24-2.4-2.8-5.6-4.6-9-5.2 4 3.4 5.4 9.2 3 14-2.6 5.2-8.8 7.6-14.2 5.6L18 50Z" fill="#8AB83D"/>
+        </svg>
+        <span class="logo-texto">
+          <span class="nombre" style="font-size:1.1rem">Sentria</span>
+          <span class="sub">Área de clientes</span>
+        </span>
+      </a>
+      <div class="app-tabs" role="tablist">
+        <button class="app-tab activo" data-panel="apps">🏠 Mis aplicaciones</button>
+        <button class="app-tab" data-panel="inventario">📦 Productos</button>
+        <button class="app-tab" data-panel="documentos">🧾 Presupuestos y facturas</button>
+        <button class="app-tab" data-panel="clientes">👥 Clientes y agenda</button>
+      </div>
+      <div class="app-user">
+        <span>Hola, <strong id="appNombre"></strong></span>
+        <button class="btn btn-fantasma" style="padding:8px 16px;font-size:.85rem" onclick="salirApp()">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-cuerpo">
+    <div class="contenedor">
+
+      <!-- PANEL: LANZADOR DE APLICACIONES -->
+      <div class="app-panel activo" id="panel-apps">
+        <h2>Tus aplicaciones</h2>
+        <p class="sub">Estas son las herramientas de gestión incluidas en tu plan con Sentria. Elige una para empezar.</p>
+        <div class="lanzador-grid">
+          <button class="lanzador-card" onclick="cambiarPanel('documentos')">
+            <span class="icono">🧾</span>
+            <h3>Presupuestos y facturas</h3>
+            <p>Crea documentos a partir de tu catálogo. El IVA y el total se calculan automáticamente.</p>
+            <span class="abrir">Abrir aplicación →</span>
+          </button>
+          <button class="lanzador-card" onclick="cambiarPanel('inventario')">
+            <span class="icono">📦</span>
+            <h3>Catálogo de productos</h3>
+            <p>Tu material y tus servicios con precio y unidad, listos para añadir a cualquier documento.</p>
+            <span class="abrir">Abrir aplicación →</span>
+          </button>
+          <button class="lanzador-card" onclick="cambiarPanel('clientes')">
+            <span class="icono">👥</span>
+            <h3>Clientes y agenda de visitas</h3>
+            <p>Fichas de clientes con historial de visitas realizadas y agenda de las próximas citas.</p>
+            <span class="abrir">Abrir aplicación →</span>
+          </button>
+        </div>
+        <div class="lanzador-aviso">
+          <span style="font-size:1.3rem">🚧</span>
+          <span><strong>Seguimos construyendo.</strong> Próximamente añadiremos más aplicaciones a tu área de clientes: informes Power BI integrados, panel del chatbot de WhatsApp y más. Si echas algo en falta, cuéntanoslo: las construimos a partir de lo que nuestros clientes necesitan.</span>
+        </div>
+      </div>
+
+      <!-- PANEL: PRODUCTOS / INVENTARIO -->
+      <div class="app-panel" id="panel-inventario">
+        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a mis aplicaciones</button>
+        <h2>Catálogo de productos</h2>
+        <p class="sub">Da de alta tu material y servicios con su precio. Después podrás añadirlos directamente a presupuestos y facturas.</p>
+        <div class="grid-app">
+          <form class="tarjeta" id="formItem">
+            <h3>Añadir producto o servicio</h3>
+            <div class="campo-grupo">
+              <label for="item-nombre">Nombre</label>
+              <input type="text" id="item-nombre" placeholder="Ej.: Tubo PVC Ø20 mm" required>
+            </div>
+            <div class="campo-grupo">
+              <label for="item-precio">Precio (€, sin IVA)</label>
+              <input type="text" id="item-precio" inputmode="decimal" placeholder="Ej.: 3,50" required>
+            </div>
+            <div class="campo-grupo">
+              <label for="item-unidad">Unidad</label>
+              <select id="item-unidad">
+                <option value="ud">Unidad (ud)</option>
+                <option value="m">Metro (m)</option>
+                <option value="m²">Metro cuadrado (m²)</option>
+                <option value="h">Hora (h)</option>
+                <option value="kg">Kilo (kg)</option>
+                <option value="l">Litro (l)</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primario btn-bloque">Añadir al catálogo</button>
+          </form>
+          <div class="tarjeta">
+            <h3>Tu catálogo</h3>
+            <table class="tabla">
+              <thead><tr><th>Producto / servicio</th><th style="text-align:right">Precio</th><th>Unidad</th><th></th></tr></thead>
+              <tbody id="cuerpoInventario"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: PRESUPUESTOS Y FACTURAS -->
+      <div class="app-panel" id="panel-documentos">
+        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a mis aplicaciones</button>
+        <h2>Presupuestos y facturas</h2>
+        <p class="sub">Elige cliente, añade artículos de tu catálogo y guarda el documento. El IVA y el total se calculan solos.</p>
+        <div class="grid-app grid-doc">
+          <div class="tarjeta">
+            <h3>Nuevo documento</h3>
+            <div class="fila-doble">
+              <div class="campo-grupo">
+                <label for="doc-tipo">Tipo</label>
+                <select id="doc-tipo">
+                  <option value="presupuesto">Presupuesto</option>
+                  <option value="factura">Factura</option>
+                </select>
+              </div>
+              <div class="campo-grupo">
+                <label for="doc-cliente">Cliente</label>
+                <select id="doc-cliente"></select>
+              </div>
+            </div>
+            <label style="margin-bottom:7px">Añadir línea desde el catálogo</label>
+            <div class="doc-anadir">
+              <select id="doc-item" aria-label="Producto del catálogo"></select>
+              <input type="text" id="doc-cantidad" inputmode="decimal" value="1" aria-label="Cantidad">
+              <button type="button" class="btn btn-primario" id="btnAnadirLinea" style="padding:11px 18px">＋ Añadir</button>
+            </div>
+            <table class="tabla">
+              <thead><tr><th>Concepto</th><th style="text-align:right">Cant.</th><th style="text-align:right">Precio</th><th style="text-align:right">Importe</th><th></th></tr></thead>
+              <tbody id="cuerpoLineas"></tbody>
+            </table>
+            <div class="doc-totales">
+              <div><span>Base imponible</span><span id="docBase">0,00 €</span></div>
+              <div><span>IVA (21 %)</span><span id="docIVA">0,00 €</span></div>
+              <div class="total-final"><span>TOTAL</span><span id="docTotal">0,00 €</span></div>
+            </div>
+            <p class="aviso-doc" id="avisoDoc"></p>
+            <button type="button" class="btn btn-primario btn-bloque" id="btnGuardarDoc" style="margin-top:18px">Guardar documento</button>
+          </div>
+          <div class="tarjeta">
+            <h3>Documentos guardados</h3>
+            <table class="tabla">
+              <thead><tr><th>Nº</th><th>Tipo</th><th>Cliente</th><th>Fecha</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody id="cuerpoDocs"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: CLIENTES Y AGENDA -->
+      <div class="app-panel" id="panel-clientes">
+        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a mis aplicaciones</button>
+        <h2>Clientes y agenda de visitas</h2>
+        <p class="sub">Guarda tus clientes, registra las visitas que ya les has hecho y agenda las próximas.</p>
+        <div class="grid-app">
+          <form class="tarjeta" id="formCliente">
+            <h3>Nuevo cliente</h3>
+            <div class="campo-grupo">
+              <label for="cli-nombre">Nombre o empresa</label>
+              <input type="text" id="cli-nombre" placeholder="Ej.: Hostal El Roble" required>
+            </div>
+            <div class="campo-grupo">
+              <label for="cli-contacto">Contacto (opcional)</label>
+              <input type="text" id="cli-contacto" placeholder="Persona · teléfono · email">
+            </div>
+            <button type="submit" class="btn btn-primario btn-bloque">Guardar cliente</button>
+          </form>
+          <div id="listaClientes"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL LOGIN / REGISTRO ============ -->
+<div class="modal-fondo" id="modalFondo" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+  <div class="modal">
+    <button class="cerrar-modal" onclick="cerrarModal()" aria-label="Cerrar">✕</button>
+    <h3 id="modalTitulo" style="margin-bottom:20px;font-size:1.35rem">Área de clientes</h3>
+
+    <div class="tabs" role="tablist">
+      <button class="tab activo" id="tabLogin" role="tab" onclick="cambiarTab('login')">Iniciar sesión</button>
+      <button class="tab" id="tabRegistro" role="tab" onclick="cambiarTab('registro')">Crear cuenta</button>
+    </div>
+
+    <div class="aviso-modal" id="avisoModal"></div>
+
+    <!-- Panel LOGIN -->
+    <div class="panel activo" id="panelLogin">
+      <form id="formLogin" novalidate>
+        <div class="campo-grupo">
+          <label for="log-email">Correo electrónico</label>
+          <input type="email" id="log-email" autocomplete="email" placeholder="tu@correo.es">
+        </div>
+        <div class="campo-grupo">
+          <label for="log-pass">Contraseña</label>
+          <input type="password" id="log-pass" autocomplete="current-password" placeholder="Tu contraseña">
+        </div>
+        <a href="#" class="olvido" onclick="event.preventDefault(); mostrarAviso('ok','Te hemos enviado un enlace para restablecer la contraseña (demo).')">¿Has olvidado la contraseña?</a>
+        <button type="submit" class="btn btn-primario btn-bloque">Entrar</button>
+      </form>
+    </div>
+
+    <!-- Panel REGISTRO rápido -->
+    <div class="panel" id="panelRegistro">
+      <form id="formRegistroModal" novalidate>
+        <div class="campo-grupo">
+          <label for="mreg-nombre">Nombre</label>
+          <input type="text" id="mreg-nombre" autocomplete="name" placeholder="Tu nombre">
+        </div>
+        <div class="campo-grupo">
+          <label for="mreg-email">Correo electrónico</label>
+          <input type="email" id="mreg-email" autocomplete="email" placeholder="tu@correo.es">
+        </div>
+        <div class="campo-grupo">
+          <label for="mreg-pass">Contraseña</label>
+          <input type="password" id="mreg-pass" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+        </div>
+        <button type="submit" class="btn btn-primario btn-bloque">Crear cuenta</button>
+        <p style="font-size:.8rem;color:var(--tinta-suave);margin-top:14px;text-align:center">El acceso completo a las aplicaciones se activa al ser cliente de Sentria. <a href="#contacto" onclick="cerrarModal()" style="color:var(--verde-fiscal)">Pide tu diagnóstico</a></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FIREBASE (conexión existente; aquí se integrará Auth/Firestore) ============ -->
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+  // TODO: Añadir SDKs de los productos de Firebase que se vayan a usar
+  // p. ej.: getAuth para autenticación real y getFirestore para guardar
+  // catálogo, clientes y documentos por usuario.
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDBHMbaP-z-cRKLM5IZsmpS343RYjc6yas",
+    authDomain: "consulting-a8240.firebaseapp.com",
+    projectId: "consulting-a8240",
+    storageBucket: "consulting-a8240.firebasestorage.app",
+    messagingSenderId: "222966420744",
+    appId: "1:222966420744:web:f7edc703477eae00c248bd"
+  };
+
+  // Initialize Firebase
+  const firebaseApp = initializeApp(firebaseConfig);
+  // Se expone por si la lógica clásica (no módulo) necesita acceder a Firebase más adelante.
+  window.firebaseApp = firebaseApp;
+</script>
+
+<script>
+/* =====================================================
+   Sentria Consulting · lógica de la página
+   - tarjeta animada del hero (automatización en directo)
+   - contadores animados
+   - opiniones renderizadas desde datos
+   - modal login/registro con tabs y "base de datos" en memoria
+     (sustituir por Firebase Auth cuando se integre)
+   - formulario de solicitud de diagnóstico con validación
+   - área de clientes con lanzador de aplicaciones
+   ===================================================== */
+
+/* ---------- 1. Automatización animada del hero ---------- */
+const lineasFlujo = [
+  { id: 'fl-canal',     texto: 'WhatsApp Business' },
+  { id: 'fl-cliente',   texto: 'Hostal El Roble' },
+  { id: 'fl-consulta',  texto: '«¿Tenéis sitio el viernes?»' },
+  { id: 'fl-respuesta', texto: 'Enviada · disponibilidad' },
+  { id: 'fl-aviso',     texto: 'Correo a recepción ✓' },
+  { id: 'fl-tiempo',    texto: '4 segundos' },
+];
+
+function escribirLinea({ id, texto }) {
+  return new Promise(resolve => {
+    const el = document.getElementById(id);
+    el.innerHTML = '<span class="cursor-escritura"></span>';
+    let i = 0;
+    const intervalo = setInterval(() => {
+      i++;
+      el.innerHTML = texto.slice(0, i) + (i < texto.length ? '<span class="cursor-escritura"></span>' : '');
+      if (i >= texto.length) { clearInterval(intervalo); resolve(); }
+    }, 34);
+  });
+}
+
+async function animarFlujo() {
+  lineasFlujo.forEach(l => document.getElementById(l.id).textContent = '');
+  const sello = document.getElementById('sello');
+  sello.classList.remove('visible');
+
+  for (const linea of lineasFlujo) {
+    await escribirLinea(linea);
+    await new Promise(r => setTimeout(r, 160));
+  }
+  sello.classList.add('visible');
+  setTimeout(animarFlujo, 6000);
+}
+animarFlujo();
+
+/* ---------- 2. Contadores del hero ---------- */
+document.querySelectorAll('[data-contador]').forEach(el => {
+  const objetivo = parseInt(el.dataset.contador, 10);
+  if (objetivo === 0) { el.textContent = '0'; return; }
+  const duracion = 1400;
+  const inicio = performance.now();
+  function paso(ahora) {
+    const progreso = Math.min((ahora - inicio) / duracion, 1);
+    el.textContent = Math.floor(progreso * objetivo).toLocaleString('es-ES');
+    if (progreso < 1) requestAnimationFrame(paso);
+  }
+  requestAnimationFrame(paso);
+});
+
+/* ---------- 3. Opiniones (datos → DOM) ---------- */
+const opiniones = [
+  {
+    nombre: 'Laura Martín', rol: 'Clínica dental · Valencia', color: '#1F7A57', estrellas: 5,
+    texto: 'El chatbot de WhatsApp nos cambió la vida: confirma citas y responde dudas mientras atendemos pacientes. Lo importante nos llega al correo ya resumido. Y todo sin tocar nuestro programa de siempre.'
+  },
+  {
+    nombre: 'Carlos Ibáñez', rol: 'Distribuidora familiar · Sevilla', color: '#C8442C', estrellas: 5,
+    texto: 'Pensaba que «datos» era cosa de empresas grandes. Sentria conectó nuestros Excel a Power BI y ahora veo márgenes por cliente cada lunes. Hemos dejado de vender a pérdida sin darnos cuenta.'
+  },
+  {
+    nombre: 'Anna Puig', rol: 'Taller de carpintería · Barcelona', color: '#3A5BA0', estrellas: 5,
+    texto: 'Lo que más valoro es que no nos vendieron humo: una mejora cada vez, con precio cerrado. La automatización de pedidos con Office nos ahorra unas diez horas al mes. Y los presupuestos ahora salen en minutos con su aplicación.'
+  },
+];
+
+const grid = document.getElementById('opinionesGrid');
+opiniones.forEach(op => {
+  const iniciales = op.nombre.split(' ').map(p => p[0]).join('');
+  const art = document.createElement('article');
+  art.className = 'opinion revelar';
+  art.innerHTML = `
+    <div class="estrellas" aria-label="${op.estrellas} de 5 estrellas">${'★'.repeat(op.estrellas)}${'☆'.repeat(5 - op.estrellas)}</div>
+    <blockquote>“${op.texto}”</blockquote>
+    <div class="opinion-autor">
+      <div class="avatar" style="background:${op.color}">${iniciales}</div>
+      <div>
+        <div class="nombre">${op.nombre}</div>
+        <div class="rol">${op.rol}</div>
+      </div>
+    </div>`;
+  grid.appendChild(art);
+});
+
+/* ---------- 4. Modal: abrir/cerrar/tabs ---------- */
+const modalFondo = document.getElementById('modalFondo');
+const avisoModal = document.getElementById('avisoModal');
+
+function abrirModal(tab) {
+  modalFondo.classList.add('abierto');
+  document.body.style.overflow = 'hidden';
+  cambiarTab(tab || 'login');
+}
+function cerrarModal() {
+  modalFondo.classList.remove('abierto');
+  document.body.style.overflow = '';
+  limpiarAviso();
+}
+function cambiarTab(tab) {
+  limpiarAviso();
+  const esLogin = tab === 'login';
+  document.getElementById('tabLogin').classList.toggle('activo', esLogin);
+  document.getElementById('tabRegistro').classList.toggle('activo', !esLogin);
+  document.getElementById('panelLogin').classList.toggle('activo', esLogin);
+  document.getElementById('panelRegistro').classList.toggle('activo', !esLogin);
+  document.getElementById('modalTitulo').textContent = esLogin ? 'Área de clientes' : 'Crea tu cuenta';
+}
+function mostrarAviso(tipo, mensaje) {
+  avisoModal.className = 'aviso-modal ' + tipo;
+  avisoModal.textContent = mensaje;
+}
+function limpiarAviso() {
+  avisoModal.className = 'aviso-modal';
+  avisoModal.textContent = '';
+}
+modalFondo.addEventListener('click', e => { if (e.target === modalFondo) cerrarModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+/* ---------- 5. "Base de datos" de usuarios en memoria ----------
+   NOTA: sustituir por Firebase Auth (getAuth + signInWithEmailAndPassword
+   y createUserWithEmailAndPassword) cuando se conecte el backend real. */
+const usuarios = [
+  { email: 'demo@sentria.es', pass: 'demo1234', nombre: 'Cliente Demo' },
+];
+const emailValido = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+/* Login */
+document.getElementById('formLogin').addEventListener('submit', e => {
+  e.preventDefault();
+  const email = document.getElementById('log-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('log-pass').value;
+  if (!emailValido(email) || !pass) {
+    mostrarAviso('error', 'Introduce un correo y una contraseña válidos.');
+    return;
+  }
+  const usuario = usuarios.find(u => u.email === email && u.pass === pass);
+  if (usuario) {
+    mostrarAviso('ok', `¡Hola, ${usuario.nombre}! Entrando en tu área de clientes…`);
+    setTimeout(() => { cerrarModal(); e.target.reset(); entrarApp(usuario); }, 650);
+  } else {
+    mostrarAviso('error', 'Correo o contraseña incorrectos. Prueba con demo@sentria.es / demo1234.');
+  }
+});
+
+/* Registro rápido (modal) */
+document.getElementById('formRegistroModal').addEventListener('submit', e => {
+  e.preventDefault();
+  const nombre = document.getElementById('mreg-nombre').value.trim();
+  const email  = document.getElementById('mreg-email').value.trim().toLowerCase();
+  const pass   = document.getElementById('mreg-pass').value;
+
+  if (!nombre) return mostrarAviso('error', 'Escribe tu nombre.');
+  if (!emailValido(email)) return mostrarAviso('error', 'El correo no parece válido.');
+  if (pass.length < 8) return mostrarAviso('error', 'La contraseña debe tener al menos 8 caracteres.');
+  if (usuarios.some(u => u.email === email)) return mostrarAviso('error', 'Ya existe una cuenta con ese correo. Prueba a iniciar sesión.');
+
+  usuarios.push({ email, pass, nombre });
+  mostrarAviso('ok', `¡Cuenta creada, ${nombre}! Ya puedes iniciar sesión con tu correo.`);
+  e.target.reset();
+});
+
+/* ---------- 6. Formulario de solicitud de diagnóstico ---------- */
+document.getElementById('formContacto').addEventListener('submit', e => {
+  e.preventDefault();
+  let valido = true;
+
+  const marcar = (input, condicionError) => {
+    const grupo = input.closest('.campo-grupo');
+    grupo.classList.toggle('con-error', condicionError);
+    if (condicionError) valido = false;
+  };
+
+  const nombre    = document.getElementById('con-nombre');
+  const apellidos = document.getElementById('con-apellidos');
+  const email     = document.getElementById('con-email');
+  const empresa   = document.getElementById('con-empresa');
+  const perfil    = document.getElementById('con-perfil');
+  const terminos  = document.getElementById('con-terminos');
+  const errTerm   = document.getElementById('error-terminos');
+
+  marcar(nombre, !nombre.value.trim());
+  marcar(apellidos, !apellidos.value.trim());
+  marcar(email, !emailValido(email.value.trim()));
+  marcar(empresa, !empresa.value.trim());
+  marcar(perfil, !perfil.value);
+
+  errTerm.style.display = terminos.checked ? 'none' : 'block';
+  if (!terminos.checked) valido = false;
+
+  if (!valido) return;
+
+  // TODO: cuando se integre Firestore, guardar aquí la solicitud de diagnóstico.
+  document.getElementById('formContacto').style.display = 'none';
+  document.getElementById('exitoEmail').textContent = email.value.trim().toLowerCase();
+  document.getElementById('contactoExito').classList.add('visible');
+});
+
+/* ---------- 7. Reveals al hacer scroll ---------- */
+const observador = new IntersectionObserver(entradas => {
+  entradas.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('visto'); observador.unobserve(en.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.revelar').forEach(el => observador.observe(el));
+
+/* ---------- 8. Menú móvil ---------- */
+document.getElementById('burger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('abierto');
+});
+document.querySelectorAll('#navLinks a, #navLinks button').forEach(el => {
+  el.addEventListener('click', () => document.getElementById('navLinks').classList.remove('abierto'));
+});
+
+/* =====================================================
+   9. ÁREA DE CLIENTES: lanzador + aplicaciones
+   ===================================================== */
+const app = document.getElementById('app');
+let usuarioActual = null;
+
+const fmtEUR = n => n.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+const fmtFecha = f => new Date(f + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+const hoyISO = () => new Date().toISOString().slice(0, 10);
+
+function entrarApp(usuario) {
+  usuarioActual = usuario;
+  document.getElementById('appNombre').textContent = usuario.nombre;
+  app.classList.add('abierta');
+  document.body.style.overflow = 'hidden';
+  cambiarPanel('apps'); // siempre se entra por la pantalla de aplicaciones
+  renderInventario(); renderClientes(); renderDocumentos(); refrescarSelects(); renderLineas();
+}
+function salirApp() {
+  usuarioActual = null;
+  app.classList.remove('abierta');
+  document.body.style.overflow = '';
+}
+function cambiarPanel(nombre) {
+  document.querySelectorAll('.app-tab').forEach(t => t.classList.toggle('activo', t.dataset.panel === nombre));
+  document.querySelectorAll('.app-panel').forEach(p => p.classList.toggle('activo', p.id === 'panel-' + nombre));
+  document.querySelector('.app-cuerpo').scrollTop = 0;
+}
+document.querySelectorAll('.app-tab').forEach(t => t.addEventListener('click', () => cambiarPanel(t.dataset.panel)));
+
+/* ---------- 9a. Catálogo de productos ---------- */
+let inventario = [
+  { id: 1, nombre: 'Tubo PVC Ø20 mm', precio: 3.50, unidad: 'ud' },
+  { id: 2, nombre: 'Cable eléctrico 2,5 mm²', precio: 0.85, unidad: 'm' },
+  { id: 3, nombre: 'Mano de obra', precio: 28.00, unidad: 'h' },
+];
+let siguienteItemId = 4;
+
+function renderInventario() {
+  const cuerpo = document.getElementById('cuerpoInventario');
+  if (!inventario.length) {
+    cuerpo.innerHTML = '<tr><td colspan="4" class="vacio">Todavía no hay productos. Añade el primero con el formulario.</td></tr>';
+    return;
+  }
+  cuerpo.innerHTML = inventario.map(it => `
+    <tr>
+      <td>${it.nombre}</td>
+      <td class="num-cel">${fmtEUR(it.precio)}</td>
+      <td>${it.unidad}</td>
+      <td style="text-align:right"><button class="btn-mini peligro" onclick="borrarItem(${it.id})">Eliminar</button></td>
+    </tr>`).join('');
+}
+function borrarItem(id) {
+  inventario = inventario.filter(i => i.id !== id);
+  renderInventario(); refrescarSelects();
+}
+document.getElementById('formItem').addEventListener('submit', e => {
+  e.preventDefault();
+  const nombre = document.getElementById('item-nombre').value.trim();
+  const precio = parseFloat(document.getElementById('item-precio').value.replace(',', '.'));
+  const unidad = document.getElementById('item-unidad').value;
+  if (!nombre || isNaN(precio) || precio < 0) return;
+  inventario.push({ id: siguienteItemId++, nombre, precio, unidad });
+  e.target.reset();
+  renderInventario(); refrescarSelects();
+});
+
+/* ---------- 9b. Clientes y visitas ---------- */
+let clientes = [
+  {
+    id: 1, nombre: 'Hostal El Roble', contacto: 'Marta · 612 345 678', visitas: [
+      { fecha: '2026-05-12', nota: 'Revisión de la instalación de la cocina', estado: 'hecha' },
+      { fecha: '2026-06-18', nota: 'Presentar presupuesto de la reforma', estado: 'agendada' },
+    ]
+  },
+  {
+    id: 2, nombre: 'Panadería Soler', contacto: 'Jordi · 699 112 233', visitas: [
+      { fecha: '2026-06-02', nota: 'Cambio de fluorescentes por LED', estado: 'hecha' },
+    ]
+  },
+];
+let siguienteClienteId = 3;
+
+function renderClientes() {
+  const cont = document.getElementById('listaClientes');
+  if (!clientes.length) {
+    cont.innerHTML = '<div class="tarjeta vacio">Todavía no tienes clientes guardados. Añade el primero con el formulario.</div>';
+    return;
+  }
+  cont.innerHTML = clientes.map(c => {
+    const hechas = c.visitas.filter(v => v.estado === 'hecha').sort((a, b) => b.fecha.localeCompare(a.fecha));
+    const proximas = c.visitas.filter(v => v.estado === 'agendada').sort((a, b) => a.fecha.localeCompare(b.fecha));
+    const visitasHTML = [...proximas, ...hechas].map(v => `
+      <li class="visita">
+        <span class="chip ${v.estado === 'agendada' ? 'azul' : 'verde'}">${v.estado === 'agendada' ? 'Agendada' : 'Hecha'}</span>
+        <span class="mono visita-fecha">${fmtFecha(v.fecha)}</span>
+        <span>${v.nota}</span>
+      </li>`).join('');
+    return `
+    <div class="tarjeta">
+      <div class="cliente-cab">
+        <div>
+          <div class="cliente-nombre">${c.nombre}</div>
+          <div class="cliente-contacto">${c.contacto}</div>
+        </div>
+        <div class="cliente-chips">
+          <span class="chip verde">${hechas.length} visita${hechas.length === 1 ? '' : 's'} hecha${hechas.length === 1 ? '' : 's'}</span>
+          ${proximas.length ? `<span class="chip azul">Próxima: ${fmtFecha(proximas[0].fecha)}</span>` : ''}
+        </div>
+      </div>
+      ${c.visitas.length ? `<ul class="lista-visitas">${visitasHTML}</ul>` : '<p class="vacio">Sin visitas todavía.</p>'}
+      <div class="cliente-acciones">
+        <button class="btn-mini" onclick="abrirFormVisita(${c.id}, 'hecha')">＋ Registrar visita</button>
+        <button class="btn-mini" onclick="abrirFormVisita(${c.id}, 'agendada')">📅 Agendar visita</button>
+        <button class="btn-mini peligro" onclick="borrarCliente(${c.id})">Eliminar</button>
+      </div>
+      <form class="form-visita" id="fv-${c.id}" onsubmit="guardarVisita(event, ${c.id})" style="display:none">
+        <label id="fv-titulo-${c.id}" style="margin-bottom:10px"></label>
+        <input type="hidden" id="fv-estado-${c.id}">
+        <div class="form-visita-campos">
+          <input type="date" id="fv-fecha-${c.id}" required aria-label="Fecha de la visita">
+          <input type="text" id="fv-nota-${c.id}" placeholder="Motivo de la visita" required aria-label="Motivo de la visita">
+          <button type="submit" class="btn btn-primario" style="padding:10px 18px;font-size:.88rem">Guardar</button>
+        </div>
+      </form>
+    </div>`;
+  }).join('');
+}
+function abrirFormVisita(id, estado) {
+  const f = document.getElementById('fv-' + id);
+  const estadoInput = document.getElementById('fv-estado-' + id);
+  if (f.style.display !== 'none' && estadoInput.value === estado) { f.style.display = 'none'; return; }
+  estadoInput.value = estado;
+  document.getElementById('fv-titulo-' + id).textContent = estado === 'agendada' ? 'Agendar una visita nueva' : 'Registrar una visita hecha';
+  document.getElementById('fv-fecha-' + id).value = hoyISO();
+  f.style.display = 'block';
+  document.getElementById('fv-nota-' + id).focus();
+}
+function guardarVisita(e, id) {
+  e.preventDefault();
+  const cliente = clientes.find(c => c.id === id);
+  const estado = document.getElementById('fv-estado-' + id).value || 'hecha';
+  const fecha = document.getElementById('fv-fecha-' + id).value;
+  const nota = document.getElementById('fv-nota-' + id).value.trim();
+  if (!cliente || !fecha || !nota) return;
+  cliente.visitas.push({ fecha, nota, estado });
+  renderClientes();
+}
+function borrarCliente(id) {
+  clientes = clientes.filter(c => c.id !== id);
+  renderClientes(); refrescarSelects();
+}
+document.getElementById('formCliente').addEventListener('submit', e => {
+  e.preventDefault();
+  const nombre = document.getElementById('cli-nombre').value.trim();
+  const contacto = document.getElementById('cli-contacto').value.trim();
+  if (!nombre) return;
+  clientes.push({ id: siguienteClienteId++, nombre, contacto: contacto || '—', visitas: [] });
+  e.target.reset();
+  renderClientes(); refrescarSelects();
+});
+
+/* ---------- 9c. Presupuestos y facturas desde el catálogo ---------- */
+let documentos = [];
+let siguienteDocNum = 148;
+let lineasDoc = [];
+
+function refrescarSelects() {
+  const selItem = document.getElementById('doc-item');
+  selItem.innerHTML = '<option value="">Elige producto del catálogo</option>' +
+    inventario.map(i => `<option value="${i.id}">${i.nombre} — ${fmtEUR(i.precio)}/${i.unidad}</option>`).join('');
+  const selCli = document.getElementById('doc-cliente');
+  selCli.innerHTML = '<option value="">Elige cliente</option>' +
+    clientes.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+}
+document.getElementById('btnAnadirLinea').addEventListener('click', () => {
+  const itemId = parseInt(document.getElementById('doc-item').value, 10);
+  const cantidad = parseFloat(document.getElementById('doc-cantidad').value.replace(',', '.'));
+  const item = inventario.find(i => i.id === itemId);
+  if (!item || isNaN(cantidad) || cantidad <= 0) return;
+  const existente = lineasDoc.find(l => l.itemId === itemId);
+  if (existente) existente.cantidad += cantidad;
+  else lineasDoc.push({ itemId, nombre: item.nombre, precio: item.precio, unidad: item.unidad, cantidad });
+  document.getElementById('doc-cantidad').value = '1';
+  renderLineas();
+});
+function quitarLinea(idx) { lineasDoc.splice(idx, 1); renderLineas(); }
+function renderLineas() {
+  const cuerpo = document.getElementById('cuerpoLineas');
+  if (!lineasDoc.length) {
+    cuerpo.innerHTML = '<tr><td colspan="5" class="vacio">Añade productos del catálogo para empezar.</td></tr>';
+  } else {
+    cuerpo.innerHTML = lineasDoc.map((l, i) => `
+      <tr>
+        <td>${l.nombre}</td>
+        <td class="num-cel">${l.cantidad.toLocaleString('es-ES')} ${l.unidad}</td>
+        <td class="num-cel">${fmtEUR(l.precio)}</td>
+        <td class="num-cel">${fmtEUR(l.precio * l.cantidad)}</td>
+        <td style="text-align:right"><button class="btn-mini peligro" onclick="quitarLinea(${i})" aria-label="Quitar línea">✕</button></td>
+      </tr>`).join('');
+  }
+  const base = lineasDoc.reduce((s, l) => s + l.precio * l.cantidad, 0);
+  document.getElementById('docBase').textContent = fmtEUR(base);
+  document.getElementById('docIVA').textContent = fmtEUR(base * 0.21);
+  document.getElementById('docTotal').textContent = fmtEUR(base * 1.21);
+}
+document.getElementById('btnGuardarDoc').addEventListener('click', () => {
+  const tipo = document.getElementById('doc-tipo').value;
+  const clienteId = parseInt(document.getElementById('doc-cliente').value, 10);
+  const cliente = clientes.find(c => c.id === clienteId);
+  const aviso = document.getElementById('avisoDoc');
+  if (!cliente) { aviso.textContent = 'Elige un cliente para guardar el documento.'; aviso.style.display = 'block'; return; }
+  if (!lineasDoc.length) { aviso.textContent = 'Añade al menos una línea desde el catálogo.'; aviso.style.display = 'block'; return; }
+  aviso.style.display = 'none';
+  const base = lineasDoc.reduce((s, l) => s + l.precio * l.cantidad, 0);
+  documentos.unshift({
+    numero: `2026-${String(siguienteDocNum++).padStart(4, '0')}`,
+    tipo, cliente: cliente.nombre, fecha: hoyISO(), total: base * 1.21,
+  });
+  lineasDoc = [];
+  renderLineas(); renderDocumentos();
+});
+function renderDocumentos() {
+  const cuerpo = document.getElementById('cuerpoDocs');
+  if (!documentos.length) {
+    cuerpo.innerHTML = '<tr><td colspan="5" class="vacio">Todavía no has guardado ningún documento.</td></tr>';
+    return;
+  }
+  cuerpo.innerHTML = documentos.map(d => `
+    <tr>
+      <td class="mono">${d.numero}</td>
+      <td><span class="chip ${d.tipo === 'factura' ? 'verde' : 'azul'}">${d.tipo === 'factura' ? 'Factura' : 'Presupuesto'}</span></td>
+      <td>${d.cliente}</td>
+      <td class="mono" style="font-size:.85rem">${fmtFecha(d.fecha)}</td>
+      <td class="num-cel">${fmtEUR(d.total)}</td>
+    </tr>`).join('');
+}
+</script>
+</body>
+</html>
