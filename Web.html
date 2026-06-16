@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sentria Consulting — Tecnología que trabaja para tu pyme</title>
+<title>Sentria Consulting — Agenda y reservas para tu clínica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -87,7 +87,7 @@ nav{
 .dato .num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1.5rem;color:var(--tinta)}
 .dato .lbl{font-size:.85rem;color:var(--tinta-suave);max-width:160px}
 
-/* Tarjeta animada del hero: una automatización en marcha */
+/* Tarjeta animada del hero: una reserva confirmándose en directo */
 .flujo-wrap{position:relative;display:flex;justify-content:center}
 .flujo{
   background:var(--blanco);width:100%;max-width:420px;
@@ -304,38 +304,91 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 .app-panel>.sub{color:var(--tinta-suave);font-size:.95rem;margin-bottom:24px}
 .tarjeta{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:26px;box-shadow:var(--sombra)}
 .tarjeta h3{font-size:1.05rem;margin-bottom:16px}
-.grid-app{display:grid;grid-template-columns:340px 1fr;gap:26px;align-items:start}
-.tabla{width:100%;border-collapse:collapse;font-size:.92rem}
-.tabla th{text-align:left;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tinta-suave);padding:10px 12px;border-bottom:2px solid var(--linea)}
-.tabla td{padding:11px 12px;border-bottom:1px solid var(--linea);vertical-align:middle}
-.tabla .num-cel{font-family:'IBM Plex Mono',monospace;text-align:right;white-space:nowrap}
+.grid-app{display:grid;grid-template-columns:360px 1fr;gap:26px;align-items:start}
 .btn-mini{background:var(--papel);border:1px solid var(--linea);border-radius:8px;padding:6px 12px;font-size:.82rem;font-weight:600;color:var(--tinta);transition:border-color .15s}
 .btn-mini:hover{border-color:var(--tinta)}
 .btn-mini.peligro{color:var(--sello)}
+.btn-mini.ok{color:var(--verde-fiscal)}
 .chip{display:inline-block;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
 .chip.verde{background:var(--verde-claro);color:var(--verde-fiscal)}
 .chip.azul{background:#E6ECF8;color:#3A5BA0}
+.chip.ambar{background:#FBEFD8;color:#A9701A}
+.chip.rojo{background:#FBEAE5;color:var(--sello)}
+.chip.gris{background:#ECEAE2;color:var(--tinta-suave)}
 .vacio{color:var(--tinta-suave);font-size:.9rem;padding:18px;text-align:center}
-.doc-anadir{display:grid;grid-template-columns:1fr 86px auto;gap:10px;align-items:end;margin-bottom:18px}
-.doc-totales{margin-top:16px;border-top:2px solid var(--linea);padding-top:12px;font-family:'IBM Plex Mono',monospace;font-size:.95rem}
-.doc-totales div{display:flex;justify-content:space-between;padding:4px 0}
-.doc-totales .total-final{font-weight:600;font-size:1.1rem;color:var(--verde-fiscal)}
-.aviso-doc{display:none;font-size:.85rem;background:#FBEAE5;color:var(--sello);padding:10px 14px;border-radius:9px;margin-top:14px}
-#listaClientes{display:flex;flex-direction:column;gap:18px}
-.cliente-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:6px}
-.cliente-nombre{font-family:'Sora',sans-serif;font-weight:700;font-size:1.08rem}
-.cliente-contacto{font-size:.86rem;color:var(--tinta-suave)}
-.cliente-chips{display:flex;gap:8px;flex-wrap:wrap}
-.lista-visitas{list-style:none;display:flex;flex-direction:column;gap:9px;margin:14px 0;border-top:1px dashed var(--linea);padding-top:14px}
-.visita{display:flex;gap:10px;align-items:baseline;font-size:.89rem;flex-wrap:wrap}
-.visita-fecha{font-size:.82rem;color:var(--tinta-suave)}
-.cliente-acciones{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.form-visita{margin-top:14px;background:var(--papel);border:1px dashed var(--linea);border-radius:10px;padding:14px}
-.form-visita-campos{display:grid;grid-template-columns:160px 1fr auto;gap:10px;align-items:center}
-.grid-app.grid-doc{grid-template-columns:1fr 1fr}
 
-/* Lanzador de aplicaciones (pantalla inicial del panel) */
-.lanzador-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}
+/* Métricas del panel */
+.metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:30px}
+.metrica{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:20px 22px}
+.metrica .num{font-family:'IBM Plex Mono',monospace;font-size:1.9rem;font-weight:600;color:var(--tinta)}
+.metrica .lbl{font-size:.85rem;color:var(--tinta-suave);margin-top:2px}
+.metrica.destacada{border-color:var(--verde-fiscal);background:var(--verde-claro)}
+
+/* Navegación de semana */
+.semana-nav{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.semana-nav button{background:var(--blanco);border:1px solid var(--linea);border-radius:9px;padding:8px 14px;font-weight:600;color:var(--tinta)}
+.semana-nav button:hover{border-color:var(--tinta)}
+.semana-nav .rango{font-weight:600;font-family:'Sora',sans-serif}
+
+/* Vista de semana (panel principal) */
+.semana-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.dia-col{background:var(--blanco);border:1px solid var(--linea);border-radius:12px;padding:12px 12px 16px;min-height:130px}
+.dia-col.hoy{border-color:var(--verde-fiscal);box-shadow:0 0 0 2px var(--verde-claro)}
+.dia-cab{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--tinta-suave);font-weight:600;margin-bottom:10px;text-align:center}
+.dia-cab .dnum{display:block;font-family:'Sora',sans-serif;font-size:1.3rem;color:var(--tinta);font-weight:700}
+.cita-mini{border-left:3px solid var(--teal);background:var(--papel);border-radius:0 8px 8px 0;padding:7px 9px;margin-bottom:8px;font-size:.8rem}
+.cita-mini .hora{font-family:'IBM Plex Mono',monospace;font-weight:600}
+.cita-mini .pac{font-weight:600;display:block}
+.cita-mini .med{color:var(--tinta-suave);font-size:.74rem}
+.dia-vacio{font-size:.78rem;color:var(--tinta-suave);text-align:center;padding-top:14px}
+
+/* Próximas citas (lista detallada) */
+.lista-citas{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.cita-fila{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--blanco);border:1px solid var(--linea);border-radius:12px;padding:14px 18px}
+.cita-fila .chora{font-family:'IBM Plex Mono',monospace;font-weight:600;min-width:96px}
+.cita-fila .cinfo{flex:1;min-width:160px}
+.cita-fila .cinfo strong{display:block;font-size:.96rem}
+.cita-fila .cinfo span{font-size:.84rem;color:var(--tinta-suave)}
+.cita-fila .cacc{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Selector de médico (pills) */
+.medico-selector{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.medico-pill{border:1px solid var(--linea);background:var(--blanco);border-radius:99px;padding:8px 16px;font-weight:600;font-size:.9rem;color:var(--tinta-suave);display:flex;align-items:center;gap:8px}
+.medico-pill.activo{border-color:var(--verde-fiscal);color:var(--verde-fiscal);background:var(--verde-claro)}
+.medico-pill .punto{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* Agenda: días y huecos */
+.agenda-dia{background:var(--blanco);border:1px solid var(--linea);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.agenda-dia .ad-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.agenda-dia h4{font-family:'Sora',sans-serif;font-size:1rem}
+.agenda-dia .ad-sub{font-size:.82rem;color:var(--tinta-suave)}
+.agenda-libre{background:#FBEFD8;color:#A9701A;border-radius:9px;padding:10px 14px;font-size:.88rem;font-weight:600}
+.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px}
+.slot{border:1px solid var(--linea);border-radius:8px;padding:8px 4px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:.82rem;font-weight:600;background:var(--blanco);color:var(--tinta-suave)}
+.slot.libre{border-color:var(--verde-fiscal);color:var(--verde-fiscal);cursor:pointer}
+.slot.libre:hover{background:var(--verde-claro)}
+.slot.ocupado{background:var(--papel);text-decoration:line-through;opacity:.75}
+
+/* Reservar: vista previa WhatsApp */
+.wa-preview{background:#E5F4EA;border-radius:14px;padding:18px;position:relative}
+.wa-burbuja{background:#fff;border-radius:4px 14px 14px 14px;padding:14px 16px;box-shadow:0 2px 6px rgba(0,0,0,.08);font-size:.92rem;line-height:1.5}
+.wa-cab{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-weight:600;color:#0B7A41;font-size:.9rem}
+.wa-hora{font-size:.72rem;color:var(--tinta-suave);text-align:right;margin-top:8px}
+.aviso-resv{display:none;font-size:.88rem;padding:11px 14px;border-radius:9px;margin-top:16px}
+.aviso-resv.ok{display:block;background:var(--verde-claro);color:var(--verde-fiscal)}
+.aviso-resv.error{display:block;background:#FBEAE5;color:var(--sello)}
+
+/* Pacientes */
+#listaPacientes{display:flex;flex-direction:column;gap:18px}
+.pac-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.pac-nombre{font-family:'Sora',sans-serif;font-weight:700;font-size:1.08rem}
+.pac-contacto{font-size:.86rem;color:var(--tinta-suave)}
+.lista-visitas{list-style:none;display:flex;flex-direction:column;gap:9px;margin:14px 0 4px;border-top:1px dashed var(--linea);padding-top:14px}
+.visita{display:flex;gap:10px;align-items:baseline;font-size:.89rem;flex-wrap:wrap}
+.visita-fecha{font-size:.82rem;color:var(--tinta-suave);font-family:'IBM Plex Mono',monospace}
+
+/* Lanzador de aplicaciones */
+.lanzador-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:8px}
 .lanzador-card{
   background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
   padding:30px 28px;text-align:left;transition:transform .2s, box-shadow .2s, border-color .2s;
@@ -360,14 +413,13 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 .volver-apps:hover{text-decoration:underline}
 
 @media (max-width:900px){
-  .grid-app,.grid-app.grid-doc{grid-template-columns:1fr}
+  .grid-app{grid-template-columns:1fr}
   .servicios-grid{grid-template-columns:1fr}
   .apps-grid{grid-template-columns:repeat(2,1fr)}
   .lanzador-grid{grid-template-columns:1fr}
-  .doc-anadir,.form-visita-campos{grid-template-columns:1fr}
+  .metricas{grid-template-columns:repeat(2,1fr)}
+  .semana-grid{grid-template-columns:repeat(2,1fr)}
 }
-
-/* ---------- RESPONSIVE ---------- */
 @media (max-width:900px){
   .hero{grid-template-columns:1fr;gap:48px;padding:56px 0 70px}
   .pasos,.opiniones-grid{grid-template-columns:1fr}
@@ -383,6 +435,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 }
 @media (max-width:560px){
   .apps-grid{grid-template-columns:1fr}
+  .metricas{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -403,12 +456,12 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
       </span>
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#servicios">Servicios</a></li>
-      <li><a href="#como-trabajamos">Cómo trabajamos</a></li>
-      <li><a href="#aplicaciones">Aplicaciones</a></li>
+      <li><a href="#servicios">Cómo funciona</a></li>
+      <li><a href="#como-trabajamos">Implantación</a></li>
+      <li><a href="#aplicaciones">Módulos</a></li>
       <li><a href="#opiniones">Clientes</a></li>
       <li><button class="btn btn-fantasma" onclick="abrirModal('login')">Área de clientes</button></li>
-      <li><button class="btn btn-primario" onclick="document.getElementById('contacto').scrollIntoView()">Pide tu diagnóstico</button></li>
+      <li><button class="btn btn-primario" onclick="document.getElementById('contacto').scrollIntoView()">Pide una demo</button></li>
     </ul>
     <button class="menu-burger" id="burger" aria-label="Abrir menú">☰</button>
   </div>
@@ -417,161 +470,161 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 <!-- ============ HERO ============ -->
 <header class="contenedor hero">
   <div>
-    <span class="hero-eyebrow">✦ Consultoría tecnológica para pymes</span>
-    <h1>La tecnología que las grandes empresas ya usan, <em>a tu medida</em>.</h1>
-    <p>En Sentria ayudamos a pequeñas empresas a recuperar horas cada semana: integramos IA en tu flujo de trabajo, chatbots de WhatsApp conectados a tu correo, cuadros de mando con Power BI y automatizaciones con Office. Mejoras concretas, <strong>sin cambiarte el ERP</strong> ni poner tu negocio patas arriba.</p>
+    <span class="hero-eyebrow">✦ Agenda y reservas para clínicas</span>
+    <h1>La agenda de tu clínica, <em>sin llamadas ni solapamientos</em>.</h1>
+    <p>Sentria conecta la disponibilidad real de tus médicos en Outlook con un panel sencillo para reservar citas en segundos. Cada reserva envía un <strong>WhatsApp de confirmación</strong> al paciente y el estado se actualiza solo. Sin instalar nada nuevo: trabajamos sobre el Microsoft 365 que ya tienes.</p>
     <div class="hero-acciones">
-      <button class="btn btn-primario btn-grande" onclick="document.getElementById('contacto').scrollIntoView()">Solicita un diagnóstico gratuito</button>
-      <a href="#servicios" class="btn btn-fantasma btn-grande" style="text-decoration:none;display:inline-flex;align-items:center">Ver servicios ↓</a>
+      <button class="btn btn-primario btn-grande" onclick="document.getElementById('contacto').scrollIntoView()">Solicita una demo gratuita</button>
+      <a href="#aplicaciones" class="btn btn-fantasma btn-grande" style="text-decoration:none;display:inline-flex;align-items:center">Ver los módulos ↓</a>
     </div>
     <div class="hero-datos">
-      <div class="dato"><div class="num" data-contador="40">0</div><div class="lbl">pymes acompañadas</div></div>
-      <div class="dato"><div class="num" data-contador="12">0</div><div class="lbl">horas ahorradas de media al mes</div></div>
-      <div class="dato"><div class="num" data-contador="0">0</div><div class="lbl">cambios de ERP necesarios</div></div>
+      <div class="dato"><div class="num" data-contador="30">0</div><div class="lbl">segundos para reservar una cita</div></div>
+      <div class="dato"><div class="num" data-contador="0">0</div><div class="lbl">solapamientos de agenda</div></div>
+      <div class="dato"><div class="num" data-contador="100">0</div><div class="lbl">% sobre tu Microsoft 365 actual</div></div>
     </div>
   </div>
 
-  <!-- Elemento firma: una automatización resolviéndose en directo -->
+  <!-- Elemento firma: una reserva confirmándose en directo -->
   <div class="flujo-wrap">
     <div class="flujo" aria-hidden="true">
       <div class="flujo-cab">
         <div>
-          <div class="tit">AUTOMATIZACIÓN #038</div>
-          <div class="mono" style="font-size:.75rem;color:var(--tinta-suave)">en directo · sin intervención humana</div>
+          <div class="tit">RESERVA #1042</div>
+          <div class="mono" style="font-size:.75rem;color:var(--tinta-suave)">en directo · confirmación automática</div>
         </div>
-        <div class="ia-chip"><span class="punto-ia"></span> IA trabajando…</div>
+        <div class="ia-chip"><span class="punto-ia"></span> Procesando…</div>
       </div>
-      <div class="flujo-linea"><span class="campo">Canal</span><span class="valor" id="fl-canal"></span></div>
-      <div class="flujo-linea"><span class="campo">Cliente</span><span class="valor" id="fl-cliente"></span></div>
-      <div class="flujo-linea"><span class="campo">Consulta</span><span class="valor" id="fl-consulta"></span></div>
-      <div class="flujo-linea"><span class="campo">Respuesta</span><span class="valor" id="fl-respuesta"></span></div>
-      <div class="flujo-linea"><span class="campo">Aviso interno</span><span class="valor" id="fl-aviso"></span></div>
-      <div class="flujo-total"><span>TIEMPO TOTAL</span><span id="fl-tiempo"></span></div>
-      <div class="sello-ok" id="sello">Resuelto</div>
+      <div class="flujo-linea"><span class="campo">Paciente</span><span class="valor" id="fl-paciente"></span></div>
+      <div class="flujo-linea"><span class="campo">Médico</span><span class="valor" id="fl-medico"></span></div>
+      <div class="flujo-linea"><span class="campo">Fecha y hora</span><span class="valor" id="fl-fecha"></span></div>
+      <div class="flujo-linea"><span class="campo">WhatsApp</span><span class="valor" id="fl-wa"></span></div>
+      <div class="flujo-linea"><span class="campo">Outlook</span><span class="valor" id="fl-outlook"></span></div>
+      <div class="flujo-total"><span>ESTADO</span><span id="fl-estado"></span></div>
+      <div class="sello-ok" id="sello">Confirmada</div>
     </div>
   </div>
 </header>
 
-<!-- ============ SERVICIOS ============ -->
+<!-- ============ CÓMO FUNCIONA ============ -->
 <section id="servicios">
   <div class="contenedor">
     <div class="sec-cab revelar">
-      <span class="eyebrow">Servicios</span>
-      <h2>Mejoras que se notan desde el primer mes</h2>
-      <p>No vendemos proyectos faraónicos. Detectamos las tareas que te roban tiempo por pura rutina y las automatizamos con las herramientas que ya tienes o con soluciones ligeras que se integran en ellas.</p>
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>Toda la agenda de tu clínica en un solo sitio</h2>
+      <p>No cambiamos cómo trabajan tus médicos. Leemos su disponibilidad de Outlook, mostramos los huecos libres y dejamos que recepción reserve sin riesgo de error.</p>
     </div>
     <div class="servicios-grid">
       <article class="servicio revelar">
-        <div class="icono-s">🤖</div>
-        <h3>IA integrada en tu flujo de trabajo</h3>
-        <p>Adaptamos modelos de inteligencia artificial a tus procesos reales: clasificar correos, extraer datos de documentos, redactar respuestas o preparar resúmenes. La IA se adapta a cómo trabajas tú, no al revés.</p>
+        <div class="icono-s">📅</div>
+        <h3>Disponibilidad real, sincronizada con Outlook</h3>
+        <p>La agenda muestra los huecos libres de cada médico tomando los datos directamente de su calendario de Outlook, incluidos vacaciones y días libres. Cero dobles reservas.</p>
         <ul>
-          <li>Lectura y clasificación automática de documentos</li>
-          <li>Asistentes internos entrenados con tu información</li>
-          <li>Integración con las herramientas que ya usas</li>
+          <li>Horario y huecos por médico y por día</li>
+          <li>Días libres y vacaciones respetados automáticamente</li>
+          <li>El médico lo sigue viendo todo en su Outlook de siempre</li>
         </ul>
       </article>
       <article class="servicio revelar">
         <div class="icono-s">💬</div>
-        <h3>Chatbots de WhatsApp conectados a tu correo</h3>
-        <p>Tu negocio responde aunque tú estés en una obra, en consulta o atendiendo el mostrador. Un chatbot en WhatsApp resuelve las preguntas frecuentes y deriva lo importante a tu correo, con todo el contexto.</p>
+        <h3>Confirmación por WhatsApp automática</h3>
+        <p>Al reservar, el paciente recibe un WhatsApp con los datos de su cita. Responde para confirmar o cancelar y el estado se actualiza solo en el panel.</p>
         <ul>
-          <li>Atención 24/7 por WhatsApp Business</li>
-          <li>Derivación automática al correo con resumen incluido</li>
-          <li>Citas, pedidos y consultas sin perder ninguna</li>
+          <li>Recordatorio y confirmación sin llamadas</li>
+          <li>Menos ausencias y huecos perdidos</li>
+          <li>Reenvío automático si no contesta</li>
         </ul>
       </article>
       <article class="servicio revelar">
-        <div class="icono-s">📊</div>
-        <h3>Data analytics con Power BI</h3>
-        <p>Tus datos ya existen: en facturas, Excel y tu programa de gestión. Los convertimos en cuadros de mando con Power BI para que veas ventas, márgenes y clientes de un vistazo y decidas con números, no con intuición.</p>
+        <div class="icono-s">👥</div>
+        <h3>Ficha de paciente con historial</h3>
+        <p>Datos de contacto e historial completo de citas de cada paciente, siempre a mano para quien atiende en recepción.</p>
         <ul>
-          <li>Cuadros de mando a medida de tu negocio</li>
-          <li>Conexión con tus Excel y sistemas actuales</li>
-          <li>Informes automáticos cada semana o cada mes</li>
+          <li>Contacto, notas y avisos importantes</li>
+          <li>Todas las citas pasadas y futuras</li>
+          <li>Búsqueda rápida al reservar</li>
         </ul>
       </article>
       <article class="servicio revelar">
-        <div class="icono-s">⚙️</div>
-        <h3>Automatización de flujos con Office</h3>
-        <p>Eliminamos el «copiar y pegar» entre Excel, Outlook y carpetas compartidas. Con Microsoft 365 y Power Automate, los datos viajan solos: recordatorios, aprobaciones, plantillas y archivado sin tocar nada.</p>
+        <div class="icono-s">🔒</div>
+        <h3>Una cuenta por clínica, datos separados</h3>
+        <p>Cada clínica entra por su propio acceso (tuclinica.sentria.app) y solo ve sus médicos, pacientes y citas. Pensado para crecer de una consulta a muchas.</p>
         <ul>
-          <li>Flujos con Power Automate, Excel y Outlook</li>
-          <li>Plantillas y documentos que se rellenan solos</li>
-          <li>Avisos y recordatorios automáticos al equipo</li>
+          <li>Acceso propio por clínica</li>
+          <li>Datos aislados y privados</li>
+          <li>Roles: recepción, médico, administración</li>
         </ul>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ============ CÓMO TRABAJAMOS ============ -->
+<!-- ============ IMPLANTACIÓN ============ -->
 <section id="como-trabajamos">
   <div class="contenedor">
     <div class="sec-cab revelar">
-      <span class="eyebrow">Cómo trabajamos</span>
-      <h2>Mejoramos lo que tienes, no te cambiamos el ERP</h2>
-      <p>Sabemos que una pyme no puede parar dos meses para «transformarse digitalmente». Por eso trabajamos por mejoras pequeñas, medibles y acumulativas.</p>
+      <span class="eyebrow">Implantación</span>
+      <h2>En marcha en una semana, sin parar la consulta</h2>
+      <p>Lo montamos sobre tu Microsoft 365 actual. Tu equipo empieza a reservar el mismo día, sin cursos largos ni migraciones.</p>
     </div>
     <div class="pasos">
       <article class="paso revelar">
         <span class="num">PASO 1</span>
-        <h3>🔍 Diagnóstico gratuito</h3>
-        <p>Nos sentamos contigo una hora y repasamos tu día a día: dónde se pierde tiempo, qué se hace a mano y qué se podría delegar a la tecnología. Te entregamos un informe claro con propuestas priorizadas.</p>
+        <h3>🔌 Conectamos tu Microsoft 365</h3>
+        <p>Vinculamos los calendarios de Outlook de tus médicos con un permiso seguro. Configuramos horarios, especialidades y tu logo. Sin tocar nada de lo que ya usan.</p>
       </article>
       <article class="paso revelar">
         <span class="num">PASO 2</span>
-        <h3>🔧 Mejora concreta y acotada</h3>
-        <p>Elegimos juntos una mejora con impacto rápido: un chatbot, un cuadro de mando, una automatización. La implantamos sobre tus herramientas actuales, con presupuesto cerrado y sin interrumpir tu trabajo.</p>
+        <h3>📲 Activamos el WhatsApp</h3>
+        <p>Damos de alta el número de WhatsApp de la clínica y dejamos lista la plantilla de confirmación de citas. Probamos el circuito completo con una cita de prueba.</p>
       </article>
       <article class="paso revelar">
         <span class="num">PASO 3</span>
-        <h3>📈 Medición y acompañamiento</h3>
-        <p>Medimos las horas ahorradas y el resultado real. Formamos a tu equipo, ajustamos lo que haga falta y, si quieres seguir, planificamos la siguiente mejora. Tú decides el ritmo.</p>
+        <h3>📈 Formamos y acompañamos</h3>
+        <p>Una sesión corta con recepción y listo. Medimos huecos aprovechados y ausencias evitadas, y ajustamos lo que haga falta. Tú decides el ritmo.</p>
       </article>
     </div>
     <div class="compromiso revelar">
       <div class="icono">🤝</div>
       <div>
         <strong>Nuestro compromiso: cambios pequeños, resultados grandes</strong>
-        <p>No te pediremos cambiar de programa de gestión ni aprender un sistema nuevo de cero. Si una mejora no encaja en tu rutina, no la implantamos. Así de simple.</p>
+        <p>No te pediremos cambiar de programa ni aprender un sistema nuevo de cero. Trabajamos sobre lo que ya tienes y empezamos por el módulo que más te duele: la agenda.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ APLICACIONES PROPIAS ============ -->
+<!-- ============ MÓDULOS ============ -->
 <section id="aplicaciones">
   <div class="contenedor">
     <div class="sec-cab revelar">
-      <span class="eyebrow">Aplicaciones propias</span>
-      <h2>Herramientas que ya hemos construido para negocios como el tuyo</h2>
-      <p>Además de los proyectos a medida, hemos desarrollado aplicaciones propias que nuestros clientes usan a diario para gestionar su negocio. Están incluidas en tu área de clientes al trabajar con nosotros.</p>
+      <span class="eyebrow">Módulos</span>
+      <h2>Cuatro herramientas, un solo panel</h2>
+      <p>Todo lo que recepción necesita para gestionar la agenda del día. Incluido en tu área de clientes desde el primer momento.</p>
     </div>
     <div class="apps-grid">
       <article class="app-card revelar">
-        <div class="icono-f">🧾</div>
-        <h3>Presupuestos y facturas</h3>
-        <p>Crea presupuestos y facturas en segundos a partir de tus productos. Base, IVA y total se calculan solos.</p>
-      </article>
-      <article class="app-card revelar">
-        <div class="icono-f">📦</div>
-        <h3>Catálogo de productos</h3>
-        <p>Da de alta tu material y servicios con precio y unidad. Lo registras una vez y lo reutilizas en cada documento.</p>
-      </article>
-      <article class="app-card revelar">
-        <div class="icono-f">👥</div>
-        <h3>Gestión de clientes</h3>
-        <p>Ficha de cada cliente con datos de contacto e historial completo de visitas y trabajos realizados.</p>
+        <div class="icono-f">🏠</div>
+        <h3>Panel de la semana</h3>
+        <p>De un vistazo: las citas de hoy, las de la semana y las que faltan por confirmar.</p>
       </article>
       <article class="app-card revelar">
         <div class="icono-f">📅</div>
-        <h3>Agenda de visitas</h3>
-        <p>Agenda la próxima visita desde la ficha del cliente y ten siempre a la vista la siguiente cita pendiente.</p>
+        <h3>Agenda de médicos</h3>
+        <p>Disponibilidad real de cada profesional, con sus huecos libres y sus días libres.</p>
+      </article>
+      <article class="app-card revelar">
+        <div class="icono-f">➕</div>
+        <h3>Reserva de horas</h3>
+        <p>Reserva una cita en segundos eligiendo médico, día y hueco. Envía el WhatsApp solo.</p>
+      </article>
+      <article class="app-card revelar">
+        <div class="icono-f">👥</div>
+        <h3>Fichas de pacientes</h3>
+        <p>Contacto, notas e historial completo de citas de cada paciente, siempre a mano.</p>
       </article>
     </div>
     <div class="apps-cta revelar">
-      <p>¿Ya eres cliente de Sentria? Accede a tus aplicaciones desde el área de clientes.</p>
+      <p>¿Ya eres cliente de Sentria? Accede a tu agenda desde el área de clientes.</p>
       <button class="btn btn-primario btn-grande" onclick="abrirModal('login')">Entrar al área de clientes</button>
     </div>
   </div>
@@ -582,20 +635,20 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
   <div class="contenedor">
     <div class="sec-cab revelar">
       <span class="eyebrow">Clientes</span>
-      <h2>Pequeñas empresas que ya trabajan con menos rutina</h2>
-      <p>Negocios de todos los sectores que han ganado horas cada semana sin cambiar su forma de trabajar.</p>
+      <h2>Clínicas que han dejado atrás la agenda de papel</h2>
+      <p>Consultas de distintas especialidades que reservan más rápido y pierden menos citas.</p>
     </div>
     <div class="opiniones-grid" id="opinionesGrid"><!-- renderizado con JS --></div>
   </div>
 </section>
 
-<!-- ============ CONTACTO / DIAGNÓSTICO ============ -->
+<!-- ============ CONTACTO / DEMO ============ -->
 <section id="contacto">
   <div class="contenedor">
     <div class="sec-cab revelar">
       <span class="eyebrow">Empieza hoy</span>
-      <h2>Solicita tu diagnóstico gratuito y sin compromiso</h2>
-      <p>Cuéntanos cómo es tu negocio y te diremos, con honestidad, dónde puedes ahorrar tiempo. Si no podemos ayudarte, también te lo diremos.</p>
+      <h2>Pide una demo gratuita y sin compromiso</h2>
+      <p>Cuéntanos cómo es tu clínica y te enseñamos, con tus médicos de ejemplo, cómo quedaría tu agenda. Si no te encaja, también te lo diremos.</p>
     </div>
 
     <div class="form-card revelar">
@@ -614,54 +667,52 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         </div>
         <div class="campo-grupo">
           <label for="con-email">Correo electrónico *</label>
-          <input type="email" id="con-email" autocomplete="email" placeholder="maria@tuempresa.es">
+          <input type="email" id="con-email" autocomplete="email" placeholder="maria@tuclinica.es">
           <p class="error-msg">Introduce un correo válido.</p>
         </div>
         <div class="fila-doble">
           <div class="campo-grupo">
-            <label for="con-empresa">Empresa *</label>
-            <input type="text" id="con-empresa" autocomplete="organization" placeholder="Tu Empresa S.L.">
-            <p class="error-msg">Escribe el nombre de tu empresa.</p>
+            <label for="con-empresa">Clínica *</label>
+            <input type="text" id="con-empresa" autocomplete="organization" placeholder="Clínica Montjuïc">
+            <p class="error-msg">Escribe el nombre de tu clínica.</p>
           </div>
           <div class="campo-grupo">
-            <label for="con-perfil">Tamaño del negocio *</label>
+            <label for="con-perfil">Tamaño *</label>
             <select id="con-perfil">
               <option value="">Selecciona una opción</option>
-              <option value="autonomo">Autónomo / freelance</option>
-              <option value="micro">Microempresa (1–9 empleados)</option>
-              <option value="pyme">Pyme (10–50 empleados)</option>
-              <option value="otro">Otro</option>
+              <option value="solo">Consulta individual</option>
+              <option value="micro">2–5 profesionales</option>
+              <option value="pyme">6–15 profesionales</option>
+              <option value="otro">Más de 15</option>
             </select>
-            <p class="error-msg">Selecciona el tamaño de tu negocio.</p>
+            <p class="error-msg">Selecciona el tamaño de tu clínica.</p>
           </div>
         </div>
         <div class="campo-grupo">
-          <label for="con-interes">¿Qué te interesa más?</label>
+          <label for="con-interes">¿Usáis ya Microsoft 365 / Outlook?</label>
           <select id="con-interes">
-            <option value="">No lo tengo claro todavía</option>
-            <option value="ia">IA integrada en mi flujo de trabajo</option>
-            <option value="chatbot">Chatbot de WhatsApp conectado al correo</option>
-            <option value="powerbi">Data analytics con Power BI</option>
-            <option value="office">Automatizar flujos con Office</option>
-            <option value="apps">Vuestras aplicaciones de gestión</option>
+            <option value="">No lo sé seguro</option>
+            <option value="si">Sí, todo el equipo</option>
+            <option value="parcial">Solo algunas personas</option>
+            <option value="no">No, usamos Google u otro</option>
           </select>
         </div>
         <div class="campo-grupo">
-          <label for="con-mensaje">Cuéntanos brevemente tu situación (opcional)</label>
-          <textarea id="con-mensaje" placeholder="Ej.: Pierdo dos tardes al mes pasando pedidos de WhatsApp a Excel…"></textarea>
+          <label for="con-mensaje">Cuéntanos brevemente cómo gestionáis hoy las citas (opcional)</label>
+          <textarea id="con-mensaje" placeholder="Ej.: Llevamos la agenda en papel y confirmamos por teléfono…"></textarea>
         </div>
         <div class="campo-grupo check-linea">
           <input type="checkbox" id="con-terminos">
           <label for="con-terminos" style="font-weight:400;margin:0">Acepto la <a href="#" style="color:var(--verde-fiscal)">política de privacidad</a> para que Sentria pueda contactarme. *</label>
         </div>
         <p class="error-msg" id="error-terminos" style="margin-bottom:14px">Debes aceptar la política de privacidad para continuar.</p>
-        <button type="submit" class="btn btn-primario btn-grande btn-bloque">Solicitar mi diagnóstico gratuito</button>
+        <button type="submit" class="btn btn-primario btn-grande btn-bloque">Solicitar mi demo gratuita</button>
       </form>
 
       <div class="exito" id="contactoExito">
         <div class="icono">✓</div>
         <h3>¡Solicitud enviada!</h3>
-        <p>Gracias por tu interés. Te escribiremos a <strong id="exitoEmail"></strong> en menos de 24&nbsp;h laborables para concertar el diagnóstico.</p>
+        <p>Gracias por tu interés. Te escribiremos a <strong id="exitoEmail"></strong> en menos de 24&nbsp;h laborables para preparar tu demo.</p>
       </div>
     </div>
   </div>
@@ -670,7 +721,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="contenedor footer-inner">
-    <p>© 2026 Sentria Consulting · Tecnología cercana para pequeñas empresas</p>
+    <p>© 2026 Sentria Consulting · Agenda y reservas para clínicas</p>
     <ul class="footer-links">
       <li><a href="#">Privacidad</a></li>
       <li><a href="#">Términos</a></li>
@@ -691,14 +742,14 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         </svg>
         <span class="logo-texto">
           <span class="nombre" style="font-size:1.1rem">Sentria</span>
-          <span class="sub">Área de clientes</span>
+          <span class="sub" id="appClinica">Clínica Montjuïc</span>
         </span>
       </a>
       <div class="app-tabs" role="tablist">
-        <button class="app-tab activo" data-panel="apps">🏠 Mis aplicaciones</button>
-        <button class="app-tab" data-panel="inventario">📦 Productos</button>
-        <button class="app-tab" data-panel="documentos">🧾 Presupuestos y facturas</button>
-        <button class="app-tab" data-panel="clientes">👥 Clientes y agenda</button>
+        <button class="app-tab activo" data-panel="panel">🏠 Panel de la semana</button>
+        <button class="app-tab" data-panel="agenda">📅 Agenda de médicos</button>
+        <button class="app-tab" data-panel="reservar">➕ Reservar hora</button>
+        <button class="app-tab" data-panel="pacientes">👥 Pacientes</button>
       </div>
       <div class="app-user">
         <span>Hola, <strong id="appNombre"></strong></span>
@@ -710,143 +761,168 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
   <div class="app-cuerpo">
     <div class="contenedor">
 
-      <!-- PANEL: LANZADOR DE APLICACIONES -->
-      <div class="app-panel activo" id="panel-apps">
-        <h2>Tus aplicaciones</h2>
-        <p class="sub">Estas son las herramientas de gestión incluidas en tu plan con Sentria. Elige una para empezar.</p>
+      <!-- PANEL: PANEL DE LA SEMANA -->
+      <div class="app-panel activo" id="panel-panel">
+        <h2>Panel de la semana</h2>
+        <p class="sub">Lo que hay por delante en tu clínica, de un vistazo.</p>
+
+        <div class="metricas" id="metricas"></div>
+
+        <div class="semana-nav">
+          <button onclick="moverSemana(-1)">‹ Anterior</button>
+          <span class="rango" id="rangoSemana"></span>
+          <button onclick="moverSemana(1)">Siguiente ›</button>
+          <button onclick="irHoy()" style="margin-left:auto">Hoy</button>
+        </div>
+        <div class="semana-grid" id="semanaGrid"></div>
+
+        <h3 style="font-family:'Sora';font-size:1.1rem;margin:30px 0 4px">Citas pendientes de confirmar</h3>
+        <p class="sub" style="margin-bottom:14px">Esperando respuesta al WhatsApp. Puedes confirmarlas a mano si el paciente avisa por otra vía.</p>
+        <ul class="lista-citas" id="listaPendientes"></ul>
+      </div>
+
+      <!-- PANEL: AGENDA DE MÉDICOS -->
+      <div class="app-panel" id="panel-agenda">
+        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a inicio</button>
+        <h2>Agenda de médicos</h2>
+        <p class="sub">Disponibilidad de cada profesional esta semana. Los huecos verdes están libres para reservar; los días libres aparecen marcados.</p>
+
+        <div class="medico-selector" id="medicoSelector"></div>
+
+        <div class="semana-nav">
+          <button onclick="moverSemanaAgenda(-1)">‹ Anterior</button>
+          <span class="rango" id="rangoSemanaAgenda"></span>
+          <button onclick="moverSemanaAgenda(1)">Siguiente ›</button>
+          <button onclick="irHoyAgenda()" style="margin-left:auto">Hoy</button>
+        </div>
+
+        <div id="agendaDias"></div>
+      </div>
+
+      <!-- PANEL: RESERVAR HORA -->
+      <div class="app-panel" id="panel-reservar">
+        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a inicio</button>
+        <h2>Reservar hora</h2>
+        <p class="sub">Elige paciente, médico y hueco libre. Al guardar, el paciente recibe un WhatsApp de confirmación.</p>
+        <div class="grid-app">
+          <form class="tarjeta" id="formReserva">
+            <h3>Nueva cita</h3>
+            <div class="campo-grupo">
+              <label for="rsv-paciente">Paciente</label>
+              <select id="rsv-paciente"></select>
+            </div>
+            <div id="rsv-nuevo" style="display:none">
+              <div class="campo-grupo">
+                <label for="rsv-nuevo-nombre">Nombre del nuevo paciente</label>
+                <input type="text" id="rsv-nuevo-nombre" placeholder="Ej.: Marta Giralt">
+              </div>
+              <div class="campo-grupo">
+                <label for="rsv-nuevo-tel">Teléfono (con WhatsApp)</label>
+                <input type="text" id="rsv-nuevo-tel" placeholder="Ej.: 612 345 678">
+              </div>
+            </div>
+            <div class="campo-grupo">
+              <label for="rsv-medico">Médico</label>
+              <select id="rsv-medico"></select>
+            </div>
+            <div class="fila-doble">
+              <div class="campo-grupo">
+                <label for="rsv-fecha">Día</label>
+                <input type="date" id="rsv-fecha">
+              </div>
+              <div class="campo-grupo">
+                <label for="rsv-hora">Hora libre</label>
+                <select id="rsv-hora"></select>
+              </div>
+            </div>
+            <div class="campo-grupo">
+              <label for="rsv-motivo">Motivo de la cita</label>
+              <input type="text" id="rsv-motivo" placeholder="Ej.: Revisión anual">
+            </div>
+            <p class="aviso-resv" id="avisoResv"></p>
+            <button type="submit" class="btn btn-primario btn-bloque" style="margin-top:6px">Reservar y enviar WhatsApp</button>
+          </form>
+
+          <div class="tarjeta">
+            <h3>Vista previa del WhatsApp</h3>
+            <div class="wa-preview">
+              <div class="wa-cab">💬 WhatsApp · Clínica Montjuïc</div>
+              <div class="wa-burbuja" id="waBurbuja"></div>
+              <div class="wa-hora" id="waHora"></div>
+            </div>
+            <p class="sub" style="margin-top:16px;font-size:.85rem">El paciente responde <strong>SÍ</strong> para confirmar o <strong>NO</strong> para cancelar. El estado se actualiza solo en el panel.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: PACIENTES -->
+      <div class="app-panel" id="panel-pacientes">
+        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a inicio</button>
+        <h2>Pacientes</h2>
+        <p class="sub">Ficha de contacto e historial de citas de cada paciente.</p>
+        <div class="grid-app">
+          <form class="tarjeta" id="formPaciente">
+            <h3>Nuevo paciente</h3>
+            <div class="campo-grupo">
+              <label for="pac-nombre">Nombre y apellidos</label>
+              <input type="text" id="pac-nombre" placeholder="Ej.: Marta Giralt" required>
+            </div>
+            <div class="campo-grupo">
+              <label for="pac-tel">Teléfono (con WhatsApp)</label>
+              <input type="text" id="pac-tel" placeholder="Ej.: 612 345 678">
+            </div>
+            <div class="campo-grupo">
+              <label for="pac-email">Email (opcional)</label>
+              <input type="email" id="pac-email" placeholder="Ej.: marta@correo.es">
+            </div>
+            <div class="campo-grupo">
+              <label for="pac-notas">Notas / avisos (opcional)</label>
+              <input type="text" id="pac-notas" placeholder="Ej.: Alergia a la penicilina">
+            </div>
+            <button type="submit" class="btn btn-primario btn-bloque">Guardar paciente</button>
+          </form>
+          <div>
+            <div class="campo-grupo" style="margin-bottom:18px">
+              <input type="text" id="buscaPaciente" placeholder="🔍 Buscar paciente por nombre…" oninput="renderPacientes()">
+            </div>
+            <div id="listaPacientes"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LANZADOR (acceso rápido a módulos, opcional) -->
+      <div class="app-panel" id="panel-apps">
+        <h2>Tu clínica en Sentria</h2>
+        <p class="sub">Elige por dónde empezar.</p>
         <div class="lanzador-grid">
-          <button class="lanzador-card" onclick="cambiarPanel('documentos')">
-            <span class="icono">🧾</span>
-            <h3>Presupuestos y facturas</h3>
-            <p>Crea documentos a partir de tu catálogo. El IVA y el total se calculan automáticamente.</p>
-            <span class="abrir">Abrir aplicación →</span>
+          <button class="lanzador-card" onclick="cambiarPanel('panel')">
+            <span class="icono">🏠</span>
+            <h3>Panel de la semana</h3>
+            <p>Las citas de hoy y de la semana, y las que faltan por confirmar.</p>
+            <span class="abrir">Abrir →</span>
           </button>
-          <button class="lanzador-card" onclick="cambiarPanel('inventario')">
-            <span class="icono">📦</span>
-            <h3>Catálogo de productos</h3>
-            <p>Tu material y tus servicios con precio y unidad, listos para añadir a cualquier documento.</p>
-            <span class="abrir">Abrir aplicación →</span>
+          <button class="lanzador-card" onclick="cambiarPanel('agenda')">
+            <span class="icono">📅</span>
+            <h3>Agenda de médicos</h3>
+            <p>Huecos libres y días libres de cada profesional, sincronizados con Outlook.</p>
+            <span class="abrir">Abrir →</span>
           </button>
-          <button class="lanzador-card" onclick="cambiarPanel('clientes')">
+          <button class="lanzador-card" onclick="cambiarPanel('reservar')">
+            <span class="icono">➕</span>
+            <h3>Reservar hora</h3>
+            <p>Crea una cita en segundos y envía el WhatsApp de confirmación al paciente.</p>
+            <span class="abrir">Abrir →</span>
+          </button>
+          <button class="lanzador-card" onclick="cambiarPanel('pacientes')">
             <span class="icono">👥</span>
-            <h3>Clientes y agenda de visitas</h3>
-            <p>Fichas de clientes con historial de visitas realizadas y agenda de las próximas citas.</p>
-            <span class="abrir">Abrir aplicación →</span>
+            <h3>Pacientes</h3>
+            <p>Fichas con contacto, notas e historial completo de citas.</p>
+            <span class="abrir">Abrir →</span>
           </button>
         </div>
         <div class="lanzador-aviso">
           <span style="font-size:1.3rem">🚧</span>
-          <span><strong>Seguimos construyendo.</strong> Próximamente añadiremos más aplicaciones a tu área de clientes: informes Power BI integrados, panel del chatbot de WhatsApp y más. Si echas algo en falta, cuéntanoslo: las construimos a partir de lo que nuestros clientes necesitan.</span>
-        </div>
-      </div>
-
-      <!-- PANEL: PRODUCTOS / INVENTARIO -->
-      <div class="app-panel" id="panel-inventario">
-        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a mis aplicaciones</button>
-        <h2>Catálogo de productos</h2>
-        <p class="sub">Da de alta tu material y servicios con su precio. Después podrás añadirlos directamente a presupuestos y facturas.</p>
-        <div class="grid-app">
-          <form class="tarjeta" id="formItem">
-            <h3>Añadir producto o servicio</h3>
-            <div class="campo-grupo">
-              <label for="item-nombre">Nombre</label>
-              <input type="text" id="item-nombre" placeholder="Ej.: Tubo PVC Ø20 mm" required>
-            </div>
-            <div class="campo-grupo">
-              <label for="item-precio">Precio (€, sin IVA)</label>
-              <input type="text" id="item-precio" inputmode="decimal" placeholder="Ej.: 3,50" required>
-            </div>
-            <div class="campo-grupo">
-              <label for="item-unidad">Unidad</label>
-              <select id="item-unidad">
-                <option value="ud">Unidad (ud)</option>
-                <option value="m">Metro (m)</option>
-                <option value="m²">Metro cuadrado (m²)</option>
-                <option value="h">Hora (h)</option>
-                <option value="kg">Kilo (kg)</option>
-                <option value="l">Litro (l)</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primario btn-bloque">Añadir al catálogo</button>
-          </form>
-          <div class="tarjeta">
-            <h3>Tu catálogo</h3>
-            <table class="tabla">
-              <thead><tr><th>Producto / servicio</th><th style="text-align:right">Precio</th><th>Unidad</th><th></th></tr></thead>
-              <tbody id="cuerpoInventario"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- PANEL: PRESUPUESTOS Y FACTURAS -->
-      <div class="app-panel" id="panel-documentos">
-        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a mis aplicaciones</button>
-        <h2>Presupuestos y facturas</h2>
-        <p class="sub">Elige cliente, añade artículos de tu catálogo y guarda el documento. El IVA y el total se calculan solos.</p>
-        <div class="grid-app grid-doc">
-          <div class="tarjeta">
-            <h3>Nuevo documento</h3>
-            <div class="fila-doble">
-              <div class="campo-grupo">
-                <label for="doc-tipo">Tipo</label>
-                <select id="doc-tipo">
-                  <option value="presupuesto">Presupuesto</option>
-                  <option value="factura">Factura</option>
-                </select>
-              </div>
-              <div class="campo-grupo">
-                <label for="doc-cliente">Cliente</label>
-                <select id="doc-cliente"></select>
-              </div>
-            </div>
-            <label style="margin-bottom:7px">Añadir línea desde el catálogo</label>
-            <div class="doc-anadir">
-              <select id="doc-item" aria-label="Producto del catálogo"></select>
-              <input type="text" id="doc-cantidad" inputmode="decimal" value="1" aria-label="Cantidad">
-              <button type="button" class="btn btn-primario" id="btnAnadirLinea" style="padding:11px 18px">＋ Añadir</button>
-            </div>
-            <table class="tabla">
-              <thead><tr><th>Concepto</th><th style="text-align:right">Cant.</th><th style="text-align:right">Precio</th><th style="text-align:right">Importe</th><th></th></tr></thead>
-              <tbody id="cuerpoLineas"></tbody>
-            </table>
-            <div class="doc-totales">
-              <div><span>Base imponible</span><span id="docBase">0,00 €</span></div>
-              <div><span>IVA (21 %)</span><span id="docIVA">0,00 €</span></div>
-              <div class="total-final"><span>TOTAL</span><span id="docTotal">0,00 €</span></div>
-            </div>
-            <p class="aviso-doc" id="avisoDoc"></p>
-            <button type="button" class="btn btn-primario btn-bloque" id="btnGuardarDoc" style="margin-top:18px">Guardar documento</button>
-          </div>
-          <div class="tarjeta">
-            <h3>Documentos guardados</h3>
-            <table class="tabla">
-              <thead><tr><th>Nº</th><th>Tipo</th><th>Cliente</th><th>Fecha</th><th style="text-align:right">Total</th></tr></thead>
-              <tbody id="cuerpoDocs"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- PANEL: CLIENTES Y AGENDA -->
-      <div class="app-panel" id="panel-clientes">
-        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a mis aplicaciones</button>
-        <h2>Clientes y agenda de visitas</h2>
-        <p class="sub">Guarda tus clientes, registra las visitas que ya les has hecho y agenda las próximas.</p>
-        <div class="grid-app">
-          <form class="tarjeta" id="formCliente">
-            <h3>Nuevo cliente</h3>
-            <div class="campo-grupo">
-              <label for="cli-nombre">Nombre o empresa</label>
-              <input type="text" id="cli-nombre" placeholder="Ej.: Hostal El Roble" required>
-            </div>
-            <div class="campo-grupo">
-              <label for="cli-contacto">Contacto (opcional)</label>
-              <input type="text" id="cli-contacto" placeholder="Persona · teléfono · email">
-            </div>
-            <button type="submit" class="btn btn-primario btn-bloque">Guardar cliente</button>
-          </form>
-          <div id="listaClientes"></div>
+          <span><strong>Versión de demostración.</strong> Los datos son de ejemplo y viven solo en este navegador. En producción, la disponibilidad y los días libres se leen del Outlook real de cada médico (Microsoft Graph) y los WhatsApp se envían de verdad. Cada clínica tendrá su propio acceso y sus datos totalmente separados.</span>
         </div>
       </div>
 
@@ -899,20 +975,20 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
           <input type="password" id="mreg-pass" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
         </div>
         <button type="submit" class="btn btn-primario btn-bloque">Crear cuenta</button>
-        <p style="font-size:.8rem;color:var(--tinta-suave);margin-top:14px;text-align:center">El acceso completo a las aplicaciones se activa al ser cliente de Sentria. <a href="#contacto" onclick="cerrarModal()" style="color:var(--verde-fiscal)">Pide tu diagnóstico</a></p>
+        <p style="font-size:.8rem;color:var(--tinta-suave);margin-top:14px;text-align:center">El acceso completo se activa al dar de alta tu clínica con Sentria. <a href="#contacto" onclick="cerrarModal()" style="color:var(--verde-fiscal)">Pide tu demo</a></p>
       </form>
     </div>
   </div>
 </div>
 
-<!-- ============ FIREBASE (conexión existente; aquí se integrará Auth/Firestore) ============ -->
+<!-- ============ FIREBASE (conexión existente; aquí se integrará Auth) ============ -->
 <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-  // TODO: Añadir SDKs de los productos de Firebase que se vayan a usar
-  // p. ej.: getAuth para autenticación real y getFirestore para guardar
-  // catálogo, clientes y documentos por usuario.
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  // TODO (backend real):
+  //  - Auth: getAuth + signInWithEmailAndPassword / OAuth de Microsoft (login con la cuenta de la clínica).
+  //  - Multi-clínica (multi-tenant): cada documento/fila lleva tenant_id (clínica) y toda consulta filtra por él.
+  //  - Outlook: Microsoft Graph (GET /me/calendarView para disponibilidad y días libres; POST /events al reservar).
+  //  - WhatsApp: webhook de Twilio para recibir la respuesta del paciente y actualizar el estado de la cita.
 
   const firebaseConfig = {
     apiKey: "AIzaSyDBHMbaP-z-cRKLM5IZsmpS343RYjc6yas",
@@ -923,34 +999,52 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
     appId: "1:222966420744:web:f7edc703477eae00c248bd"
   };
 
-  // Initialize Firebase
   const firebaseApp = initializeApp(firebaseConfig);
-  // Se expone por si la lógica clásica (no módulo) necesita acceder a Firebase más adelante.
   window.firebaseApp = firebaseApp;
 </script>
 
 <script>
 /* =====================================================
-   Sentria Consulting · lógica de la página
-   - tarjeta animada del hero (automatización en directo)
-   - contadores animados
-   - opiniones renderizadas desde datos
-   - modal login/registro con tabs y "base de datos" en memoria
-     (sustituir por Firebase Auth cuando se integre)
-   - formulario de solicitud de diagnóstico con validación
-   - área de clientes con lanzador de aplicaciones
+   Sentria · Agenda y reservas para clínicas
+   DEMO en memoria. Sustituir por backend real:
+   - Outlook/Graph para disponibilidad y eventos
+   - Twilio para WhatsApp (envío + webhook de respuesta)
+   - tenant_id en cada dato para separar clínicas
    ===================================================== */
 
-/* ---------- 1. Automatización animada del hero ---------- */
-const lineasFlujo = [
-  { id: 'fl-canal',     texto: 'WhatsApp Business' },
-  { id: 'fl-cliente',   texto: 'Hostal El Roble' },
-  { id: 'fl-consulta',  texto: '«¿Tenéis sitio el viernes?»' },
-  { id: 'fl-respuesta', texto: 'Enviada · disponibilidad' },
-  { id: 'fl-aviso',     texto: 'Correo a recepción ✓' },
-  { id: 'fl-tiempo',    texto: '4 segundos' },
-];
+/* ---------- Utilidades de fecha ---------- */
+function iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function hoyISO(){ return iso(new Date()); }
+function inicioSemana(offset=0){
+  const d = new Date();
+  const dia = (d.getDay() + 6) % 7;            // 0 = lunes
+  d.setDate(d.getDate() - dia + offset * 7);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function diasSemana(offset=0){
+  const ini = inicioSemana(offset);
+  return Array.from({length:6}, (_,i) => { const x = new Date(ini); x.setDate(ini.getDate()+i); return x; }); // L-S
+}
+const DIAS_CORTOS = ['Lun','Mar','Mié','Jue','Vie','Sáb'];
+const fmtFecha = f => new Date(f + 'T00:00:00').toLocaleDateString('es-ES', { day:'numeric', month:'short', year:'numeric' });
+const fmtFechaLarga = f => new Date(f + 'T00:00:00').toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
+function rangoSemanaTxt(offset){
+  const ds = diasSemana(offset);
+  const a = ds[0], b = ds[5];
+  const opt = { day:'numeric', month:'short' };
+  return `${a.toLocaleDateString('es-ES',opt)} – ${b.toLocaleDateString('es-ES',opt)}`;
+}
 
+/* ---------- Tarjeta animada del hero ---------- */
+const lineasFlujo = [
+  { id: 'fl-paciente', texto: 'Marta Giralt' },
+  { id: 'fl-medico',   texto: 'Dra. Elena Vidal' },
+  { id: 'fl-fecha',    texto: 'jue · 09:30' },
+  { id: 'fl-wa',       texto: 'Enviado ✓' },
+  { id: 'fl-outlook',  texto: 'Evento creado ✓' },
+  { id: 'fl-estado',   texto: 'Confirmada' },
+];
 function escribirLinea({ id, texto }) {
   return new Promise(resolve => {
     const el = document.getElementById(id);
@@ -963,12 +1057,10 @@ function escribirLinea({ id, texto }) {
     }, 34);
   });
 }
-
 async function animarFlujo() {
   lineasFlujo.forEach(l => document.getElementById(l.id).textContent = '');
   const sello = document.getElementById('sello');
   sello.classList.remove('visible');
-
   for (const linea of lineasFlujo) {
     await escribirLinea(linea);
     await new Promise(r => setTimeout(r, 160));
@@ -978,7 +1070,7 @@ async function animarFlujo() {
 }
 animarFlujo();
 
-/* ---------- 2. Contadores del hero ---------- */
+/* ---------- Contadores del hero ---------- */
 document.querySelectorAll('[data-contador]').forEach(el => {
   const objetivo = parseInt(el.dataset.contador, 10);
   if (objetivo === 0) { el.textContent = '0'; return; }
@@ -992,22 +1084,21 @@ document.querySelectorAll('[data-contador]').forEach(el => {
   requestAnimationFrame(paso);
 });
 
-/* ---------- 3. Opiniones (datos → DOM) ---------- */
+/* ---------- Opiniones ---------- */
 const opiniones = [
   {
     nombre: 'Laura Martín', rol: 'Clínica dental · Valencia', color: '#1F7A57', estrellas: 5,
-    texto: 'El chatbot de WhatsApp nos cambió la vida: confirma citas y responde dudas mientras atendemos pacientes. Lo importante nos llega al correo ya resumido. Y todo sin tocar nuestro programa de siempre.'
+    texto: 'Recepción reserva en segundos y el paciente recibe el WhatsApp al momento. Hemos bajado muchísimo las ausencias y se acabaron las dobles citas. Y todo desde el Outlook que ya usábamos.'
   },
   {
-    nombre: 'Carlos Ibáñez', rol: 'Distribuidora familiar · Sevilla', color: '#C8442C', estrellas: 5,
-    texto: 'Pensaba que «datos» era cosa de empresas grandes. Sentria conectó nuestros Excel a Power BI y ahora veo márgenes por cliente cada lunes. Hemos dejado de vender a pérdida sin darnos cuenta.'
+    nombre: 'Carlos Ibáñez', rol: 'Centro de fisioterapia · Sevilla', color: '#C8442C', estrellas: 5,
+    texto: 'Lo mejor es ver la disponibilidad real de cada fisio de un vistazo, con sus días libres incluidos. Antes lo cuadrábamos a mano en una libreta. Ahora no se nos escapa un hueco.'
   },
   {
-    nombre: 'Anna Puig', rol: 'Taller de carpintería · Barcelona', color: '#3A5BA0', estrellas: 5,
-    texto: 'Lo que más valoro es que no nos vendieron humo: una mejora cada vez, con precio cerrado. La automatización de pedidos con Office nos ahorra unas diez horas al mes. Y los presupuestos ahora salen en minutos con su aplicación.'
+    nombre: 'Anna Puig', rol: 'Consulta de nutrición · Barcelona', color: '#3A5BA0', estrellas: 5,
+    texto: 'Sin instalar nada nuevo y en una semana estábamos funcionando. La ficha del paciente con todo su historial de citas a mano nos ahorra muchísimo tiempo en cada visita.'
   },
 ];
-
 const grid = document.getElementById('opinionesGrid');
 opiniones.forEach(op => {
   const iniciales = op.nombre.split(' ').map(p => p[0]).join('');
@@ -1026,10 +1117,9 @@ opiniones.forEach(op => {
   grid.appendChild(art);
 });
 
-/* ---------- 4. Modal: abrir/cerrar/tabs ---------- */
+/* ---------- Modal ---------- */
 const modalFondo = document.getElementById('modalFondo');
 const avisoModal = document.getElementById('avisoModal');
-
 function abrirModal(tab) {
   modalFondo.classList.add('abierto');
   document.body.style.overflow = 'hidden';
@@ -1049,105 +1139,77 @@ function cambiarTab(tab) {
   document.getElementById('panelRegistro').classList.toggle('activo', !esLogin);
   document.getElementById('modalTitulo').textContent = esLogin ? 'Área de clientes' : 'Crea tu cuenta';
 }
-function mostrarAviso(tipo, mensaje) {
-  avisoModal.className = 'aviso-modal ' + tipo;
-  avisoModal.textContent = mensaje;
-}
-function limpiarAviso() {
-  avisoModal.className = 'aviso-modal';
-  avisoModal.textContent = '';
-}
+function mostrarAviso(tipo, mensaje) { avisoModal.className = 'aviso-modal ' + tipo; avisoModal.textContent = mensaje; }
+function limpiarAviso() { avisoModal.className = 'aviso-modal'; avisoModal.textContent = ''; }
 modalFondo.addEventListener('click', e => { if (e.target === modalFondo) cerrarModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
 
-/* ---------- 5. "Base de datos" de usuarios en memoria ----------
-   NOTA: sustituir por Firebase Auth (getAuth + signInWithEmailAndPassword
-   y createUserWithEmailAndPassword) cuando se conecte el backend real. */
+/* ---------- Usuarios demo (sustituir por Auth real) ---------- */
 const usuarios = [
-  { email: 'demo@sentria.es', pass: 'demo1234', nombre: 'Cliente Demo' },
+  { email: 'demo@sentria.es', pass: 'demo1234', nombre: 'Recepción', clinica: 'Clínica Montjuïc' },
 ];
 const emailValido = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-/* Login */
 document.getElementById('formLogin').addEventListener('submit', e => {
   e.preventDefault();
   const email = document.getElementById('log-email').value.trim().toLowerCase();
   const pass  = document.getElementById('log-pass').value;
-  if (!emailValido(email) || !pass) {
-    mostrarAviso('error', 'Introduce un correo y una contraseña válidos.');
-    return;
-  }
+  if (!emailValido(email) || !pass) { mostrarAviso('error', 'Introduce un correo y una contraseña válidos.'); return; }
   const usuario = usuarios.find(u => u.email === email && u.pass === pass);
   if (usuario) {
-    mostrarAviso('ok', `¡Hola, ${usuario.nombre}! Entrando en tu área de clientes…`);
+    mostrarAviso('ok', `¡Hola, ${usuario.nombre}! Entrando en tu agenda…`);
     setTimeout(() => { cerrarModal(); e.target.reset(); entrarApp(usuario); }, 650);
   } else {
     mostrarAviso('error', 'Correo o contraseña incorrectos. Prueba con demo@sentria.es / demo1234.');
   }
 });
-
-/* Registro rápido (modal) */
 document.getElementById('formRegistroModal').addEventListener('submit', e => {
   e.preventDefault();
   const nombre = document.getElementById('mreg-nombre').value.trim();
   const email  = document.getElementById('mreg-email').value.trim().toLowerCase();
   const pass   = document.getElementById('mreg-pass').value;
-
   if (!nombre) return mostrarAviso('error', 'Escribe tu nombre.');
   if (!emailValido(email)) return mostrarAviso('error', 'El correo no parece válido.');
   if (pass.length < 8) return mostrarAviso('error', 'La contraseña debe tener al menos 8 caracteres.');
-  if (usuarios.some(u => u.email === email)) return mostrarAviso('error', 'Ya existe una cuenta con ese correo. Prueba a iniciar sesión.');
-
-  usuarios.push({ email, pass, nombre });
-  mostrarAviso('ok', `¡Cuenta creada, ${nombre}! Ya puedes iniciar sesión con tu correo.`);
+  if (usuarios.some(u => u.email === email)) return mostrarAviso('error', 'Ya existe una cuenta con ese correo.');
+  usuarios.push({ email, pass, nombre, clinica: 'Tu clínica' });
+  mostrarAviso('ok', `¡Cuenta creada, ${nombre}! Ya puedes iniciar sesión.`);
   e.target.reset();
 });
 
-/* ---------- 6. Formulario de solicitud de diagnóstico ---------- */
+/* ---------- Formulario de demo ---------- */
 document.getElementById('formContacto').addEventListener('submit', e => {
   e.preventDefault();
   let valido = true;
-
   const marcar = (input, condicionError) => {
-    const grupo = input.closest('.campo-grupo');
-    grupo.classList.toggle('con-error', condicionError);
+    input.closest('.campo-grupo').classList.toggle('con-error', condicionError);
     if (condicionError) valido = false;
   };
-
-  const nombre    = document.getElementById('con-nombre');
+  const nombre = document.getElementById('con-nombre');
   const apellidos = document.getElementById('con-apellidos');
-  const email     = document.getElementById('con-email');
-  const empresa   = document.getElementById('con-empresa');
-  const perfil    = document.getElementById('con-perfil');
-  const terminos  = document.getElementById('con-terminos');
-  const errTerm   = document.getElementById('error-terminos');
-
+  const email = document.getElementById('con-email');
+  const empresa = document.getElementById('con-empresa');
+  const perfil = document.getElementById('con-perfil');
+  const terminos = document.getElementById('con-terminos');
+  const errTerm = document.getElementById('error-terminos');
   marcar(nombre, !nombre.value.trim());
   marcar(apellidos, !apellidos.value.trim());
   marcar(email, !emailValido(email.value.trim()));
   marcar(empresa, !empresa.value.trim());
   marcar(perfil, !perfil.value);
-
   errTerm.style.display = terminos.checked ? 'none' : 'block';
   if (!terminos.checked) valido = false;
-
   if (!valido) return;
-
-  // TODO: cuando se integre Firestore, guardar aquí la solicitud de diagnóstico.
   document.getElementById('formContacto').style.display = 'none';
   document.getElementById('exitoEmail').textContent = email.value.trim().toLowerCase();
   document.getElementById('contactoExito').classList.add('visible');
 });
 
-/* ---------- 7. Reveals al hacer scroll ---------- */
+/* ---------- Reveals + menú móvil ---------- */
 const observador = new IntersectionObserver(entradas => {
-  entradas.forEach(en => {
-    if (en.isIntersecting) { en.target.classList.add('visto'); observador.unobserve(en.target); }
-  });
+  entradas.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visto'); observador.unobserve(en.target); } });
 }, { threshold: 0.12 });
 document.querySelectorAll('.revelar').forEach(el => observador.observe(el));
-
-/* ---------- 8. Menú móvil ---------- */
 document.getElementById('burger').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('abierto');
 });
@@ -1156,22 +1218,81 @@ document.querySelectorAll('#navLinks a, #navLinks button').forEach(el => {
 });
 
 /* =====================================================
-   9. ÁREA DE CLIENTES: lanzador + aplicaciones
+   ÁREA DE CLIENTES — datos demo (en memoria)
    ===================================================== */
 const app = document.getElementById('app');
 let usuarioActual = null;
 
-const fmtEUR = n => n.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
-const fmtFecha = f => new Date(f + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-const hoyISO = () => new Date().toISOString().slice(0, 10);
+/* MÉDICOS (en real, vinculados a usuarios y a su Outlook) */
+let medicos = [
+  { id: 1, nombre: 'Dra. Elena Vidal', especialidad: 'Medicina general', color: '#1F7A57', inicio: '09:00', fin: '14:00', diasLibres: [] },
+  { id: 2, nombre: 'Dr. Marc Soler',  especialidad: 'Fisioterapia',     color: '#3A5BA0', inicio: '10:00', fin: '18:00', diasLibres: [] },
+  { id: 3, nombre: 'Dra. Ana Ruiz',   especialidad: 'Nutrición',        color: '#C8442C', inicio: '09:00', fin: '13:00', diasLibres: [] },
+];
 
+/* PACIENTES */
+let pacientes = [
+  { id: 1, nombre: 'Marta Giralt',  telefono: '612 345 678', email: 'marta@correo.es',  notas: 'Alergia a la penicilina' },
+  { id: 2, nombre: 'Jordi Roca',    telefono: '699 112 233', email: '',                 notas: '' },
+  { id: 3, nombre: 'Núria Vives',   telefono: '655 778 990', email: 'nuria@correo.es',  notas: 'Prefiere mañanas' },
+];
+let siguientePacienteId = 4;
+
+/* RESERVAS (fechas dentro de la semana actual para que se vean) */
+const _d = diasSemana(0).map(iso);
+let reservas = [
+  { id: 1, pacienteId: 1, medicoId: 1, fecha: _d[0], hora: '09:30', motivo: 'Revisión anual', estado: 'confirmada' },
+  { id: 2, pacienteId: 2, medicoId: 2, fecha: _d[1], hora: '10:30', motivo: 'Rehabilitación rodilla', estado: 'pendiente' },
+  { id: 3, pacienteId: 3, medicoId: 1, fecha: _d[2], hora: '11:00', motivo: 'Primera visita', estado: 'pendiente' },
+  { id: 4, pacienteId: 1, medicoId: 3, fecha: _d[3], hora: '12:30', motivo: 'Plan nutricional', estado: 'confirmada' },
+];
+let siguienteReservaId = 5;
+
+/* Día libre de ejemplo: la Dra. Ruiz libra el viernes de esta semana */
+medicos.find(m => m.id === 3).diasLibres.push(_d[4]);
+
+/* Estado de navegación */
+let semanaOffset = 0;
+let agendaOffset = 0;
+let agendaMedicoId = 1;
+
+/* Helpers de dominio */
+const pacientePorId = id => pacientes.find(p => p.id === id);
+const medicoPorId = id => medicos.find(m => m.id === id);
+const chipEstado = est => est === 'confirmada'
+  ? '<span class="chip verde">Confirmada</span>'
+  : est === 'cancelada'
+    ? '<span class="chip rojo">Cancelada</span>'
+    : '<span class="chip ambar">Pendiente WhatsApp</span>';
+
+function generarSlots(medico) {
+  const slots = [];
+  let [h, m] = medico.inicio.split(':').map(Number);
+  const [hf, mf] = medico.fin.split(':').map(Number);
+  while (h < hf || (h === hf && m < mf)) {
+    slots.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+    m += 30; if (m >= 60) { m -= 60; h++; }
+  }
+  return slots;
+}
+function slotsLibres(medicoId, fecha) {
+  const medico = medicoPorId(medicoId);
+  if (!medico || medico.diasLibres.includes(fecha)) return [];
+  const ocupados = reservas
+    .filter(r => r.medicoId === medicoId && r.fecha === fecha && r.estado !== 'cancelada')
+    .map(r => r.hora);
+  return generarSlots(medico).filter(s => !ocupados.includes(s));
+}
+
+/* ---------- Entrada / salida de la app ---------- */
 function entrarApp(usuario) {
   usuarioActual = usuario;
   document.getElementById('appNombre').textContent = usuario.nombre;
+  document.getElementById('appClinica').textContent = usuario.clinica || 'Área de clientes';
   app.classList.add('abierta');
   document.body.style.overflow = 'hidden';
-  cambiarPanel('apps'); // siempre se entra por la pantalla de aplicaciones
-  renderInventario(); renderClientes(); renderDocumentos(); refrescarSelects(); renderLineas();
+  cambiarPanel('panel');
+  renderTodo();
 }
 function salirApp() {
   usuarioActual = null;
@@ -1182,215 +1303,284 @@ function cambiarPanel(nombre) {
   document.querySelectorAll('.app-tab').forEach(t => t.classList.toggle('activo', t.dataset.panel === nombre));
   document.querySelectorAll('.app-panel').forEach(p => p.classList.toggle('activo', p.id === 'panel-' + nombre));
   document.querySelector('.app-cuerpo').scrollTop = 0;
+  if (nombre === 'panel') renderPanel();
+  if (nombre === 'agenda') renderAgenda();
+  if (nombre === 'reservar') prepararReserva();
+  if (nombre === 'pacientes') renderPacientes();
 }
 document.querySelectorAll('.app-tab').forEach(t => t.addEventListener('click', () => cambiarPanel(t.dataset.panel)));
 
-/* ---------- 9a. Catálogo de productos ---------- */
-let inventario = [
-  { id: 1, nombre: 'Tubo PVC Ø20 mm', precio: 3.50, unidad: 'ud' },
-  { id: 2, nombre: 'Cable eléctrico 2,5 mm²', precio: 0.85, unidad: 'm' },
-  { id: 3, nombre: 'Mano de obra', precio: 28.00, unidad: 'h' },
-];
-let siguienteItemId = 4;
+function renderTodo() { renderPanel(); renderAgenda(); prepararReserva(); renderPacientes(); }
 
-function renderInventario() {
-  const cuerpo = document.getElementById('cuerpoInventario');
-  if (!inventario.length) {
-    cuerpo.innerHTML = '<tr><td colspan="4" class="vacio">Todavía no hay productos. Añade el primero con el formulario.</td></tr>';
-    return;
-  }
-  cuerpo.innerHTML = inventario.map(it => `
-    <tr>
-      <td>${it.nombre}</td>
-      <td class="num-cel">${fmtEUR(it.precio)}</td>
-      <td>${it.unidad}</td>
-      <td style="text-align:right"><button class="btn-mini peligro" onclick="borrarItem(${it.id})">Eliminar</button></td>
-    </tr>`).join('');
+/* ---------- PANEL DE LA SEMANA ---------- */
+function moverSemana(d) { semanaOffset += d; renderPanel(); }
+function irHoy() { semanaOffset = 0; renderPanel(); }
+
+function renderPanel() {
+  const hoy = hoyISO();
+  const dias = diasSemana(semanaOffset).map(iso);
+  const activas = reservas.filter(r => r.estado !== 'cancelada');
+
+  // Métricas
+  const citasHoy = activas.filter(r => r.fecha === hoy).length;
+  const citasSemana = activas.filter(r => dias.includes(r.fecha)).length;
+  const pendientes = activas.filter(r => r.estado === 'pendiente').length;
+  document.getElementById('metricas').innerHTML = `
+    <div class="metrica destacada"><div class="num">${citasHoy}</div><div class="lbl">Citas hoy</div></div>
+    <div class="metrica"><div class="num">${citasSemana}</div><div class="lbl">Esta semana</div></div>
+    <div class="metrica"><div class="num">${pendientes}</div><div class="lbl">Por confirmar</div></div>
+    <div class="metrica"><div class="num">${medicos.length}</div><div class="lbl">Médicos activos</div></div>`;
+
+  document.getElementById('rangoSemana').textContent = rangoSemanaTxt(semanaOffset);
+
+  // Vista de semana
+  document.getElementById('semanaGrid').innerHTML = diasSemana(semanaOffset).map((d, i) => {
+    const fecha = iso(d);
+    const delDia = activas.filter(r => r.fecha === fecha).sort((a, b) => a.hora.localeCompare(b.hora));
+    const citasHTML = delDia.length
+      ? delDia.map(r => {
+          const med = medicoPorId(r.medicoId), pac = pacientePorId(r.pacienteId);
+          return `<div class="cita-mini" style="border-left-color:${med.color}">
+            <span class="hora">${r.hora}</span>
+            <span class="pac">${pac ? pac.nombre : '—'}</span>
+            <span class="med">${med.nombre}</span>
+          </div>`;
+        }).join('')
+      : '<div class="dia-vacio">Sin citas</div>';
+    return `<div class="dia-col ${fecha === hoy ? 'hoy' : ''}">
+      <div class="dia-cab">${DIAS_CORTOS[i]}<span class="dnum">${d.getDate()}</span></div>
+      ${citasHTML}
+    </div>`;
+  }).join('');
+
+  // Pendientes de confirmar
+  const pend = activas.filter(r => r.estado === 'pendiente').sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora));
+  const cont = document.getElementById('listaPendientes');
+  cont.innerHTML = pend.length ? pend.map(r => {
+    const med = medicoPorId(r.medicoId), pac = pacientePorId(r.pacienteId);
+    return `<li class="cita-fila">
+      <span class="chora">${fmtFecha(r.fecha).replace(' de ',' ')}<br>${r.hora}</span>
+      <span class="cinfo"><strong>${pac ? pac.nombre : '—'}</strong><span>${med.nombre} · ${r.motivo}</span></span>
+      ${chipEstado(r.estado)}
+      <span class="cacc">
+        <button class="btn-mini ok" onclick="confirmarReserva(${r.id})">✓ Confirmar</button>
+        <button class="btn-mini peligro" onclick="cancelarReserva(${r.id})">Cancelar</button>
+      </span>
+    </li>`;
+  }).join('') : '<li class="vacio">No hay citas pendientes de confirmar. 🎉</li>';
 }
-function borrarItem(id) {
-  inventario = inventario.filter(i => i.id !== id);
-  renderInventario(); refrescarSelects();
+function confirmarReserva(id) {
+  const r = reservas.find(x => x.id === id); if (!r) return;
+  r.estado = 'confirmada'; renderPanel(); renderAgenda();
 }
-document.getElementById('formItem').addEventListener('submit', e => {
-  e.preventDefault();
-  const nombre = document.getElementById('item-nombre').value.trim();
-  const precio = parseFloat(document.getElementById('item-precio').value.replace(',', '.'));
-  const unidad = document.getElementById('item-unidad').value;
-  if (!nombre || isNaN(precio) || precio < 0) return;
-  inventario.push({ id: siguienteItemId++, nombre, precio, unidad });
-  e.target.reset();
-  renderInventario(); refrescarSelects();
-});
+function cancelarReserva(id) {
+  const r = reservas.find(x => x.id === id); if (!r) return;
+  r.estado = 'cancelada'; renderPanel(); renderAgenda(); renderPacientes();
+}
 
-/* ---------- 9b. Clientes y visitas ---------- */
-let clientes = [
-  {
-    id: 1, nombre: 'Hostal El Roble', contacto: 'Marta · 612 345 678', visitas: [
-      { fecha: '2026-05-12', nota: 'Revisión de la instalación de la cocina', estado: 'hecha' },
-      { fecha: '2026-06-18', nota: 'Presentar presupuesto de la reforma', estado: 'agendada' },
-    ]
-  },
-  {
-    id: 2, nombre: 'Panadería Soler', contacto: 'Jordi · 699 112 233', visitas: [
-      { fecha: '2026-06-02', nota: 'Cambio de fluorescentes por LED', estado: 'hecha' },
-    ]
-  },
-];
-let siguienteClienteId = 3;
+/* ---------- AGENDA DE MÉDICOS ---------- */
+function moverSemanaAgenda(d) { agendaOffset += d; renderAgenda(); }
+function irHoyAgenda() { agendaOffset = 0; renderAgenda(); }
 
-function renderClientes() {
-  const cont = document.getElementById('listaClientes');
-  if (!clientes.length) {
-    cont.innerHTML = '<div class="tarjeta vacio">Todavía no tienes clientes guardados. Añade el primero con el formulario.</div>';
-    return;
-  }
-  cont.innerHTML = clientes.map(c => {
-    const hechas = c.visitas.filter(v => v.estado === 'hecha').sort((a, b) => b.fecha.localeCompare(a.fecha));
-    const proximas = c.visitas.filter(v => v.estado === 'agendada').sort((a, b) => a.fecha.localeCompare(b.fecha));
-    const visitasHTML = [...proximas, ...hechas].map(v => `
-      <li class="visita">
-        <span class="chip ${v.estado === 'agendada' ? 'azul' : 'verde'}">${v.estado === 'agendada' ? 'Agendada' : 'Hecha'}</span>
-        <span class="mono visita-fecha">${fmtFecha(v.fecha)}</span>
-        <span>${v.nota}</span>
-      </li>`).join('');
-    return `
-    <div class="tarjeta">
-      <div class="cliente-cab">
-        <div>
-          <div class="cliente-nombre">${c.nombre}</div>
-          <div class="cliente-contacto">${c.contacto}</div>
-        </div>
-        <div class="cliente-chips">
-          <span class="chip verde">${hechas.length} visita${hechas.length === 1 ? '' : 's'} hecha${hechas.length === 1 ? '' : 's'}</span>
-          ${proximas.length ? `<span class="chip azul">Próxima: ${fmtFecha(proximas[0].fecha)}</span>` : ''}
-        </div>
+function renderAgenda() {
+  // Selector de médicos
+  document.getElementById('medicoSelector').innerHTML = medicos.map(m => `
+    <button class="medico-pill ${m.id === agendaMedicoId ? 'activo' : ''}" onclick="seleccionarMedico(${m.id})">
+      <span class="punto" style="background:${m.color}"></span>${m.nombre} · ${m.especialidad}
+    </button>`).join('');
+
+  document.getElementById('rangoSemanaAgenda').textContent = rangoSemanaTxt(agendaOffset);
+
+  const medico = medicoPorId(agendaMedicoId);
+  const hoy = hoyISO();
+  document.getElementById('agendaDias').innerHTML = diasSemana(agendaOffset).map(d => {
+    const fecha = iso(d);
+    const esLibre = medico.diasLibres.includes(fecha);
+    let cuerpo;
+    if (esLibre) {
+      cuerpo = '<div class="agenda-libre">🌴 Día libre / vacaciones</div>';
+    } else {
+      const ocupados = reservas.filter(r => r.medicoId === medico.id && r.fecha === fecha && r.estado !== 'cancelada');
+      const ocupadosHoras = ocupados.map(r => r.hora);
+      const slots = generarSlots(medico);
+      cuerpo = `<div class="slots-grid">${slots.map(s => {
+        const ocupada = ocupadosHoras.includes(s);
+        return ocupada
+          ? `<div class="slot ocupado" title="Ocupado">${s}</div>`
+          : `<div class="slot libre" title="Reservar este hueco" onclick="reservarDesdeSlot(${medico.id},'${fecha}','${s}')">${s}</div>`;
+      }).join('')}</div>`;
+    }
+    const libres = slotsLibres(medico.id, fecha).length;
+    return `<div class="agenda-dia">
+      <div class="ad-cab">
+        <h4 style="text-transform:capitalize">${fmtFechaLarga(fecha)}${fecha === hoy ? ' · hoy' : ''}</h4>
+        <span class="ad-sub">${esLibre ? '—' : libres + ' huecos libres'}</span>
       </div>
-      ${c.visitas.length ? `<ul class="lista-visitas">${visitasHTML}</ul>` : '<p class="vacio">Sin visitas todavía.</p>'}
-      <div class="cliente-acciones">
-        <button class="btn-mini" onclick="abrirFormVisita(${c.id}, 'hecha')">＋ Registrar visita</button>
-        <button class="btn-mini" onclick="abrirFormVisita(${c.id}, 'agendada')">📅 Agendar visita</button>
-        <button class="btn-mini peligro" onclick="borrarCliente(${c.id})">Eliminar</button>
-      </div>
-      <form class="form-visita" id="fv-${c.id}" onsubmit="guardarVisita(event, ${c.id})" style="display:none">
-        <label id="fv-titulo-${c.id}" style="margin-bottom:10px"></label>
-        <input type="hidden" id="fv-estado-${c.id}">
-        <div class="form-visita-campos">
-          <input type="date" id="fv-fecha-${c.id}" required aria-label="Fecha de la visita">
-          <input type="text" id="fv-nota-${c.id}" placeholder="Motivo de la visita" required aria-label="Motivo de la visita">
-          <button type="submit" class="btn btn-primario" style="padding:10px 18px;font-size:.88rem">Guardar</button>
-        </div>
-      </form>
+      ${cuerpo}
     </div>`;
   }).join('');
 }
-function abrirFormVisita(id, estado) {
-  const f = document.getElementById('fv-' + id);
-  const estadoInput = document.getElementById('fv-estado-' + id);
-  if (f.style.display !== 'none' && estadoInput.value === estado) { f.style.display = 'none'; return; }
-  estadoInput.value = estado;
-  document.getElementById('fv-titulo-' + id).textContent = estado === 'agendada' ? 'Agendar una visita nueva' : 'Registrar una visita hecha';
-  document.getElementById('fv-fecha-' + id).value = hoyISO();
-  f.style.display = 'block';
-  document.getElementById('fv-nota-' + id).focus();
+function seleccionarMedico(id) { agendaMedicoId = id; renderAgenda(); }
+function reservarDesdeSlot(medicoId, fecha, hora) {
+  cambiarPanel('reservar');
+  document.getElementById('rsv-medico').value = medicoId;
+  document.getElementById('rsv-fecha').value = fecha;
+  actualizarHoras(() => { document.getElementById('rsv-hora').value = hora; actualizarPreviewWA(); });
 }
-function guardarVisita(e, id) {
-  e.preventDefault();
-  const cliente = clientes.find(c => c.id === id);
-  const estado = document.getElementById('fv-estado-' + id).value || 'hecha';
-  const fecha = document.getElementById('fv-fecha-' + id).value;
-  const nota = document.getElementById('fv-nota-' + id).value.trim();
-  if (!cliente || !fecha || !nota) return;
-  cliente.visitas.push({ fecha, nota, estado });
-  renderClientes();
-}
-function borrarCliente(id) {
-  clientes = clientes.filter(c => c.id !== id);
-  renderClientes(); refrescarSelects();
-}
-document.getElementById('formCliente').addEventListener('submit', e => {
-  e.preventDefault();
-  const nombre = document.getElementById('cli-nombre').value.trim();
-  const contacto = document.getElementById('cli-contacto').value.trim();
-  if (!nombre) return;
-  clientes.push({ id: siguienteClienteId++, nombre, contacto: contacto || '—', visitas: [] });
-  e.target.reset();
-  renderClientes(); refrescarSelects();
-});
 
-/* ---------- 9c. Presupuestos y facturas desde el catálogo ---------- */
-let documentos = [];
-let siguienteDocNum = 148;
-let lineasDoc = [];
-
-function refrescarSelects() {
-  const selItem = document.getElementById('doc-item');
-  selItem.innerHTML = '<option value="">Elige producto del catálogo</option>' +
-    inventario.map(i => `<option value="${i.id}">${i.nombre} — ${fmtEUR(i.precio)}/${i.unidad}</option>`).join('');
-  const selCli = document.getElementById('doc-cliente');
-  selCli.innerHTML = '<option value="">Elige cliente</option>' +
-    clientes.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+/* ---------- RESERVAR HORA ---------- */
+function prepararReserva() {
+  const selPac = document.getElementById('rsv-paciente');
+  selPac.innerHTML = pacientes.map(p => `<option value="${p.id}">${p.nombre}${p.telefono ? ' · ' + p.telefono : ''}</option>`).join('')
+    + '<option value="nuevo">➕ Nuevo paciente…</option>';
+  const selMed = document.getElementById('rsv-medico');
+  selMed.innerHTML = medicos.map(m => `<option value="${m.id}">${m.nombre} · ${m.especialidad}</option>`).join('');
+  document.getElementById('rsv-fecha').value = hoyISO();
+  document.getElementById('rsv-fecha').min = hoyISO();
+  actualizarHoras();
 }
-document.getElementById('btnAnadirLinea').addEventListener('click', () => {
-  const itemId = parseInt(document.getElementById('doc-item').value, 10);
-  const cantidad = parseFloat(document.getElementById('doc-cantidad').value.replace(',', '.'));
-  const item = inventario.find(i => i.id === itemId);
-  if (!item || isNaN(cantidad) || cantidad <= 0) return;
-  const existente = lineasDoc.find(l => l.itemId === itemId);
-  if (existente) existente.cantidad += cantidad;
-  else lineasDoc.push({ itemId, nombre: item.nombre, precio: item.precio, unidad: item.unidad, cantidad });
-  document.getElementById('doc-cantidad').value = '1';
-  renderLineas();
-});
-function quitarLinea(idx) { lineasDoc.splice(idx, 1); renderLineas(); }
-function renderLineas() {
-  const cuerpo = document.getElementById('cuerpoLineas');
-  if (!lineasDoc.length) {
-    cuerpo.innerHTML = '<tr><td colspan="5" class="vacio">Añade productos del catálogo para empezar.</td></tr>';
+function actualizarHoras(despues) {
+  const medicoId = parseInt(document.getElementById('rsv-medico').value, 10);
+  const fecha = document.getElementById('rsv-fecha').value;
+  const libres = slotsLibres(medicoId, fecha);
+  const selHora = document.getElementById('rsv-hora');
+  selHora.innerHTML = libres.length
+    ? libres.map(s => `<option value="${s}">${s}</option>`).join('')
+    : '<option value="">Sin huecos ese día</option>';
+  actualizarPreviewWA();
+  if (typeof despues === 'function') despues();
+}
+function actualizarPreviewWA() {
+  const selPac = document.getElementById('rsv-paciente');
+  let nombrePac;
+  if (selPac.value === 'nuevo') {
+    nombrePac = document.getElementById('rsv-nuevo-nombre').value.trim() || 'el paciente';
   } else {
-    cuerpo.innerHTML = lineasDoc.map((l, i) => `
-      <tr>
-        <td>${l.nombre}</td>
-        <td class="num-cel">${l.cantidad.toLocaleString('es-ES')} ${l.unidad}</td>
-        <td class="num-cel">${fmtEUR(l.precio)}</td>
-        <td class="num-cel">${fmtEUR(l.precio * l.cantidad)}</td>
-        <td style="text-align:right"><button class="btn-mini peligro" onclick="quitarLinea(${i})" aria-label="Quitar línea">✕</button></td>
-      </tr>`).join('');
+    const p = pacientePorId(parseInt(selPac.value, 10));
+    nombrePac = p ? p.nombre.split(' ')[0] : 'el paciente';
   }
-  const base = lineasDoc.reduce((s, l) => s + l.precio * l.cantidad, 0);
-  document.getElementById('docBase').textContent = fmtEUR(base);
-  document.getElementById('docIVA').textContent = fmtEUR(base * 0.21);
-  document.getElementById('docTotal').textContent = fmtEUR(base * 1.21);
+  const med = medicoPorId(parseInt(document.getElementById('rsv-medico').value, 10));
+  const fecha = document.getElementById('rsv-fecha').value;
+  const hora = document.getElementById('rsv-hora').value;
+  const fechaTxt = fecha ? fmtFechaLarga(fecha) : '—';
+  const burbuja = document.getElementById('waBurbuja');
+  burbuja.innerHTML = `Hola ${nombrePac}, te confirmamos tu cita en <strong>${(usuarioActual && usuarioActual.clinica) || 'la clínica'}</strong> con <strong>${med ? med.nombre : '—'}</strong> el <strong>${fechaTxt}</strong>${hora ? ' a las <strong>' + hora + '</strong>' : ''}.<br><br>Responde <strong>SÍ</strong> para confirmar o <strong>NO</strong> para cancelar.`;
+  document.getElementById('waHora').textContent = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 }
-document.getElementById('btnGuardarDoc').addEventListener('click', () => {
-  const tipo = document.getElementById('doc-tipo').value;
-  const clienteId = parseInt(document.getElementById('doc-cliente').value, 10);
-  const cliente = clientes.find(c => c.id === clienteId);
-  const aviso = document.getElementById('avisoDoc');
-  if (!cliente) { aviso.textContent = 'Elige un cliente para guardar el documento.'; aviso.style.display = 'block'; return; }
-  if (!lineasDoc.length) { aviso.textContent = 'Añade al menos una línea desde el catálogo.'; aviso.style.display = 'block'; return; }
-  aviso.style.display = 'none';
-  const base = lineasDoc.reduce((s, l) => s + l.precio * l.cantidad, 0);
-  documentos.unshift({
-    numero: `2026-${String(siguienteDocNum++).padStart(4, '0')}`,
-    tipo, cliente: cliente.nombre, fecha: hoyISO(), total: base * 1.21,
-  });
-  lineasDoc = [];
-  renderLineas(); renderDocumentos();
+['rsv-medico','rsv-fecha'].forEach(id => document.getElementById(id).addEventListener('change', () => actualizarHoras()));
+document.getElementById('rsv-hora').addEventListener('change', actualizarPreviewWA);
+document.getElementById('rsv-paciente').addEventListener('change', e => {
+  document.getElementById('rsv-nuevo').style.display = e.target.value === 'nuevo' ? 'block' : 'none';
+  actualizarPreviewWA();
 });
-function renderDocumentos() {
-  const cuerpo = document.getElementById('cuerpoDocs');
-  if (!documentos.length) {
-    cuerpo.innerHTML = '<tr><td colspan="5" class="vacio">Todavía no has guardado ningún documento.</td></tr>';
-    return;
+['rsv-nuevo-nombre','rsv-nuevo-tel','rsv-motivo'].forEach(id => document.getElementById(id).addEventListener('input', actualizarPreviewWA));
+
+document.getElementById('formReserva').addEventListener('submit', e => {
+  e.preventDefault();
+  const aviso = document.getElementById('avisoResv');
+  const selPac = document.getElementById('rsv-paciente');
+  const medicoId = parseInt(document.getElementById('rsv-medico').value, 10);
+  const fecha = document.getElementById('rsv-fecha').value;
+  const hora = document.getElementById('rsv-hora').value;
+  const motivo = document.getElementById('rsv-motivo').value.trim();
+
+  if (!fecha || !hora) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Elige un día y un hueco libre.'; return; }
+  if (!motivo) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Indica el motivo de la cita.'; return; }
+
+  // Paciente (existente o nuevo)
+  let pacienteId;
+  if (selPac.value === 'nuevo') {
+    const nombre = document.getElementById('rsv-nuevo-nombre').value.trim();
+    const tel = document.getElementById('rsv-nuevo-tel').value.trim();
+    if (!nombre) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Escribe el nombre del nuevo paciente.'; return; }
+    const nuevo = { id: siguientePacienteId++, nombre, telefono: tel, email: '', notas: '' };
+    pacientes.push(nuevo);
+    pacienteId = nuevo.id;
+  } else {
+    pacienteId = parseInt(selPac.value, 10);
   }
-  cuerpo.innerHTML = documentos.map(d => `
-    <tr>
-      <td class="mono">${d.numero}</td>
-      <td><span class="chip ${d.tipo === 'factura' ? 'verde' : 'azul'}">${d.tipo === 'factura' ? 'Factura' : 'Presupuesto'}</span></td>
-      <td>${d.cliente}</td>
-      <td class="mono" style="font-size:.85rem">${fmtFecha(d.fecha)}</td>
-      <td class="num-cel">${fmtEUR(d.total)}</td>
-    </tr>`).join('');
+
+  // Comprobar que el hueco sigue libre
+  if (!slotsLibres(medicoId, fecha).includes(hora)) {
+    aviso.className = 'aviso-resv error'; aviso.textContent = 'Ese hueco se acaba de ocupar. Elige otro.';
+    actualizarHoras(); return;
+  }
+
+  // Crear reserva (en real: POST a Outlook + envío de WhatsApp por Twilio)
+  reservas.push({ id: siguienteReservaId++, pacienteId, medicoId, fecha, hora, motivo, estado: 'pendiente' });
+
+  const pac = pacientePorId(pacienteId);
+  aviso.className = 'aviso-resv ok';
+  aviso.innerHTML = `✓ Cita reservada. WhatsApp de confirmación enviado${pac && pac.telefono ? ' al ' + pac.telefono : ''}. Aparece como “pendiente” hasta que el paciente responda.`;
+
+  // Reset parcial
+  document.getElementById('rsv-motivo').value = '';
+  document.getElementById('rsv-nuevo').style.display = 'none';
+  document.getElementById('rsv-nuevo-nombre').value = '';
+  document.getElementById('rsv-nuevo-tel').value = '';
+  prepararReserva();
+  renderPanel(); renderPacientes();
+});
+
+/* ---------- PACIENTES ---------- */
+document.getElementById('formPaciente').addEventListener('submit', e => {
+  e.preventDefault();
+  const nombre = document.getElementById('pac-nombre').value.trim();
+  if (!nombre) return;
+  pacientes.push({
+    id: siguientePacienteId++,
+    nombre,
+    telefono: document.getElementById('pac-tel').value.trim(),
+    email: document.getElementById('pac-email').value.trim(),
+    notas: document.getElementById('pac-notas').value.trim(),
+  });
+  e.target.reset();
+  renderPacientes(); prepararReserva();
+});
+
+function renderPacientes() {
+  const filtro = (document.getElementById('buscaPaciente').value || '').toLowerCase().trim();
+  const cont = document.getElementById('listaPacientes');
+  const lista = pacientes.filter(p => p.nombre.toLowerCase().includes(filtro));
+  if (!lista.length) { cont.innerHTML = '<div class="tarjeta vacio">No hay pacientes que coincidan.</div>'; return; }
+
+  cont.innerHTML = lista.map(p => {
+    const citas = reservas
+      .filter(r => r.pacienteId === p.id && r.estado !== 'cancelada')
+      .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
+    const citasHTML = citas.length ? `<ul class="lista-visitas">${citas.map(r => {
+      const med = medicoPorId(r.medicoId);
+      return `<li class="visita">
+        ${chipEstado(r.estado)}
+        <span class="visita-fecha">${fmtFecha(r.fecha)} · ${r.hora}</span>
+        <span>${r.motivo} · ${med.nombre}</span>
+      </li>`;
+    }).join('')}</ul>` : '<p class="vacio" style="text-align:left;padding:10px 0">Sin citas registradas.</p>';
+
+    const contacto = [p.telefono, p.email].filter(Boolean).join(' · ') || '—';
+    return `<div class="tarjeta">
+      <div class="pac-cab">
+        <div>
+          <div class="pac-nombre">${p.nombre}</div>
+          <div class="pac-contacto">${contacto}</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          ${p.notas ? `<span class="chip rojo">⚠ ${p.notas}</span>` : ''}
+          <span class="chip gris">${citas.length} cita${citas.length === 1 ? '' : 's'}</span>
+        </div>
+      </div>
+      ${citasHTML}
+      <div style="margin-top:12px">
+        <button class="btn-mini ok" onclick="reservarParaPaciente(${p.id})">➕ Reservar cita</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function reservarParaPaciente(id) {
+  cambiarPanel('reservar');
+  document.getElementById('rsv-paciente').value = id;
+  document.getElementById('rsv-nuevo').style.display = 'none';
+  actualizarPreviewWA();
 }
 </script>
 </body>
