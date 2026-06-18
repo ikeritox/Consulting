@@ -192,22 +192,6 @@ section{padding:84px 0}
 .apps-cta{text-align:center;margin-top:40px}
 .apps-cta p{color:var(--tinta-suave);font-size:.95rem;margin-bottom:16px}
 
-/* Opiniones */
-.opiniones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-.opinion{
-  background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
-  padding:28px 26px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--sombra);
-}
-.estrellas{color:#E8A33D;letter-spacing:2px;font-size:1rem}
-.opinion blockquote{font-size:.98rem;color:var(--tinta);flex:1}
-.opinion-autor{display:flex;align-items:center;gap:12px}
-.avatar{
-  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
-  font-family:'Sora',sans-serif;font-weight:700;color:#fff;font-size:.95rem;flex-shrink:0;
-}
-.opinion-autor .nombre{font-weight:600;font-size:.93rem}
-.opinion-autor .rol{font-size:.82rem;color:var(--tinta-suave)}
-
 /* Contacto / diagnóstico */
 #contacto{background:var(--tinta);color:var(--papel)}
 #contacto .sec-cab h2{color:#fff}
@@ -422,7 +406,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 }
 @media (max-width:900px){
   .hero{grid-template-columns:1fr;gap:48px;padding:56px 0 70px}
-  .pasos,.opiniones-grid{grid-template-columns:1fr}
+  .pasos{grid-template-columns:1fr}
   .nav-links{
     display:none;position:absolute;top:72px;left:0;right:0;
     background:var(--blanco);flex-direction:column;padding:20px 24px;gap:18px;
@@ -459,7 +443,6 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
       <li><a href="#servicios">Cómo funciona</a></li>
       <li><a href="#como-trabajamos">Implantación</a></li>
       <li><a href="#aplicaciones">Módulos</a></li>
-      <li><a href="#opiniones">Clientes</a></li>
       <li><button class="btn btn-fantasma" onclick="abrirModal('login')">Área de clientes</button></li>
       <li><button class="btn btn-primario" onclick="document.getElementById('contacto').scrollIntoView()">Pide una demo</button></li>
     </ul>
@@ -627,18 +610,6 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
       <p>¿Ya eres cliente de Sentria? Accede a tu agenda desde el área de clientes.</p>
       <button class="btn btn-primario btn-grande" onclick="abrirModal('login')">Entrar al área de clientes</button>
     </div>
-  </div>
-</section>
-
-<!-- ============ OPINIONES ============ -->
-<section id="opiniones" style="background:var(--blanco);border-block:1px solid var(--linea)">
-  <div class="contenedor">
-    <div class="sec-cab revelar">
-      <span class="eyebrow">Clientes</span>
-      <h2>Clínicas que han dejado atrás la agenda de papel</h2>
-      <p>Consultas de distintas especialidades que reservan más rápido y pierden menos citas.</p>
-    </div>
-    <div class="opiniones-grid" id="opinionesGrid"><!-- renderizado con JS --></div>
   </div>
 </section>
 
@@ -981,26 +952,28 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
   </div>
 </div>
 
-<!-- ============ FIREBASE (conexión existente; aquí se integrará Auth) ============ -->
+<!-- ============ SUPABASE (conexión real: Auth + datos) ============ -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-  // TODO (backend real):
-  //  - Auth: getAuth + signInWithEmailAndPassword / OAuth de Microsoft (login con la cuenta de la clínica).
-  //  - Multi-clínica (multi-tenant): cada documento/fila lleva tenant_id (clínica) y toda consulta filtra por él.
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  // Proyecto Supabase real de Sentria.
+  // La "publishable key" es pública por diseño: es segura en el frontend
+  // porque el acceso real está controlado por las políticas de RLS
+  // que ya tienes activadas en clinicas/trabajadores/pacientes/citas/dias_libres.
+  const SUPABASE_URL = "https://freevgzknkvapsvxrxuz.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_UeWOR8BrynjIuRIoslLiHA_dRZV3R8F";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  // Se expone para que el script clásico (no módulo) más abajo pueda usarlo.
+  window.supabase = supabase;
+
+  // Pendiente para más adelante:
   //  - Outlook: Microsoft Graph (GET /me/calendarView para disponibilidad y días libres; POST /events al reservar).
   //  - WhatsApp: webhook de Twilio para recibir la respuesta del paciente y actualizar el estado de la cita.
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDBHMbaP-z-cRKLM5IZsmpS343RYjc6yas",
-    authDomain: "consulting-a8240.firebaseapp.com",
-    projectId: "consulting-a8240",
-    storageBucket: "consulting-a8240.firebasestorage.app",
-    messagingSenderId: "222966420744",
-    appId: "1:222966420744:web:f7edc703477eae00c248bd"
-  };
-
-  const firebaseApp = initializeApp(firebaseConfig);
-  window.firebaseApp = firebaseApp;
+  // Avisamos al resto del HTML (que es un <script> clásico, cargado antes
+  // de que este módulo termine) de que Supabase ya está listo para usarse.
+  window.dispatchEvent(new Event('supabase-listo'));
 </script>
 
 <script>
@@ -1085,38 +1058,6 @@ document.querySelectorAll('[data-contador]').forEach(el => {
 });
 
 /* ---------- Opiniones ---------- */
-const opiniones = [
-  {
-    nombre: 'Laura Martín', rol: 'Clínica dental · Valencia', color: '#1F7A57', estrellas: 5,
-    texto: 'Recepción reserva en segundos y el paciente recibe el WhatsApp al momento. Hemos bajado muchísimo las ausencias y se acabaron las dobles citas. Y todo desde el Outlook que ya usábamos.'
-  },
-  {
-    nombre: 'Carlos Ibáñez', rol: 'Centro de fisioterapia · Sevilla', color: '#C8442C', estrellas: 5,
-    texto: 'Lo mejor es ver la disponibilidad real de cada fisio de un vistazo, con sus días libres incluidos. Antes lo cuadrábamos a mano en una libreta. Ahora no se nos escapa un hueco.'
-  },
-  {
-    nombre: 'Anna Puig', rol: 'Consulta de nutrición · Barcelona', color: '#3A5BA0', estrellas: 5,
-    texto: 'Sin instalar nada nuevo y en una semana estábamos funcionando. La ficha del paciente con todo su historial de citas a mano nos ahorra muchísimo tiempo en cada visita.'
-  },
-];
-const grid = document.getElementById('opinionesGrid');
-opiniones.forEach(op => {
-  const iniciales = op.nombre.split(' ').map(p => p[0]).join('');
-  const art = document.createElement('article');
-  art.className = 'opinion revelar';
-  art.innerHTML = `
-    <div class="estrellas" aria-label="${op.estrellas} de 5 estrellas">${'★'.repeat(op.estrellas)}${'☆'.repeat(5 - op.estrellas)}</div>
-    <blockquote>“${op.texto}”</blockquote>
-    <div class="opinion-autor">
-      <div class="avatar" style="background:${op.color}">${iniciales}</div>
-      <div>
-        <div class="nombre">${op.nombre}</div>
-        <div class="rol">${op.rol}</div>
-      </div>
-    </div>`;
-  grid.appendChild(art);
-});
-
 /* ---------- Modal ---------- */
 const modalFondo = document.getElementById('modalFondo');
 const avisoModal = document.getElementById('avisoModal');
@@ -1144,36 +1085,63 @@ function limpiarAviso() { avisoModal.className = 'aviso-modal'; avisoModal.textC
 modalFondo.addEventListener('click', e => { if (e.target === modalFondo) cerrarModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
 
-/* ---------- Usuarios demo (sustituir por Auth real) ---------- */
-const usuarios = [
-  { email: 'demo@sentria.es', pass: 'demo1234', nombre: 'Recepción', clinica: 'Clínica Montjuïc' },
-];
+/* ---------- Login real con Supabase Auth ---------- */
 const emailValido = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-document.getElementById('formLogin').addEventListener('submit', e => {
+// El cliente de Supabase se crea en un <script type="module"> que carga de
+// forma asíncrona. Esta promesa se resuelve en cuanto está listo, o de
+// inmediato si para entonces ya lo estaba.
+const supabaseListo = window.supabase
+  ? Promise.resolve()
+  : new Promise(resolve => window.addEventListener('supabase-listo', resolve, { once: true }));
+
+document.getElementById('formLogin').addEventListener('submit', async e => {
   e.preventDefault();
   const email = document.getElementById('log-email').value.trim().toLowerCase();
   const pass  = document.getElementById('log-pass').value;
   if (!emailValido(email) || !pass) { mostrarAviso('error', 'Introduce un correo y una contraseña válidos.'); return; }
-  const usuario = usuarios.find(u => u.email === email && u.pass === pass);
-  if (usuario) {
-    mostrarAviso('ok', `¡Hola, ${usuario.nombre}! Entrando en tu agenda…`);
-    setTimeout(() => { cerrarModal(); e.target.reset(); entrarApp(usuario); }, 650);
-  } else {
-    mostrarAviso('error', 'Correo o contraseña incorrectos. Prueba con demo@sentria.es / demo1234.');
+
+  mostrarAviso('ok', 'Comprobando tus datos…');
+  await supabaseListo;
+  const { data, error } = await window.supabase.auth.signInWithPassword({ email, password: pass });
+
+  if (error) {
+    mostrarAviso('error', 'Correo o contraseña incorrectos.');
+    return;
   }
+
+  // El login en Auth ha funcionado. Ahora buscamos el trabajador vinculado
+  // a este usuario, que es lo que nos dice su clínica y su rol (RLS se
+  // encarga de que esta consulta solo pueda devolver SU propia fila).
+  const { data: trabajador, error: errTrab } = await window.supabase
+    .from('trabajadores')
+    .select('id, nombre, rol, clinica_id, clinicas(nombre)')
+    .eq('auth_user_id', data.user.id)
+    .single();
+
+  if (errTrab || !trabajador) {
+    mostrarAviso('error', 'Tu usuario existe pero no está vinculado a ninguna clínica. Contacta con Sentria.');
+    await window.supabase.auth.signOut();
+    return;
+  }
+
+  mostrarAviso('ok', `¡Hola, ${trabajador.nombre}! Entrando en tu agenda…`);
+  setTimeout(() => {
+    cerrarModal(); e.target.reset();
+    entrarApp({
+      nombre: trabajador.nombre,
+      rol: trabajador.rol,
+      clinicaId: trabajador.clinica_id,
+      clinica: trabajador.clinicas ? trabajador.clinicas.nombre : 'Tu clínica',
+    });
+  }, 500);
 });
+
 document.getElementById('formRegistroModal').addEventListener('submit', e => {
   e.preventDefault();
-  const nombre = document.getElementById('mreg-nombre').value.trim();
-  const email  = document.getElementById('mreg-email').value.trim().toLowerCase();
-  const pass   = document.getElementById('mreg-pass').value;
-  if (!nombre) return mostrarAviso('error', 'Escribe tu nombre.');
-  if (!emailValido(email)) return mostrarAviso('error', 'El correo no parece válido.');
-  if (pass.length < 8) return mostrarAviso('error', 'La contraseña debe tener al menos 8 caracteres.');
-  if (usuarios.some(u => u.email === email)) return mostrarAviso('error', 'Ya existe una cuenta con ese correo.');
-  usuarios.push({ email, pass, nombre, clinica: 'Tu clínica' });
-  mostrarAviso('ok', `¡Cuenta creada, ${nombre}! Ya puedes iniciar sesión.`);
+  // El alta de nuevas clínicas se gestiona manualmente por ahora (onboarding
+  // guiado): creamos la fila en "clinicas" y el primer trabajador a mano.
+  mostrarAviso('ok', 'Gracias por tu interés. Escríbenos desde el formulario de demo y te damos acceso a tu clínica.');
   e.target.reset();
 });
 
@@ -1218,43 +1186,30 @@ document.querySelectorAll('#navLinks a, #navLinks button').forEach(el => {
 });
 
 /* =====================================================
-   ÁREA DE CLIENTES — datos demo (en memoria)
+   ÁREA DE CLIENTES — datos reales desde Supabase
    ===================================================== */
 const app = document.getElementById('app');
 let usuarioActual = null;
 
-/* MÉDICOS (en real, vinculados a usuarios y a su Outlook) */
-let medicos = [
-  { id: 1, nombre: 'Dra. Elena Vidal', especialidad: 'Medicina general', color: '#1F7A57', inicio: '09:00', fin: '14:00', diasLibres: [] },
-  { id: 2, nombre: 'Dr. Marc Soler',  especialidad: 'Fisioterapia',     color: '#3A5BA0', inicio: '10:00', fin: '18:00', diasLibres: [] },
-  { id: 3, nombre: 'Dra. Ana Ruiz',   especialidad: 'Nutrición',        color: '#C8442C', inicio: '09:00', fin: '13:00', diasLibres: [] },
-];
-
-/* PACIENTES */
-let pacientes = [
-  { id: 1, nombre: 'Marta Giralt',  telefono: '612 345 678', email: 'marta@correo.es',  notas: 'Alergia a la penicilina' },
-  { id: 2, nombre: 'Jordi Roca',    telefono: '699 112 233', email: '',                 notas: '' },
-  { id: 3, nombre: 'Núria Vives',   telefono: '655 778 990', email: 'nuria@correo.es',  notas: 'Prefiere mañanas' },
-];
-let siguientePacienteId = 4;
-
-/* RESERVAS (fechas dentro de la semana actual para que se vean) */
-const _d = diasSemana(0).map(iso);
-let reservas = [
-  { id: 1, pacienteId: 1, medicoId: 1, fecha: _d[0], hora: '09:30', motivo: 'Revisión anual', estado: 'confirmada' },
-  { id: 2, pacienteId: 2, medicoId: 2, fecha: _d[1], hora: '10:30', motivo: 'Rehabilitación rodilla', estado: 'pendiente' },
-  { id: 3, pacienteId: 3, medicoId: 1, fecha: _d[2], hora: '11:00', motivo: 'Primera visita', estado: 'pendiente' },
-  { id: 4, pacienteId: 1, medicoId: 3, fecha: _d[3], hora: '12:30', motivo: 'Plan nutricional', estado: 'confirmada' },
-];
-let siguienteReservaId = 5;
-
-/* Día libre de ejemplo: la Dra. Ruiz libra el viernes de esta semana */
-medicos.find(m => m.id === 3).diasLibres.push(_d[4]);
+/* Caché local: se recarga desde Supabase al entrar y tras cada cambio.
+   El filtrado por clínica ya lo hace RLS en el servidor; aquí solo
+   guardamos lo que la consulta nos ha devuelto. */
+let medicos = [];     // trabajadores con rol = 'medico'
+let pacientes = [];
+let reservas = [];    // citas
+let diasLibresTodos = []; // { trabajador_id, fecha }
 
 /* Estado de navegación */
 let semanaOffset = 0;
 let agendaOffset = 0;
-let agendaMedicoId = 1;
+let agendaMedicoId = null;
+
+/* Paleta para diferenciar médicos visualmente (no se guarda en BD) */
+const PALETA_MEDICOS = ['#1F7A57', '#3A5BA0', '#C8442C', '#8AB83D', '#4D9B8F', '#A9701A'];
+const colorMedico = id => {
+  const idx = medicos.findIndex(m => m.id === id);
+  return PALETA_MEDICOS[idx % PALETA_MEDICOS.length] || '#5A6378';
+};
 
 /* Helpers de dominio */
 const pacientePorId = id => pacientes.find(p => p.id === id);
@@ -1267,35 +1222,66 @@ const chipEstado = est => est === 'confirmada'
 
 function generarSlots(medico) {
   const slots = [];
-  let [h, m] = medico.inicio.split(':').map(Number);
-  const [hf, mf] = medico.fin.split(':').map(Number);
+  let [h, m] = medico.hora_inicio.slice(0,5).split(':').map(Number);
+  const [hf, mf] = medico.hora_fin.slice(0,5).split(':').map(Number);
   while (h < hf || (h === hf && m < mf)) {
     slots.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
     m += 30; if (m >= 60) { m -= 60; h++; }
   }
   return slots;
 }
+function diaLibre(medicoId, fecha) {
+  return diasLibresTodos.some(d => d.trabajador_id === medicoId && d.fecha === fecha);
+}
 function slotsLibres(medicoId, fecha) {
   const medico = medicoPorId(medicoId);
-  if (!medico || medico.diasLibres.includes(fecha)) return [];
+  if (!medico || diaLibre(medicoId, fecha)) return [];
   const ocupados = reservas
-    .filter(r => r.medicoId === medicoId && r.fecha === fecha && r.estado !== 'cancelada')
-    .map(r => r.hora);
+    .filter(r => r.trabajador_id === medicoId && r.fecha === fecha && r.estado !== 'cancelada')
+    .map(r => r.hora.slice(0,5));
   return generarSlots(medico).filter(s => !ocupados.includes(s));
 }
 
+/* ---------- Carga de datos desde Supabase ---------- */
+async function cargarDatosClinica() {
+  const sb = window.supabase;
+
+  const [resMedicos, resPacientes, resCitas, resDiasLibres] = await Promise.all([
+    sb.from('trabajadores').select('*').eq('rol', 'medico').eq('activo', true).order('nombre'),
+    sb.from('pacientes').select('*').order('nombre'),
+    sb.from('citas').select('*').neq('estado', 'cancelada').order('fecha').order('hora'),
+    sb.from('dias_libres').select('*'),
+  ]);
+
+  if (resMedicos.error) console.error('Error cargando médicos:', resMedicos.error);
+  if (resPacientes.error) console.error('Error cargando pacientes:', resPacientes.error);
+  if (resCitas.error) console.error('Error cargando citas:', resCitas.error);
+  if (resDiasLibres.error) console.error('Error cargando días libres:', resDiasLibres.error);
+
+  medicos = resMedicos.data || [];
+  pacientes = resPacientes.data || [];
+  reservas = resCitas.data || [];
+  diasLibresTodos = resDiasLibres.data || [];
+
+  if (!agendaMedicoId && medicos.length) agendaMedicoId = medicos[0].id;
+}
+
 /* ---------- Entrada / salida de la app ---------- */
-function entrarApp(usuario) {
+async function entrarApp(usuario) {
   usuarioActual = usuario;
   document.getElementById('appNombre').textContent = usuario.nombre;
   document.getElementById('appClinica').textContent = usuario.clinica || 'Área de clientes';
   app.classList.add('abierta');
   document.body.style.overflow = 'hidden';
+
+  await cargarDatosClinica();
   cambiarPanel('panel');
   renderTodo();
 }
-function salirApp() {
+async function salirApp() {
+  await window.supabase.auth.signOut();
   usuarioActual = null;
+  medicos = []; pacientes = []; reservas = []; diasLibresTodos = [];
   app.classList.remove('abierta');
   document.body.style.overflow = '';
 }
@@ -1339,11 +1325,11 @@ function renderPanel() {
     const delDia = activas.filter(r => r.fecha === fecha).sort((a, b) => a.hora.localeCompare(b.hora));
     const citasHTML = delDia.length
       ? delDia.map(r => {
-          const med = medicoPorId(r.medicoId), pac = pacientePorId(r.pacienteId);
-          return `<div class="cita-mini" style="border-left-color:${med.color}">
-            <span class="hora">${r.hora}</span>
+          const med = medicoPorId(r.trabajador_id), pac = pacientePorId(r.paciente_id);
+          return `<div class="cita-mini" style="border-left-color:${colorMedico(r.trabajador_id)}">
+            <span class="hora">${r.hora.slice(0,5)}</span>
             <span class="pac">${pac ? pac.nombre : '—'}</span>
-            <span class="med">${med.nombre}</span>
+            <span class="med">${med ? med.nombre : '—'}</span>
           </div>`;
         }).join('')
       : '<div class="dia-vacio">Sin citas</div>';
@@ -1357,25 +1343,29 @@ function renderPanel() {
   const pend = activas.filter(r => r.estado === 'pendiente').sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora));
   const cont = document.getElementById('listaPendientes');
   cont.innerHTML = pend.length ? pend.map(r => {
-    const med = medicoPorId(r.medicoId), pac = pacientePorId(r.pacienteId);
+    const med = medicoPorId(r.trabajador_id), pac = pacientePorId(r.paciente_id);
     return `<li class="cita-fila">
-      <span class="chora">${fmtFecha(r.fecha).replace(' de ',' ')}<br>${r.hora}</span>
-      <span class="cinfo"><strong>${pac ? pac.nombre : '—'}</strong><span>${med.nombre} · ${r.motivo}</span></span>
+      <span class="chora">${fmtFecha(r.fecha).replace(' de ',' ')}<br>${r.hora.slice(0,5)}</span>
+      <span class="cinfo"><strong>${pac ? pac.nombre : '—'}</strong><span>${med ? med.nombre : '—'} · ${r.motivo || 'Sin motivo indicado'}</span></span>
       ${chipEstado(r.estado)}
       <span class="cacc">
-        <button class="btn-mini ok" onclick="confirmarReserva(${r.id})">✓ Confirmar</button>
-        <button class="btn-mini peligro" onclick="cancelarReserva(${r.id})">Cancelar</button>
+        <button class="btn-mini ok" onclick="confirmarReserva('${r.id}')">✓ Confirmar</button>
+        <button class="btn-mini peligro" onclick="cancelarReserva('${r.id}')">Cancelar</button>
       </span>
     </li>`;
   }).join('') : '<li class="vacio">No hay citas pendientes de confirmar. 🎉</li>';
 }
-function confirmarReserva(id) {
-  const r = reservas.find(x => x.id === id); if (!r) return;
-  r.estado = 'confirmada'; renderPanel(); renderAgenda();
+async function confirmarReserva(id) {
+  const { error } = await window.supabase.from('citas').update({ estado: 'confirmada' }).eq('id', id);
+  if (error) { console.error(error); return; }
+  const r = reservas.find(x => x.id === id); if (r) r.estado = 'confirmada';
+  renderPanel(); renderAgenda();
 }
-function cancelarReserva(id) {
-  const r = reservas.find(x => x.id === id); if (!r) return;
-  r.estado = 'cancelada'; renderPanel(); renderAgenda(); renderPacientes();
+async function cancelarReserva(id) {
+  const { error } = await window.supabase.from('citas').update({ estado: 'cancelada' }).eq('id', id);
+  if (error) { console.error(error); return; }
+  const r = reservas.find(x => x.id === id); if (r) r.estado = 'cancelada';
+  renderPanel(); renderAgenda(); renderPacientes();
 }
 
 /* ---------- AGENDA DE MÉDICOS ---------- */
@@ -1383,31 +1373,38 @@ function moverSemanaAgenda(d) { agendaOffset += d; renderAgenda(); }
 function irHoyAgenda() { agendaOffset = 0; renderAgenda(); }
 
 function renderAgenda() {
+  if (!medicos.length) {
+    document.getElementById('medicoSelector').innerHTML = '<p class="vacio">Esta clínica todavía no tiene médicos dados de alta.</p>';
+    document.getElementById('agendaDias').innerHTML = '';
+    return;
+  }
   // Selector de médicos
   document.getElementById('medicoSelector').innerHTML = medicos.map(m => `
-    <button class="medico-pill ${m.id === agendaMedicoId ? 'activo' : ''}" onclick="seleccionarMedico(${m.id})">
-      <span class="punto" style="background:${m.color}"></span>${m.nombre} · ${m.especialidad}
+    <button class="medico-pill ${m.id === agendaMedicoId ? 'activo' : ''}" onclick="seleccionarMedico('${m.id}')">
+      <span class="punto" style="background:${colorMedico(m.id)}"></span>${m.nombre}${m.especialidad ? ' · ' + m.especialidad : ''}
     </button>`).join('');
 
   document.getElementById('rangoSemanaAgenda').textContent = rangoSemanaTxt(agendaOffset);
 
   const medico = medicoPorId(agendaMedicoId);
+  if (!medico) { document.getElementById('agendaDias').innerHTML = ''; return; }
   const hoy = hoyISO();
   document.getElementById('agendaDias').innerHTML = diasSemana(agendaOffset).map(d => {
     const fecha = iso(d);
-    const esLibre = medico.diasLibres.includes(fecha);
+    const esLibre = diaLibre(medico.id, fecha);
     let cuerpo;
     if (esLibre) {
       cuerpo = '<div class="agenda-libre">🌴 Día libre / vacaciones</div>';
     } else {
-      const ocupados = reservas.filter(r => r.medicoId === medico.id && r.fecha === fecha && r.estado !== 'cancelada');
-      const ocupadosHoras = ocupados.map(r => r.hora);
+      const ocupadosHoras = reservas
+        .filter(r => r.trabajador_id === medico.id && r.fecha === fecha && r.estado !== 'cancelada')
+        .map(r => r.hora.slice(0,5));
       const slots = generarSlots(medico);
       cuerpo = `<div class="slots-grid">${slots.map(s => {
         const ocupada = ocupadosHoras.includes(s);
         return ocupada
           ? `<div class="slot ocupado" title="Ocupado">${s}</div>`
-          : `<div class="slot libre" title="Reservar este hueco" onclick="reservarDesdeSlot(${medico.id},'${fecha}','${s}')">${s}</div>`;
+          : `<div class="slot libre" title="Reservar este hueco" onclick="reservarDesdeSlot('${medico.id}','${fecha}','${s}')">${s}</div>`;
       }).join('')}</div>`;
     }
     const libres = slotsLibres(medico.id, fecha).length;
@@ -1434,15 +1431,17 @@ function prepararReserva() {
   selPac.innerHTML = pacientes.map(p => `<option value="${p.id}">${p.nombre}${p.telefono ? ' · ' + p.telefono : ''}</option>`).join('')
     + '<option value="nuevo">➕ Nuevo paciente…</option>';
   const selMed = document.getElementById('rsv-medico');
-  selMed.innerHTML = medicos.map(m => `<option value="${m.id}">${m.nombre} · ${m.especialidad}</option>`).join('');
+  selMed.innerHTML = medicos.length
+    ? medicos.map(m => `<option value="${m.id}">${m.nombre}${m.especialidad ? ' · ' + m.especialidad : ''}</option>`).join('')
+    : '<option value="">Sin médicos disponibles</option>';
   document.getElementById('rsv-fecha').value = hoyISO();
   document.getElementById('rsv-fecha').min = hoyISO();
   actualizarHoras();
 }
 function actualizarHoras(despues) {
-  const medicoId = parseInt(document.getElementById('rsv-medico').value, 10);
+  const medicoId = document.getElementById('rsv-medico').value;
   const fecha = document.getElementById('rsv-fecha').value;
-  const libres = slotsLibres(medicoId, fecha);
+  const libres = medicoId ? slotsLibres(medicoId, fecha) : [];
   const selHora = document.getElementById('rsv-hora');
   selHora.innerHTML = libres.length
     ? libres.map(s => `<option value="${s}">${s}</option>`).join('')
@@ -1456,10 +1455,10 @@ function actualizarPreviewWA() {
   if (selPac.value === 'nuevo') {
     nombrePac = document.getElementById('rsv-nuevo-nombre').value.trim() || 'el paciente';
   } else {
-    const p = pacientePorId(parseInt(selPac.value, 10));
+    const p = pacientePorId(selPac.value);
     nombrePac = p ? p.nombre.split(' ')[0] : 'el paciente';
   }
-  const med = medicoPorId(parseInt(document.getElementById('rsv-medico').value, 10));
+  const med = medicoPorId(document.getElementById('rsv-medico').value);
   const fecha = document.getElementById('rsv-fecha').value;
   const hora = document.getElementById('rsv-hora').value;
   const fechaTxt = fecha ? fmtFechaLarga(fecha) : '—';
@@ -1475,43 +1474,75 @@ document.getElementById('rsv-paciente').addEventListener('change', e => {
 });
 ['rsv-nuevo-nombre','rsv-nuevo-tel','rsv-motivo'].forEach(id => document.getElementById(id).addEventListener('input', actualizarPreviewWA));
 
-document.getElementById('formReserva').addEventListener('submit', e => {
+document.getElementById('formReserva').addEventListener('submit', async e => {
   e.preventDefault();
   const aviso = document.getElementById('avisoResv');
   const selPac = document.getElementById('rsv-paciente');
-  const medicoId = parseInt(document.getElementById('rsv-medico').value, 10);
+  const medicoId = document.getElementById('rsv-medico').value;
   const fecha = document.getElementById('rsv-fecha').value;
   const hora = document.getElementById('rsv-hora').value;
   const motivo = document.getElementById('rsv-motivo').value.trim();
 
+  if (!medicoId) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Esta clínica no tiene médicos dados de alta todavía.'; return; }
   if (!fecha || !hora) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Elige un día y un hueco libre.'; return; }
   if (!motivo) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Indica el motivo de la cita.'; return; }
 
-  // Paciente (existente o nuevo)
+  const sb = window.supabase;
+  const clinicaId = usuarioActual.clinicaId;
+
+  // Paciente (existente o nuevo) — el nuevo se guarda ya en Supabase
   let pacienteId;
   if (selPac.value === 'nuevo') {
     const nombre = document.getElementById('rsv-nuevo-nombre').value.trim();
     const tel = document.getElementById('rsv-nuevo-tel').value.trim();
     if (!nombre) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Escribe el nombre del nuevo paciente.'; return; }
-    const nuevo = { id: siguientePacienteId++, nombre, telefono: tel, email: '', notas: '' };
+    const { data: nuevo, error: errNuevo } = await sb
+      .from('pacientes')
+      .insert({ clinica_id: clinicaId, nombre, telefono: tel })
+      .select()
+      .single();
+    if (errNuevo) { aviso.className = 'aviso-resv error'; aviso.textContent = 'No se ha podido guardar el nuevo paciente.'; console.error(errNuevo); return; }
     pacientes.push(nuevo);
     pacienteId = nuevo.id;
   } else {
-    pacienteId = parseInt(selPac.value, 10);
+    pacienteId = selPac.value;
   }
 
-  // Comprobar que el hueco sigue libre
+  // Comprobar que el hueco sigue libre (en local; la restricción UNIQUE de la
+  // tabla "citas" es la última línea de defensa real contra dobles reservas)
   if (!slotsLibres(medicoId, fecha).includes(hora)) {
     aviso.className = 'aviso-resv error'; aviso.textContent = 'Ese hueco se acaba de ocupar. Elige otro.';
     actualizarHoras(); return;
   }
 
-  // Crear reserva (en real: POST a Outlook + envío de WhatsApp por Twilio)
-  reservas.push({ id: siguienteReservaId++, pacienteId, medicoId, fecha, hora, motivo, estado: 'pendiente' });
+  // Crear la cita en Supabase (en producción: además, POST a Outlook + WhatsApp por Twilio)
+  const { data: nuevaCita, error: errCita } = await sb
+    .from('citas')
+    .insert({
+      clinica_id: clinicaId,
+      paciente_id: pacienteId,
+      trabajador_id: medicoId,
+      fecha, hora, motivo,
+      estado: 'pendiente',
+    })
+    .select()
+    .single();
+
+  if (errCita) {
+    aviso.className = 'aviso-resv error';
+    aviso.textContent = errCita.code === '23505'
+      ? 'Ese hueco se acaba de ocupar. Elige otro.'
+      : 'No se ha podido guardar la cita.';
+    console.error(errCita);
+    actualizarHoras();
+    return;
+  }
+
+  reservas.push(nuevaCita);
 
   const pac = pacientePorId(pacienteId);
   aviso.className = 'aviso-resv ok';
-  aviso.innerHTML = `✓ Cita reservada. WhatsApp de confirmación enviado${pac && pac.telefono ? ' al ' + pac.telefono : ''}. Aparece como “pendiente” hasta que el paciente responda.`;
+  aviso.innerHTML = `✓ Cita guardada en la base de datos. WhatsApp de confirmación pendiente de activar${pac && pac.telefono ? ' (se enviaría al ' + pac.telefono + ')' : ''}. Aparece como “pendiente”.`;
 
   // Reset parcial
   document.getElementById('rsv-motivo').value = '';
@@ -1523,17 +1554,26 @@ document.getElementById('formReserva').addEventListener('submit', e => {
 });
 
 /* ---------- PACIENTES ---------- */
-document.getElementById('formPaciente').addEventListener('submit', e => {
+document.getElementById('formPaciente').addEventListener('submit', async e => {
   e.preventDefault();
   const nombre = document.getElementById('pac-nombre').value.trim();
   if (!nombre) return;
-  pacientes.push({
-    id: siguientePacienteId++,
-    nombre,
-    telefono: document.getElementById('pac-tel').value.trim(),
-    email: document.getElementById('pac-email').value.trim(),
-    notas: document.getElementById('pac-notas').value.trim(),
-  });
+
+  const { data: nuevo, error } = await window.supabase
+    .from('pacientes')
+    .insert({
+      clinica_id: usuarioActual.clinicaId,
+      nombre,
+      telefono: document.getElementById('pac-tel').value.trim(),
+      email: document.getElementById('pac-email').value.trim(),
+      notas: document.getElementById('pac-notas').value.trim(),
+    })
+    .select()
+    .single();
+
+  if (error) { console.error(error); return; }
+
+  pacientes.push(nuevo);
   e.target.reset();
   renderPacientes(); prepararReserva();
 });
@@ -1546,14 +1586,14 @@ function renderPacientes() {
 
   cont.innerHTML = lista.map(p => {
     const citas = reservas
-      .filter(r => r.pacienteId === p.id && r.estado !== 'cancelada')
+      .filter(r => r.paciente_id === p.id && r.estado !== 'cancelada')
       .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
     const citasHTML = citas.length ? `<ul class="lista-visitas">${citas.map(r => {
-      const med = medicoPorId(r.medicoId);
+      const med = medicoPorId(r.trabajador_id);
       return `<li class="visita">
         ${chipEstado(r.estado)}
-        <span class="visita-fecha">${fmtFecha(r.fecha)} · ${r.hora}</span>
-        <span>${r.motivo} · ${med.nombre}</span>
+        <span class="visita-fecha">${fmtFecha(r.fecha)} · ${r.hora.slice(0,5)}</span>
+        <span>${r.motivo || 'Sin motivo indicado'} · ${med ? med.nombre : '—'}</span>
       </li>`;
     }).join('')}</ul>` : '<p class="vacio" style="text-align:left;padding:10px 0">Sin citas registradas.</p>';
 
@@ -1571,7 +1611,7 @@ function renderPacientes() {
       </div>
       ${citasHTML}
       <div style="margin-top:12px">
-        <button class="btn-mini ok" onclick="reservarParaPaciente(${p.id})">➕ Reservar cita</button>
+        <button class="btn-mini ok" onclick="reservarParaPaciente('${p.id}')">➕ Reservar cita</button>
       </div>
     </div>`;
   }).join('');
