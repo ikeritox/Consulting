@@ -3,36 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sentria Consulting — Agenda y reservas para tu clínica</title>
+<title>Punto Base — Agenda y reservas para tu clínica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --papel:#FBFAF6;
-  --tinta:#19233B;
-  --tinta-suave:#5A6378;
-  --verde-fiscal:#1F7A57;
-  --verde-claro:#E3F1EA;
-  --teal:#4D9B8F;
-  --lima:#8AB83D;
+  --papel:#F5F7FA;
+  --tinta:#07213F;
+  --tinta-suave:#4A5568;
+  --verde-fiscal:#0D68D9;
+  --verde-claro:#E6F0FB;
+  --teal:#0D68D9;
+  --lima:#0D68D9;
   --sello:#C8442C;
-  --linea:#E3E0D6;
-  --blanco:#FFFFFF;
+  --linea:#DDE3EC;
+  --blanco:#FEFEFE;
   --radio:14px;
-  --sombra:0 10px 30px rgba(25,35,59,.08);
+  --sombra:0 10px 30px rgba(7,33,63,.09);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  font-family:'IBM Plex Sans',sans-serif;
+  font-family:'Inter',sans-serif;
   background:var(--papel);
   color:var(--tinta);
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
-h1,h2,h3{font-family:'Sora',sans-serif;line-height:1.15}
-.mono{font-family:'IBM Plex Mono',monospace}
+h1,h2,h3{font-family:'Nunito Sans',sans-serif;line-height:1.15}
+.mono{font-family:'Inter',monospace}
 .contenedor{max-width:1120px;margin:0 auto;padding:0 24px}
 a{color:inherit}
 button{font-family:inherit;cursor:pointer}
@@ -42,8 +42,8 @@ button{font-family:inherit;cursor:pointer}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo svg{display:block}
 .logo-texto{display:flex;flex-direction:column;line-height:1}
-.logo-texto .nombre{font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;color:var(--tinta);letter-spacing:-.01em}
-.logo-texto .sub{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.34em;color:var(--teal);text-transform:uppercase;margin-top:3px}
+.logo-texto .nombre{font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:1.3rem;color:var(--tinta);letter-spacing:-.01em}
+.logo-texto .sub{font-family:'Inter',sans-serif;font-size:.58rem;letter-spacing:.34em;color:var(--teal);text-transform:uppercase;margin-top:3px}
 
 /* ---------- NAV ---------- */
 nav{
@@ -84,7 +84,7 @@ nav{
 .hero-acciones{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px}
 .btn-grande{padding:15px 30px;font-size:1.02rem;border-radius:12px}
 .hero-datos{display:flex;gap:36px}
-.dato .num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1.5rem;color:var(--tinta)}
+.dato .num{font-family:'Inter',sans-serif;font-weight:600;font-size:1.5rem;color:var(--tinta)}
 .dato .lbl{font-size:.85rem;color:var(--tinta-suave);max-width:160px}
 
 /* Tarjeta animada del hero: una reserva confirmándose en directo */
@@ -101,7 +101,7 @@ nav{
   background-size:22px 20px;background-position:bottom;
 }
 .flujo-cab{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
-.flujo-cab .tit{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.85rem;letter-spacing:.08em}
+.flujo-cab .tit{font-family:'Inter',sans-serif;font-weight:600;font-size:.85rem;letter-spacing:.08em}
 .flujo-cab .ia-chip{
   font-size:.7rem;font-weight:600;background:var(--verde-claro);color:var(--verde-fiscal);
   padding:4px 10px;border-radius:99px;display:flex;align-items:center;gap:5px;
@@ -111,17 +111,17 @@ nav{
 .flujo-linea{
   display:flex;justify-content:space-between;gap:14px;font-size:.86rem;
   padding:9px 0;border-bottom:1px dashed var(--linea);
-  font-family:'IBM Plex Mono',monospace;
+  font-family:'Inter',sans-serif;
 }
 .flujo-linea .campo{color:var(--tinta-suave);flex-shrink:0}
 .flujo-linea .valor{font-weight:500;min-height:1.3em;text-align:right}
 .cursor-escritura{display:inline-block;width:8px;height:1.05em;background:var(--verde-fiscal);vertical-align:text-bottom;animation:parpadeo .8s infinite}
 @keyframes parpadeo{0%,49%{opacity:1}50%,100%{opacity:0}}
-.flujo-total{display:flex;justify-content:space-between;padding-top:16px;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1rem}
+.flujo-total{display:flex;justify-content:space-between;padding-top:16px;font-family:'Inter',sans-serif;font-weight:600;font-size:1rem}
 .sello-ok{
   position:absolute;right:18px;bottom:34px;
   border:3px solid var(--sello);color:var(--sello);
-  font-family:'Sora',sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.1em;
+  font-family:'Nunito Sans',sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.1em;
   padding:7px 16px;border-radius:6px;transform:rotate(-9deg) scale(0);
   opacity:0;text-transform:uppercase;
 }
@@ -135,7 +135,7 @@ nav{
 section{padding:84px 0}
 .sec-cab{max-width:640px;margin:0 auto 56px;text-align:center}
 .sec-cab .eyebrow{
-  font-family:'IBM Plex Mono',monospace;font-size:.8rem;letter-spacing:.12em;
+  font-family:'Inter',sans-serif;font-size:.8rem;letter-spacing:.12em;
   text-transform:uppercase;color:var(--verde-fiscal);font-weight:600;display:block;margin-bottom:12px;
 }
 .sec-cab h2{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:700;margin-bottom:14px}
@@ -165,7 +165,7 @@ section{padding:84px 0}
 }
 .paso:hover{transform:translateY(-4px);box-shadow:var(--sombra)}
 .paso .num{
-  font-family:'IBM Plex Mono',monospace;font-size:.8rem;font-weight:600;
+  font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;
   color:var(--verde-fiscal);background:var(--verde-claro);
   padding:5px 11px;border-radius:99px;display:inline-block;margin-bottom:18px;
 }
@@ -176,7 +176,7 @@ section{padding:84px 0}
   border-radius:var(--radio);padding:26px 30px;display:flex;gap:18px;align-items:flex-start;
 }
 .compromiso .icono{font-size:1.6rem}
-.compromiso strong{display:block;margin-bottom:4px;font-family:'Sora',sans-serif}
+.compromiso strong{display:block;margin-bottom:4px;font-family:'Nunito Sans',sans-serif}
 .compromiso p{font-size:.95rem;color:var(--tinta-suave)}
 
 /* Aplicaciones */
@@ -304,7 +304,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 /* Métricas del panel */
 .metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:30px}
 .metrica{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:20px 22px}
-.metrica .num{font-family:'IBM Plex Mono',monospace;font-size:1.9rem;font-weight:600;color:var(--tinta)}
+.metrica .num{font-family:'Inter',sans-serif;font-size:1.9rem;font-weight:600;color:var(--tinta)}
 .metrica .lbl{font-size:.85rem;color:var(--tinta-suave);margin-top:2px}
 .metrica.destacada{border-color:var(--verde-fiscal);background:var(--verde-claro)}
 
@@ -428,15 +428,20 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 <!-- ============ NAV ============ -->
 <nav>
   <div class="contenedor nav-inner">
-    <a href="#" class="logo" aria-label="Sentria Consulting, inicio">
+    <a href="#" class="logo" aria-label="Punto Base, inicio">
       <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M46 14C40 7 28 5 20 11c-8 6-9 17-3 24 2.4 2.8 5.6 4.6 9 5.2-4-3.4-5.4-9.2-3-14 2.6-5.2 8.8-7.6 14.2-5.6L46 14Z" fill="#19233B"/>
-        <path d="M37.2 20.6c-5.4-2-11.6.4-14.2 5.6-2.4 4.8-1 10.6 3 14 1.6.3 3.3.3 5 0 5-1 9-4.8 10.3-9.6l-4.1-10Z" fill="#4D9B8F"/>
-        <path d="M18 50c6 7 18 9 26 3 8-6 9-17 3-24-2.4-2.8-5.6-4.6-9-5.2 4 3.4 5.4 9.2 3 14-2.6 5.2-8.8 7.6-14.2 5.6L18 50Z" fill="#8AB83D"/>
+        <!-- Cuerpo de la P (azul marino) -->
+        <rect x="14" y="8" width="9" height="38" rx="4" fill="#07213F"/>
+        <!-- Semicírculo derecho de la P -->
+        <path d="M23 8 h8 a14 14 0 0 1 0 28 h-8 Z" fill="#07213F"/>
+        <!-- Agujero interior de la P -->
+        <path d="M23 15 h6 a7 7 0 0 1 0 14 h-6 Z" fill="#F5F7FA"/>
+        <!-- Punto azul debajo -->
+        <circle cx="18" cy="54" r="5.5" fill="#0D68D9"/>
       </svg>
       <span class="logo-texto">
-        <span class="nombre">Sentria</span>
-        <span class="sub">Consulting</span>
+        <span class="nombre">Punto Base</span>
+        <span class="sub">Software · Gestión · Personas</span>
       </span>
     </a>
     <ul class="nav-links" id="navLinks">
@@ -455,7 +460,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
   <div>
     <span class="hero-eyebrow">✦ Agenda y reservas para clínicas</span>
     <h1>La agenda de tu clínica, <em>sin llamadas ni solapamientos</em>.</h1>
-    <p>Sentria conecta la disponibilidad real de tus médicos en Outlook con un panel sencillo para reservar citas en segundos. Cada reserva envía un <strong>WhatsApp de confirmación</strong> al paciente y el estado se actualiza solo. Sin instalar nada nuevo: trabajamos sobre el Microsoft 365 que ya tienes.</p>
+    <p>Punto Base conecta la disponibilidad real de tus médicos en Outlook con un panel sencillo para reservar citas en segundos. Cada reserva envía un <strong>WhatsApp de confirmación</strong> al paciente y el estado se actualiza solo. Sin instalar nada nuevo: trabajamos sobre el Microsoft 365 que ya tienes.</p>
     <div class="hero-acciones">
       <button class="btn btn-primario btn-grande" onclick="document.getElementById('contacto').scrollIntoView()">Solicita una demo gratuita</button>
       <a href="#aplicaciones" class="btn btn-fantasma btn-grande" style="text-decoration:none;display:inline-flex;align-items:center">Ver los módulos ↓</a>
@@ -530,7 +535,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
       <article class="servicio revelar">
         <div class="icono-s">🔒</div>
         <h3>Una cuenta por clínica, datos separados</h3>
-        <p>Cada clínica entra por su propio acceso (tuclinica.sentria.app) y solo ve sus médicos, pacientes y citas. Pensado para crecer de una consulta a muchas.</p>
+        <p>Cada clínica entra por su propio acceso (tuclinica.puntobase.app) y solo ve sus médicos, pacientes y citas. Pensado para crecer de una consulta a muchas.</p>
         <ul>
           <li>Acceso propio por clínica</li>
           <li>Datos aislados y privados</li>
@@ -607,7 +612,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
       </article>
     </div>
     <div class="apps-cta revelar">
-      <p>¿Ya eres cliente de Sentria? Accede a tu agenda desde el área de clientes.</p>
+      <p>¿Ya eres cliente de Punto Base? Accede a tu agenda desde el área de clientes.</p>
       <button class="btn btn-primario btn-grande" onclick="abrirModal('login')">Entrar al área de clientes</button>
     </div>
   </div>
@@ -674,7 +679,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         </div>
         <div class="campo-grupo check-linea">
           <input type="checkbox" id="con-terminos">
-          <label for="con-terminos" style="font-weight:400;margin:0">Acepto la <a href="#" style="color:var(--verde-fiscal)">política de privacidad</a> para que Sentria pueda contactarme. *</label>
+          <label for="con-terminos" style="font-weight:400;margin:0">Acepto la <a href="#" style="color:var(--verde-fiscal)">política de privacidad</a> para que Punto Base pueda contactarme. *</label>
         </div>
         <p class="error-msg" id="error-terminos" style="margin-bottom:14px">Debes aceptar la política de privacidad para continuar.</p>
         <button type="submit" class="btn btn-primario btn-grande btn-bloque">Solicitar mi demo gratuita</button>
@@ -692,7 +697,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="contenedor footer-inner">
-    <p>© 2026 Sentria Consulting · Agenda y reservas para clínicas</p>
+    <p>© 2026 Punto Base · Software · Gestión · Personas</p>
     <ul class="footer-links">
       <li><a href="#">Privacidad</a></li>
       <li><a href="#">Términos</a></li>
@@ -707,13 +712,14 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
     <div class="contenedor app-top-inner">
       <a href="#" class="logo" onclick="event.preventDefault(); cambiarPanel('apps')">
         <svg width="34" height="34" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M46 14C40 7 28 5 20 11c-8 6-9 17-3 24 2.4 2.8 5.6 4.6 9 5.2-4-3.4-5.4-9.2-3-14 2.6-5.2 8.8-7.6 14.2-5.6L46 14Z" fill="#19233B"/>
-          <path d="M37.2 20.6c-5.4-2-11.6.4-14.2 5.6-2.4 4.8-1 10.6 3 14 1.6.3 3.3.3 5 0 5-1 9-4.8 10.3-9.6l-4.1-10Z" fill="#4D9B8F"/>
-          <path d="M18 50c6 7 18 9 26 3 8-6 9-17 3-24-2.4-2.8-5.6-4.6-9-5.2 4 3.4 5.4 9.2 3 14-2.6 5.2-8.8 7.6-14.2 5.6L18 50Z" fill="#8AB83D"/>
+          <rect x="14" y="8" width="9" height="38" rx="4" fill="#07213F"/>
+          <path d="M23 8 h8 a14 14 0 0 1 0 28 h-8 Z" fill="#07213F"/>
+          <path d="M23 15 h6 a7 7 0 0 1 0 14 h-6 Z" fill="#F5F7FA"/>
+          <circle cx="18" cy="54" r="5.5" fill="#0D68D9"/>
         </svg>
         <span class="logo-texto">
-          <span class="nombre" style="font-size:1.1rem">Sentria</span>
-          <span class="sub" id="appClinica">Clínica Montjuïc</span>
+          <span class="nombre" style="font-size:1.1rem">Punto Base</span>
+          <span class="sub" id="appClinica">Área de clientes</span>
         </span>
       </a>
       <div class="app-tabs" role="tablist">
@@ -863,7 +869,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 
       <!-- LANZADOR (acceso rápido a módulos, opcional) -->
       <div class="app-panel" id="panel-apps">
-        <h2>Tu clínica en Sentria</h2>
+        <h2>Tu clínica en Punto Base</h2>
         <p class="sub">Elige por dónde empezar.</p>
         <div class="lanzador-grid">
           <button class="lanzador-card" onclick="cambiarPanel('panel')">
@@ -946,7 +952,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
           <input type="password" id="mreg-pass" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
         </div>
         <button type="submit" class="btn btn-primario btn-bloque">Crear cuenta</button>
-        <p style="font-size:.8rem;color:var(--tinta-suave);margin-top:14px;text-align:center">El acceso completo se activa al dar de alta tu clínica con Sentria. <a href="#contacto" onclick="cerrarModal()" style="color:var(--verde-fiscal)">Pide tu demo</a></p>
+        <p style="font-size:.8rem;color:var(--tinta-suave);margin-top:14px;text-align:center">El acceso completo se activa al dar de alta tu clínica con Punto Base. <a href="#contacto" onclick="cerrarModal()" style="color:var(--verde-fiscal)">Pide tu demo</a></p>
       </form>
     </div>
   </div>
@@ -956,7 +962,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 <script type="module">
   import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  // Proyecto Supabase real de Sentria.
+  // Proyecto Supabase real de Punto Base.
   // La "publishable key" es pública por diseño: es segura en el frontend
   // porque el acceso real está controlado por las políticas de RLS
   // que ya tienes activadas en clinicas/trabajadores/pacientes/citas/dias_libres.
@@ -978,7 +984,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 
 <script>
 /* =====================================================
-   Sentria · Agenda y reservas para clínicas
+   Punto Base · Agenda y reservas para clínicas
    DEMO en memoria. Sustituir por backend real:
    - Outlook/Graph para disponibilidad y eventos
    - Twilio para WhatsApp (envío + webhook de respuesta)
@@ -1120,7 +1126,7 @@ document.getElementById('formLogin').addEventListener('submit', async e => {
     .single();
 
   if (errTrab || !trabajador) {
-    mostrarAviso('error', 'Tu usuario existe pero no está vinculado a ninguna clínica. Contacta con Sentria.');
+    mostrarAviso('error', 'Tu usuario existe pero no está vinculado a ninguna clínica. Contacta con Punto Base.');
     await window.supabase.auth.signOut();
     return;
   }
