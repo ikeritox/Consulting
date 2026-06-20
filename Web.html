@@ -1654,6 +1654,8 @@ document.getElementById('formPaciente').addEventListener('submit', async e => {
   renderPacientes(); prepararReserva();
 });
 
+let pacienteEditandoId = null;
+
 function renderPacientes() {
   const filtro = (document.getElementById('buscaPaciente').value || '').toLowerCase().trim();
   const cont = document.getElementById('listaPacientes');
@@ -1661,6 +1663,8 @@ function renderPacientes() {
   if (!lista.length) { cont.innerHTML = '<div class="tarjeta vacio">No hay pacientes que coincidan.</div>'; return; }
 
   cont.innerHTML = lista.map(p => {
+    if (p.id === pacienteEditandoId) return tarjetaEdicionPaciente(p);
+
     const citas = reservas
       .filter(r => r.paciente_id === p.id && r.estado !== 'cancelada')
       .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
@@ -1686,12 +1690,82 @@ function renderPacientes() {
         </div>
       </div>
       ${citasHTML}
-      <div style="margin-top:12px">
+      <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn-mini ok" onclick="reservarParaPaciente('${p.id}')">➕ Reservar cita</button>
+        <button class="btn-mini" onclick="editarPaciente('${p.id}')">✎ Editar</button>
       </div>
     </div>`;
   }).join('');
 }
+
+function tarjetaEdicionPaciente(p) {
+  return `<div class="tarjeta">
+    <h3 style="margin-bottom:18px">Editar paciente</h3>
+    <div class="campo-grupo">
+      <label for="edit-pac-nombre">Nombre y apellidos</label>
+      <input type="text" id="edit-pac-nombre" value="${p.nombre.replace(/"/g, '&quot;')}">
+    </div>
+    <div class="campo-grupo">
+      <label for="edit-pac-tel">Teléfono (con WhatsApp)</label>
+      <input type="text" id="edit-pac-tel" value="${(p.telefono || '').replace(/"/g, '&quot;')}">
+    </div>
+    <div class="campo-grupo">
+      <label for="edit-pac-email">Email (opcional)</label>
+      <input type="email" id="edit-pac-email" value="${(p.email || '').replace(/"/g, '&quot;')}">
+    </div>
+    <div class="campo-grupo">
+      <label for="edit-pac-notas">Notas / avisos (opcional)</label>
+      <input type="text" id="edit-pac-notas" value="${(p.notas || '').replace(/"/g, '&quot;')}">
+    </div>
+    <p class="aviso-resv" id="avisoEditPac"></p>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primario" style="flex:1" onclick="guardarEdicionPaciente('${p.id}')">Guardar cambios</button>
+      <button class="btn btn-fantasma" onclick="cancelarEdicionPaciente()">Cancelar</button>
+    </div>
+  </div>`;
+}
+
+function editarPaciente(id) {
+  pacienteEditandoId = id;
+  renderPacientes();
+}
+function cancelarEdicionPaciente() {
+  pacienteEditandoId = null;
+  renderPacientes();
+}
+async function guardarEdicionPaciente(id) {
+  const aviso = document.getElementById('avisoEditPac');
+  const nombre = document.getElementById('edit-pac-nombre').value.trim();
+  if (!nombre) { aviso.className = 'aviso-resv error'; aviso.textContent = 'El nombre no puede quedar vacío.'; return; }
+
+  const cambios = {
+    nombre,
+    telefono: document.getElementById('edit-pac-tel').value.trim(),
+    email: document.getElementById('edit-pac-email').value.trim(),
+    notas: document.getElementById('edit-pac-notas').value.trim(),
+  };
+
+  const { data: actualizado, error } = await window.supabase
+    .from('pacientes')
+    .update(cambios)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    aviso.className = 'aviso-resv error';
+    aviso.textContent = 'No se han podido guardar los cambios.';
+    console.error(error);
+    return;
+  }
+
+  const idx = pacientes.findIndex(x => x.id === id);
+  if (idx !== -1) pacientes[idx] = actualizado;
+  pacienteEditandoId = null;
+  renderPacientes();
+  prepararReserva();
+}
+
 function reservarParaPaciente(id) {
   cambiarPanel('reservar');
   document.getElementById('rsv-paciente').value = id;
