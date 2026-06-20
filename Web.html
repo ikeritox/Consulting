@@ -723,10 +723,11 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         </span>
       </a>
       <div class="app-tabs" role="tablist">
-        <button class="app-tab activo" data-panel="panel">🏠 Panel de la semana</button>
-        <button class="app-tab" data-panel="agenda">📅 Agenda de médicos</button>
-        <button class="app-tab" data-panel="reservar">➕ Reservar hora</button>
-        <button class="app-tab" data-panel="pacientes">👥 Pacientes</button>
+        <button class="app-tab activo" data-panel="panel">Panel de la semana</button>
+        <button class="app-tab" data-panel="agenda">Agenda de médicos</button>
+        <button class="app-tab" data-panel="reservar">Reservar hora</button>
+        <button class="app-tab" data-panel="pacientes">Pacientes</button>
+        <button class="app-tab" data-panel="vacaciones">Vacaciones</button>
       </div>
       <div class="app-user">
         <span>Hola, <strong id="appNombre"></strong></span>
@@ -867,6 +868,58 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         </div>
       </div>
 
+      <!-- PANEL: VACACIONES -->
+      <div class="app-panel" id="panel-vacaciones">
+        <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a inicio</button>
+        <h2>Vacaciones</h2>
+        <p class="sub" id="vacSubtitulo">Solicita tus días libres y consulta el estado de tus solicitudes.</p>
+
+        <div class="grid-app">
+          <div>
+            <div class="tarjeta" style="margin-bottom:20px">
+              <h3>Tu saldo</h3>
+              <div class="metricas" id="vacSaldoPropio" style="grid-template-columns:repeat(3,1fr);margin-bottom:0"></div>
+            </div>
+
+            <form class="tarjeta" id="formVacaciones">
+              <h3>Solicitar vacaciones</h3>
+              <div class="fila-doble">
+                <div class="campo-grupo">
+                  <label for="vac-inicio">Desde</label>
+                  <input type="date" id="vac-inicio">
+                </div>
+                <div class="campo-grupo">
+                  <label for="vac-fin">Hasta</label>
+                  <input type="date" id="vac-fin">
+                </div>
+              </div>
+              <div class="campo-grupo">
+                <label for="vac-motivo">Motivo (opcional)</label>
+                <input type="text" id="vac-motivo" placeholder="Ej.: Vacaciones de verano">
+              </div>
+              <p class="sub" id="vacResumenDias" style="margin-bottom:14px"></p>
+              <p class="aviso-resv" id="avisoVac"></p>
+              <button type="submit" class="btn btn-primario btn-bloque">Enviar solicitud</button>
+            </form>
+          </div>
+
+          <div class="tarjeta">
+            <h3 id="vacTituloLista">Mis solicitudes</h3>
+            <div id="listaVacaciones"></div>
+          </div>
+        </div>
+
+        <!-- Solo visible para el rol secretaria -->
+        <div id="bloqueSecretariaVac" style="display:none;margin-top:34px">
+          <h3 style="font-family:'Nunito Sans';font-size:1.15rem;margin-bottom:4px">Solicitudes pendientes del equipo</h3>
+          <p class="sub" style="margin-bottom:14px">Aprueba o deniega las peticiones de vacaciones de tu clínica.</p>
+          <ul class="lista-citas" id="listaPendientesVac"></ul>
+
+          <h3 style="font-family:'Nunito Sans';font-size:1.15rem;margin:30px 0 14px">Saldo de vacaciones por trabajador</h3>
+          <div id="listaSaldosEquipo"></div>
+        </div>
+      </div>
+
       <!-- LANZADOR (acceso rápido a módulos, opcional) -->
       <div class="app-panel" id="panel-apps">
         <h2>Tu clínica en Punto Base</h2>
@@ -894,6 +947,12 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
             <span class="icono">👥</span>
             <h3>Pacientes</h3>
             <p>Fichas con contacto, notas e historial completo de citas.</p>
+            <span class="abrir">Abrir →</span>
+          </button>
+          <button class="lanzador-card" onclick="cambiarPanel('vacaciones')">
+            <span class="icono">🌴</span>
+            <h3>Vacaciones</h3>
+            <p>Solicita tus días libres y consulta tu saldo. La secretaria aprueba o deniega.</p>
             <span class="abrir">Abrir →</span>
           </button>
         </div>
@@ -1121,7 +1180,7 @@ document.getElementById('formLogin').addEventListener('submit', async e => {
   // encarga de que esta consulta solo pueda devolver SU propia fila).
   const { data: trabajador, error: errTrab } = await window.supabase
     .from('trabajadores')
-    .select('id, nombre, rol, clinica_id, clinicas(nombre)')
+    .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre)')
     .eq('auth_user_id', data.user.id)
     .single();
 
@@ -1135,6 +1194,7 @@ document.getElementById('formLogin').addEventListener('submit', async e => {
   setTimeout(() => {
     cerrarModal(); e.target.reset();
     entrarApp({
+      id: trabajador.id,
       nombre: trabajador.nombre,
       rol: trabajador.rol,
       clinicaId: trabajador.clinica_id,
@@ -1204,6 +1264,8 @@ let medicos = [];     // trabajadores con rol = 'medico'
 let pacientes = [];
 let reservas = [];    // citas
 let diasLibresTodos = []; // { trabajador_id, fecha }
+let todosTrabajadores = []; // todos los roles, para el panel de vacaciones / secretaria
+let solicitudesVacaciones = [];
 
 /* Estado de navegación */
 let semanaOffset = 0;
@@ -1252,22 +1314,28 @@ function slotsLibres(medicoId, fecha) {
 async function cargarDatosClinica() {
   const sb = window.supabase;
 
-  const [resMedicos, resPacientes, resCitas, resDiasLibres] = await Promise.all([
+  const [resMedicos, resPacientes, resCitas, resDiasLibres, resTodosTrabajadores, resVacaciones] = await Promise.all([
     sb.from('trabajadores').select('*').eq('rol', 'medico').eq('activo', true).order('nombre'),
     sb.from('pacientes').select('*').order('nombre'),
     sb.from('citas').select('*').neq('estado', 'cancelada').order('fecha').order('hora'),
     sb.from('dias_libres').select('*'),
+    sb.from('trabajadores').select('*').order('nombre'),
+    sb.from('solicitudes_vacaciones').select('*').order('creado_en', { ascending: false }),
   ]);
 
   if (resMedicos.error) console.error('Error cargando médicos:', resMedicos.error);
   if (resPacientes.error) console.error('Error cargando pacientes:', resPacientes.error);
   if (resCitas.error) console.error('Error cargando citas:', resCitas.error);
   if (resDiasLibres.error) console.error('Error cargando días libres:', resDiasLibres.error);
+  if (resTodosTrabajadores.error) console.error('Error cargando trabajadores:', resTodosTrabajadores.error);
+  if (resVacaciones.error) console.error('Error cargando solicitudes de vacaciones:', resVacaciones.error);
 
   medicos = resMedicos.data || [];
   pacientes = resPacientes.data || [];
   reservas = resCitas.data || [];
   diasLibresTodos = resDiasLibres.data || [];
+  todosTrabajadores = resTodosTrabajadores.data || [];
+  solicitudesVacaciones = resVacaciones.data || [];
 
   if (!agendaMedicoId && medicos.length) agendaMedicoId = medicos[0].id;
 }
@@ -1288,6 +1356,7 @@ async function salirApp() {
   await window.supabase.auth.signOut();
   usuarioActual = null;
   medicos = []; pacientes = []; reservas = []; diasLibresTodos = [];
+  todosTrabajadores = []; solicitudesVacaciones = [];
   app.classList.remove('abierta');
   document.body.style.overflow = '';
 }
@@ -1299,10 +1368,11 @@ function cambiarPanel(nombre) {
   if (nombre === 'agenda') renderAgenda();
   if (nombre === 'reservar') prepararReserva();
   if (nombre === 'pacientes') renderPacientes();
+  if (nombre === 'vacaciones') renderVacaciones();
 }
 document.querySelectorAll('.app-tab').forEach(t => t.addEventListener('click', () => cambiarPanel(t.dataset.panel)));
 
-function renderTodo() { renderPanel(); renderAgenda(); prepararReserva(); renderPacientes(); }
+function renderTodo() { renderPanel(); renderAgenda(); prepararReserva(); renderPacientes(); renderVacaciones(); }
 
 /* ---------- PANEL DE LA SEMANA ---------- */
 function moverSemana(d) { semanaOffset += d; renderPanel(); }
@@ -1627,6 +1697,205 @@ function reservarParaPaciente(id) {
   document.getElementById('rsv-paciente').value = id;
   document.getElementById('rsv-nuevo').style.display = 'none';
   actualizarPreviewWA();
+}
+
+/* =====================================================
+   VACACIONES
+   - Cada trabajador pide vacaciones para sí mismo.
+   - La secretaria de la clínica aprueba o deniega.
+   - El saldo (dias_vacaciones_anuales, por defecto 23) se
+     resta solo al APROBAR, contando días laborables (L-S).
+   ===================================================== */
+const esSecretaria = () => usuarioActual && usuarioActual.rol === 'secretaria';
+
+function diasLaborablesEntre(inicioISO, finISO) {
+  // Cuenta días de lunes a sábado (excluye domingo), ambos extremos incluidos.
+  let total = 0;
+  const cur = new Date(inicioISO + 'T00:00:00');
+  const fin = new Date(finISO + 'T00:00:00');
+  while (cur <= fin) {
+    if (cur.getDay() !== 0) total++; // 0 = domingo
+    cur.setDate(cur.getDate() + 1);
+  }
+  return total;
+}
+
+function trabajadorPropioActual() {
+  return todosTrabajadores.find(t => t.id === (usuarioActual && usuarioActual.id));
+}
+
+function diasUsadosPorTrabajador(trabajadorId) {
+  return solicitudesVacaciones
+    .filter(s => s.trabajador_id === trabajadorId && s.estado === 'aprobada')
+    .reduce((sum, s) => sum + s.dias_laborables, 0);
+}
+
+const chipEstadoVac = est => est === 'aprobada'
+  ? '<span class="chip verde">Aprobada</span>'
+  : est === 'denegada'
+    ? '<span class="chip rojo">Denegada</span>'
+    : '<span class="chip ambar">Pendiente</span>';
+
+function renderVacaciones() {
+  if (!usuarioActual) return;
+  const yo = trabajadorPropioActual();
+  const secretaria = esSecretaria();
+
+  document.getElementById('vacSubtitulo').textContent = secretaria
+    ? 'Solicita tus días, y revisa o resuelve las peticiones de tu equipo.'
+    : 'Solicita tus días libres y consulta el estado de tus solicitudes.';
+
+  // ---- Saldo propio ----
+  const diasAnuales = yo ? yo.dias_vacaciones_anuales : 23;
+  const usados = yo ? diasUsadosPorTrabajador(yo.id) : 0;
+  const pendientesPropias = solicitudesVacaciones.filter(s => s.trabajador_id === (yo && yo.id) && s.estado === 'pendiente').length;
+  document.getElementById('vacSaldoPropio').innerHTML = `
+    <div class="metrica destacada"><div class="num">${diasAnuales - usados}</div><div class="lbl">Días disponibles</div></div>
+    <div class="metrica"><div class="num">${usados}</div><div class="lbl">Días usados</div></div>
+    <div class="metrica"><div class="num">${diasAnuales}</div><div class="lbl">Saldo anual</div></div>`;
+
+  // ---- Mis solicitudes ----
+  document.getElementById('vacTituloLista').textContent = 'Mis solicitudes';
+  const mias = solicitudesVacaciones
+    .filter(s => s.trabajador_id === (yo && yo.id))
+    .sort((a, b) => b.creado_en.localeCompare(a.creado_en));
+  const contMias = document.getElementById('listaVacaciones');
+  contMias.innerHTML = mias.length ? mias.map(s => `
+    <div class="cita-fila" style="align-items:flex-start">
+      <span class="cinfo">
+        <strong>${fmtFecha(s.fecha_inicio)} → ${fmtFecha(s.fecha_fin)}</strong>
+        <span>${s.dias_laborables} día${s.dias_laborables === 1 ? '' : 's'} laborable${s.dias_laborables === 1 ? '' : 's'}${s.motivo ? ' · ' + s.motivo : ''}</span>
+      </span>
+      ${chipEstadoVac(s.estado)}
+    </div>`).join('') : '<p class="vacio">Todavía no has solicitado vacaciones.</p>';
+
+  // ---- Bloque exclusivo de secretaria ----
+  document.getElementById('bloqueSecretariaVac').style.display = secretaria ? 'block' : 'none';
+  if (!secretaria) return;
+
+  const pendientesEquipo = solicitudesVacaciones
+    .filter(s => s.estado === 'pendiente')
+    .sort((a, b) => a.creado_en.localeCompare(b.creado_en));
+  const contPend = document.getElementById('listaPendientesVac');
+  contPend.innerHTML = pendientesEquipo.length ? pendientesEquipo.map(s => {
+    const trab = todosTrabajadores.find(t => t.id === s.trabajador_id);
+    return `<li class="cita-fila">
+      <span class="cinfo">
+        <strong>${trab ? trab.nombre : 'Trabajador'}</strong>
+        <span>${fmtFecha(s.fecha_inicio)} → ${fmtFecha(s.fecha_fin)} · ${s.dias_laborables} día${s.dias_laborables === 1 ? '' : 's'}${s.motivo ? ' · ' + s.motivo : ''}</span>
+      </span>
+      <span class="cacc">
+        <button class="btn-mini ok" onclick="resolverSolicitudVacaciones('${s.id}','aprobada')">✓ Aprobar</button>
+        <button class="btn-mini peligro" onclick="resolverSolicitudVacaciones('${s.id}','denegada')">Denegar</button>
+      </span>
+    </li>`;
+  }).join('') : '<li class="vacio">No hay solicitudes pendientes. 🎉</li>';
+
+  // ---- Saldos del equipo (editable) ----
+  const contSaldos = document.getElementById('listaSaldosEquipo');
+  contSaldos.innerHTML = todosTrabajadores.map(t => {
+    const usadosT = diasUsadosPorTrabajador(t.id);
+    return `<div class="cita-fila">
+      <span class="cinfo">
+        <strong>${t.nombre}</strong>
+        <span>${t.rol} · ${usadosT} día${usadosT === 1 ? '' : 's'} usados este año</span>
+      </span>
+      <input type="number" min="0" step="1" value="${t.dias_vacaciones_anuales}"
+        style="width:80px;padding:8px 10px"
+        onchange="actualizarSaldoVacaciones('${t.id}', this.value)">
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('vac-inicio').addEventListener('change', actualizarResumenDiasVac);
+document.getElementById('vac-fin').addEventListener('change', actualizarResumenDiasVac);
+function actualizarResumenDiasVac() {
+  const inicio = document.getElementById('vac-inicio').value;
+  const fin = document.getElementById('vac-fin').value;
+  const resumen = document.getElementById('vacResumenDias');
+  if (!inicio || !fin || fin < inicio) { resumen.textContent = ''; return; }
+  const dias = diasLaborablesEntre(inicio, fin);
+  resumen.textContent = `${dias} día${dias === 1 ? '' : 's'} laborable${dias === 1 ? '' : 's'} (de lunes a sábado).`;
+}
+
+document.getElementById('formVacaciones').addEventListener('submit', async e => {
+  e.preventDefault();
+  const aviso = document.getElementById('avisoVac');
+  const yo = trabajadorPropioActual();
+  const inicio = document.getElementById('vac-inicio').value;
+  const fin = document.getElementById('vac-fin').value;
+  const motivo = document.getElementById('vac-motivo').value.trim();
+
+  if (!yo) { aviso.className = 'aviso-resv error'; aviso.textContent = 'No se ha encontrado tu ficha de trabajador.'; return; }
+  if (!inicio || !fin) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Indica la fecha de inicio y de fin.'; return; }
+  if (fin < inicio) { aviso.className = 'aviso-resv error'; aviso.textContent = 'La fecha de fin no puede ser anterior a la de inicio.'; return; }
+
+  const dias = diasLaborablesEntre(inicio, fin);
+  const disponibles = yo.dias_vacaciones_anuales - diasUsadosPorTrabajador(yo.id);
+  if (dias > disponibles) {
+    aviso.className = 'aviso-resv error';
+    aviso.textContent = `Solo te quedan ${disponibles} día${disponibles === 1 ? '' : 's'} disponibles y esta solicitud son ${dias}. Puedes enviarla igualmente para que la secretaria lo valore.`;
+    // No bloqueamos el envío: dejamos que sea la secretaria quien decida ante un caso límite.
+  }
+
+  const { data: nueva, error } = await window.supabase
+    .from('solicitudes_vacaciones')
+    .insert({
+      clinica_id: usuarioActual.clinicaId,
+      trabajador_id: yo.id,
+      fecha_inicio: inicio,
+      fecha_fin: fin,
+      dias_laborables: dias,
+      motivo,
+      estado: 'pendiente',
+    })
+    .select()
+    .single();
+
+  if (error) {
+    aviso.className = 'aviso-resv error';
+    aviso.textContent = 'No se ha podido enviar la solicitud.';
+    console.error(error);
+    return;
+  }
+
+  solicitudesVacaciones.unshift(nueva);
+  aviso.className = 'aviso-resv ok';
+  aviso.textContent = '✓ Solicitud enviada. Queda pendiente de aprobación.';
+  e.target.reset();
+  document.getElementById('vacResumenDias').textContent = '';
+  renderVacaciones();
+});
+
+async function resolverSolicitudVacaciones(id, nuevoEstado) {
+  const { error } = await window.supabase
+    .from('solicitudes_vacaciones')
+    .update({
+      estado: nuevoEstado,
+      resuelta_por: usuarioActual.id,
+      resuelta_en: new Date().toISOString(),
+    })
+    .eq('id', id);
+
+  if (error) { console.error(error); return; }
+
+  const s = solicitudesVacaciones.find(x => x.id === id);
+  if (s) { s.estado = nuevoEstado; s.resuelta_por = usuarioActual.id; }
+  renderVacaciones();
+}
+
+async function actualizarSaldoVacaciones(trabajadorId, nuevoValor) {
+  const valor = Math.max(0, parseInt(nuevoValor, 10) || 0);
+  const { error } = await window.supabase
+    .from('trabajadores')
+    .update({ dias_vacaciones_anuales: valor })
+    .eq('id', trabajadorId);
+
+  if (error) { console.error(error); return; }
+
+  const t = todosTrabajadores.find(x => x.id === trabajadorId);
+  if (t) t.dias_vacaciones_anuales = valor;
+  renderVacaciones();
 }
 </script>
 </body>
