@@ -966,6 +966,25 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
   </div>
 </div>
 
+<!-- ============ MODAL NOTA CLÍNICA ============ -->
+<div class="modal-fondo" id="modalNotaFondo" role="dialog" aria-modal="true" aria-labelledby="modalNotaTitulo">
+  <div class="modal">
+    <button class="cerrar-modal" onclick="cerrarModalNota()" aria-label="Cerrar">✕</button>
+    <h3 id="modalNotaTitulo" style="margin-bottom:6px;font-size:1.35rem">Nota clínica de la visita</h3>
+    <p class="sub" id="modalNotaSubtitulo" style="margin-bottom:20px"></p>
+
+    <div class="aviso-modal" id="avisoModalNota"></div>
+
+    <form id="formNotaClinica">
+      <div class="campo-grupo">
+        <label for="nota-clinica-texto">Qué se hizo, diagnóstico, tratamiento…</label>
+        <textarea id="nota-clinica-texto" placeholder="Ej.: Revisión rutinaria, sin hallazgos. Se recomienda control en 6 meses."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primario btn-bloque">Guardar nota</button>
+    </form>
+  </div>
+</div>
+
 <!-- ============ MODAL DETALLE DE CITA ============ -->
 <div class="modal-fondo" id="modalCitaFondo" role="dialog" aria-modal="true" aria-labelledby="modalCitaTitulo">
   <div class="modal">
@@ -1385,7 +1404,7 @@ async function cargarDatosClinica() {
   const [resMedicos, resPacientes, resCitas, resDiasLibres, resTodosTrabajadores, resVacaciones] = await Promise.all([
     sb.from('trabajadores').select('*').eq('rol', 'medico').eq('activo', true).order('nombre'),
     sb.from('pacientes').select('*').order('nombre'),
-    sb.from('citas').select('*').neq('estado', 'cancelada').order('fecha').order('hora'),
+    sb.from('citas').select('*').order('fecha').order('hora'),
     sb.from('dias_libres').select('*'),
     sb.from('trabajadores').select('*').order('nombre'),
     sb.from('solicitudes_vacaciones').select('*').order('creado_en', { ascending: false }),
@@ -1614,6 +1633,93 @@ async function eliminarCitaDesdeModal() {
   renderPanel(); renderAgenda(); renderPacientes();
 }
 
+/* ---------- MODAL DE NOTA CLÍNICA (historial del paciente) ---------- */
+const modalNotaFondo = document.getElementById('modalNotaFondo');
+const avisoModalNota = document.getElementById('avisoModalNota');
+let citaNotaAbiertaId = null;
+
+function abrirModalNotaClinica(citaId) {
+  const r = reservas.find(x => x.id === citaId);
+  if (!r) return;
+  citaNotaAbiertaId = citaId;
+
+  const med = medicoPorId(r.trabajador_id);
+  document.getElementById('modalNotaSubtitulo').textContent =
+    `${fmtFecha(r.fecha)} · ${r.hora.slice(0,5)} · ${med ? med.nombre : '—'} · ${r.motivo || 'Sin motivo indicado'}`;
+  document.getElementById('nota-clinica-texto').value = r.notas_clinicas || '';
+  limpiarAvisoModalNota();
+
+  modalNotaFondo.classList.add('abierto');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarModalNota() {
+  modalNotaFondo.classList.remove('abierto');
+  document.body.style.overflow = '';
+  citaNotaAbiertaId = null;
+}
+function mostrarAvisoModalNota(tipo, mensaje) { avisoModalNota.className = 'aviso-modal ' + tipo; avisoModalNota.textContent = mensaje; }
+function limpiarAvisoModalNota() { avisoModalNota.className = 'aviso-modal'; avisoModalNota.textContent = ''; }
+modalNotaFondo.addEventListener('click', e => { if (e.target === modalNotaFondo) cerrarModalNota(); });
+
+document.getElementById('formNotaClinica').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!citaNotaAbiertaId) return;
+  const texto = document.getElementById('nota-clinica-texto').value.trim();
+
+  const { error } = await window.supabase
+    .from('citas')
+    .update({ notas_clinicas: texto })
+    .eq('id', citaNotaAbiertaId);
+
+  if (error) {
+    mostrarAvisoModalNota('error', 'No se ha podido guardar la nota.');
+    console.error(error);
+    return;
+  }
+
+  const r = reservas.find(x => x.id === citaNotaAbiertaId);
+  if (r) r.notas_clinicas = texto;
+  cerrarModalNota();
+  renderPacientes();
+});
+
+/* ---------- RESUMEN CLÍNICO GENERADO POR IA ---------- */
+const URL_FUNCION_RESUMEN = 'https://freevgzknkvapsvxrxuz.supabase.co/functions/v1/generar-resumen-paciente';
+
+async function generarResumenIA(pacienteId) {
+  const boton = document.getElementById('btnResumen-' + pacienteId);
+  const textoEl = document.getElementById('textoResumen-' + pacienteId);
+  if (boton) { boton.disabled = true; boton.textContent = 'Generando…'; }
+  if (textoEl) textoEl.innerHTML = '<span class="vacio" style="padding:0">Analizando el historial del paciente…</span>';
+
+  try {
+    const { data: sesion } = await window.supabase.auth.getSession();
+    const token = sesion.session ? sesion.session.access_token : '';
+
+    const res = await fetch(URL_FUNCION_RESUMEN, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ paciente_id: pacienteId }),
+    });
+    const datos = await res.json();
+
+    if (!res.ok || datos.error) {
+      if (textoEl) textoEl.innerHTML = '<span class="vacio" style="padding:0">No se ha podido generar el resumen. Inténtalo de nuevo en un momento.</span>';
+      console.error('Error generando resumen:', datos.error);
+      return;
+    }
+
+    const p = pacientePorId(pacienteId);
+    if (p) { p.resumen_ia = datos.resumen; p.resumen_generado_en = new Date().toISOString(); }
+    renderPacientes();
+  } catch (e) {
+    console.error(e);
+    if (textoEl) textoEl.innerHTML = '<span class="vacio" style="padding:0">No se ha podido generar el resumen. Comprueba tu conexión.</span>';
+  } finally {
+    if (boton) { boton.disabled = false; boton.textContent = 'Regenerar resumen'; }
+  }
+}
+
 /* ---------- AGENDA DE MÉDICOS ---------- */
 function moverSemanaAgenda(d) { agendaOffset += d; renderAgenda(); }
 function irHoyAgenda() { agendaOffset = 0; renderAgenda(); }
@@ -1834,15 +1940,21 @@ function renderPacientes() {
   cont.innerHTML = lista.map(p => {
     if (p.id === pacienteEditandoId) return tarjetaEdicionPaciente(p);
 
+    // Incluimos también las canceladas: son las que delatan un patrón de
+    // ausencias, justo lo que el resumen de IA necesita poder detectar.
     const citas = reservas
-      .filter(r => r.paciente_id === p.id && r.estado !== 'cancelada')
+      .filter(r => r.paciente_id === p.id)
       .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
+    const citasActivas = citas.filter(r => r.estado !== 'cancelada');
     const citasHTML = citas.length ? `<ul class="lista-visitas">${citas.map(r => {
       const med = medicoPorId(r.trabajador_id);
-      return `<li class="visita">
-        ${chipEstado(r.estado)}
-        <span class="visita-fecha">${fmtFecha(r.fecha)} · ${r.hora.slice(0,5)}</span>
-        <span>${r.motivo || 'Sin motivo indicado'} · ${med ? med.nombre : '—'}</span>
+      return `<li class="visita" style="cursor:pointer;flex-direction:column;align-items:flex-start" onclick="abrirModalNotaClinica('${r.id}')">
+        <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap">
+          ${chipEstado(r.estado)}
+          <span class="visita-fecha">${fmtFecha(r.fecha)} · ${r.hora.slice(0,5)}</span>
+          <span>${r.motivo || 'Sin motivo indicado'} · ${med ? med.nombre : '—'}</span>
+        </div>
+        ${r.notas_clinicas ? `<span style="font-size:.85rem;color:var(--tinta-suave);margin-top:4px">📝 ${r.notas_clinicas}</span>` : '<span style="font-size:.8rem;color:var(--verde-fiscal);margin-top:4px">+ Añadir nota clínica</span>'}
       </li>`;
     }).join('')}</ul>` : '<p class="vacio" style="text-align:left;padding:10px 0">Sin citas registradas.</p>';
 
@@ -1855,9 +1967,23 @@ function renderPacientes() {
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
           ${p.notas ? `<span class="chip rojo">⚠ ${p.notas}</span>` : ''}
-          <span class="chip gris">${citas.length} cita${citas.length === 1 ? '' : 's'}</span>
+          <span class="chip gris">${citasActivas.length} cita${citasActivas.length === 1 ? '' : 's'}</span>
         </div>
       </div>
+
+      <div style="background:var(--verde-claro);border-radius:10px;padding:14px 16px;margin:14px 0">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px">
+          <strong style="font-size:.88rem;color:var(--verde-fiscal)">🧠 Resumen clínico (IA)</strong>
+          <button class="btn-mini" onclick="generarResumenIA('${p.id}')" id="btnResumen-${p.id}">Regenerar resumen</button>
+        </div>
+        <p style="font-size:.9rem;color:var(--tinta)" id="textoResumen-${p.id}">${
+          p.resumen_ia
+            ? p.resumen_ia.replace(/</g, '&lt;')
+            : '<span class="vacio" style="padding:0">Todavía no se ha generado un resumen. Pulsa «Regenerar resumen».</span>'
+        }</p>
+        ${p.resumen_generado_en ? `<p style="font-size:.74rem;color:var(--tinta-suave);margin-top:6px">Actualizado ${fmtFecha(p.resumen_generado_en.slice(0,10))}</p>` : ''}
+      </div>
+
       ${citasHTML}
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn-mini ok" onclick="reservarParaPaciente('${p.id}')">➕ Reservar cita</button>
