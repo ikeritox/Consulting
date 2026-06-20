@@ -289,6 +289,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 .tarjeta{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:26px;box-shadow:var(--sombra)}
 .tarjeta h3{font-size:1.05rem;margin-bottom:16px}
 .grid-app{display:grid;grid-template-columns:360px 1fr;gap:26px;align-items:start}
+.grid-vac{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
 .btn-mini{background:var(--papel);border:1px solid var(--linea);border-radius:8px;padding:6px 12px;font-size:.82rem;font-weight:600;color:var(--tinta);transition:border-color .15s}
 .btn-mini:hover{border-color:var(--tinta)}
 .btn-mini.peligro{color:var(--sello)}
@@ -398,6 +399,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 
 @media (max-width:900px){
   .grid-app{grid-template-columns:1fr}
+  .grid-vac{grid-template-columns:1fr}
   .servicios-grid{grid-template-columns:1fr}
   .apps-grid{grid-template-columns:repeat(2,1fr)}
   .lanzador-grid{grid-template-columns:1fr}
@@ -874,34 +876,32 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         <h2>Vacaciones</h2>
         <p class="sub" id="vacSubtitulo">Solicita tus días libres y consulta el estado de tus solicitudes.</p>
 
-        <div class="grid-app">
-          <div>
-            <div class="tarjeta" style="margin-bottom:20px">
-              <h3>Tu saldo</h3>
-              <div class="metricas" id="vacSaldoPropio" style="grid-template-columns:repeat(3,1fr);margin-bottom:0"></div>
-            </div>
+        <div class="tarjeta" style="margin-bottom:26px">
+          <h3>Tu saldo</h3>
+          <div class="metricas" id="vacSaldoPropio" style="grid-template-columns:repeat(3,1fr);margin-bottom:0"></div>
+        </div>
 
-            <form class="tarjeta" id="formVacaciones">
-              <h3>Solicitar vacaciones</h3>
-              <div class="fila-doble">
-                <div class="campo-grupo">
-                  <label for="vac-inicio">Desde</label>
-                  <input type="date" id="vac-inicio">
-                </div>
-                <div class="campo-grupo">
-                  <label for="vac-fin">Hasta</label>
-                  <input type="date" id="vac-fin">
-                </div>
+        <div class="grid-vac">
+          <form class="tarjeta" id="formVacaciones">
+            <h3>Solicitar vacaciones</h3>
+            <div class="fila-doble">
+              <div class="campo-grupo">
+                <label for="vac-inicio">Desde</label>
+                <input type="date" id="vac-inicio">
               </div>
               <div class="campo-grupo">
-                <label for="vac-motivo">Motivo (opcional)</label>
-                <input type="text" id="vac-motivo" placeholder="Ej.: Vacaciones de verano">
+                <label for="vac-fin">Hasta</label>
+                <input type="date" id="vac-fin">
               </div>
-              <p class="sub" id="vacResumenDias" style="margin-bottom:14px"></p>
-              <p class="aviso-resv" id="avisoVac"></p>
-              <button type="submit" class="btn btn-primario btn-bloque">Enviar solicitud</button>
-            </form>
-          </div>
+            </div>
+            <div class="campo-grupo">
+              <label for="vac-motivo">Motivo (opcional)</label>
+              <input type="text" id="vac-motivo" placeholder="Ej.: Vacaciones de verano">
+            </div>
+            <p class="sub" id="vacResumenDias" style="margin-bottom:14px"></p>
+            <p class="aviso-resv" id="avisoVac"></p>
+            <button type="submit" class="btn btn-primario btn-bloque">Enviar solicitud</button>
+          </form>
 
           <div class="tarjeta">
             <h3 id="vacTituloLista">Mis solicitudes</h3>
@@ -909,8 +909,8 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
           </div>
         </div>
 
-        <!-- Solo visible para el rol secretaria -->
-        <div id="bloqueSecretariaVac" style="display:none;margin-top:34px">
+        <!-- Solo visible para el rol recepción -->
+        <div id="bloqueRecepcionVac" style="display:none;margin-top:34px">
           <h3 style="font-family:'Nunito Sans';font-size:1.15rem;margin-bottom:4px">Solicitudes pendientes del equipo</h3>
           <p class="sub" style="margin-bottom:14px">Aprueba o deniega las peticiones de vacaciones de tu clínica.</p>
           <ul class="lista-citas" id="listaPendientesVac"></ul>
@@ -952,7 +952,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
           <button class="lanzador-card" onclick="cambiarPanel('vacaciones')">
             <span class="icono">🌴</span>
             <h3>Vacaciones</h3>
-            <p>Solicita tus días libres y consulta tu saldo. La secretaria aprueba o deniega.</p>
+            <p>Solicita tus días libres y consulta tu saldo. Recepción aprueba o deniega.</p>
             <span class="abrir">Abrir →</span>
           </button>
         </div>
@@ -1264,7 +1264,7 @@ let medicos = [];     // trabajadores con rol = 'medico'
 let pacientes = [];
 let reservas = [];    // citas
 let diasLibresTodos = []; // { trabajador_id, fecha }
-let todosTrabajadores = []; // todos los roles, para el panel de vacaciones / secretaria
+let todosTrabajadores = []; // todos los roles, para el panel de vacaciones / recepción
 let solicitudesVacaciones = [];
 
 /* Estado de navegación */
@@ -1702,11 +1702,11 @@ function reservarParaPaciente(id) {
 /* =====================================================
    VACACIONES
    - Cada trabajador pide vacaciones para sí mismo.
-   - La secretaria de la clínica aprueba o deniega.
+   - Recepción aprueba o deniega.
    - El saldo (dias_vacaciones_anuales, por defecto 23) se
      resta solo al APROBAR, contando días laborables (L-S).
    ===================================================== */
-const esSecretaria = () => usuarioActual && usuarioActual.rol === 'secretaria';
+const esRecepcion = () => usuarioActual && usuarioActual.rol === 'recepcion';
 
 function diasLaborablesEntre(inicioISO, finISO) {
   // Cuenta días de lunes a sábado (excluye domingo), ambos extremos incluidos.
@@ -1739,9 +1739,9 @@ const chipEstadoVac = est => est === 'aprobada'
 function renderVacaciones() {
   if (!usuarioActual) return;
   const yo = trabajadorPropioActual();
-  const secretaria = esSecretaria();
+  const esDeRecepcion = esRecepcion();
 
-  document.getElementById('vacSubtitulo').textContent = secretaria
+  document.getElementById('vacSubtitulo').textContent = esDeRecepcion
     ? 'Solicita tus días, y revisa o resuelve las peticiones de tu equipo.'
     : 'Solicita tus días libres y consulta el estado de tus solicitudes.';
 
@@ -1769,9 +1769,9 @@ function renderVacaciones() {
       ${chipEstadoVac(s.estado)}
     </div>`).join('') : '<p class="vacio">Todavía no has solicitado vacaciones.</p>';
 
-  // ---- Bloque exclusivo de secretaria ----
-  document.getElementById('bloqueSecretariaVac').style.display = secretaria ? 'block' : 'none';
-  if (!secretaria) return;
+  // ---- Bloque exclusivo de recepción ----
+  document.getElementById('bloqueRecepcionVac').style.display = esDeRecepcion ? 'block' : 'none';
+  if (!esDeRecepcion) return;
 
   const pendientesEquipo = solicitudesVacaciones
     .filter(s => s.estado === 'pendiente')
@@ -1834,8 +1834,8 @@ document.getElementById('formVacaciones').addEventListener('submit', async e => 
   const disponibles = yo.dias_vacaciones_anuales - diasUsadosPorTrabajador(yo.id);
   if (dias > disponibles) {
     aviso.className = 'aviso-resv error';
-    aviso.textContent = `Solo te quedan ${disponibles} día${disponibles === 1 ? '' : 's'} disponibles y esta solicitud son ${dias}. Puedes enviarla igualmente para que la secretaria lo valore.`;
-    // No bloqueamos el envío: dejamos que sea la secretaria quien decida ante un caso límite.
+    aviso.textContent = `Solo te quedan ${disponibles} día${disponibles === 1 ? '' : 's'} disponibles y esta solicitud son ${dias}. Puedes enviarla igualmente para que recepción lo valore.`;
+    // No bloqueamos el envío: dejamos que sea recepción quien decida ante un caso límite.
   }
 
   const { data: nueva, error } = await window.supabase
