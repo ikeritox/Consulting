@@ -1642,14 +1642,13 @@ function renderAgenda() {
     if (esLibre) {
       cuerpo = '<div class="agenda-libre">🌴 Día libre / vacaciones</div>';
     } else {
-      const ocupadosHoras = reservas
-        .filter(r => r.trabajador_id === medico.id && r.fecha === fecha && r.estado !== 'cancelada')
-        .map(r => r.hora.slice(0,5));
+      const reservasDelDia = reservas
+        .filter(r => r.trabajador_id === medico.id && r.fecha === fecha && r.estado !== 'cancelada');
       const slots = generarSlots(medico);
       cuerpo = `<div class="slots-grid">${slots.map(s => {
-        const ocupada = ocupadosHoras.includes(s);
-        return ocupada
-          ? `<div class="slot ocupado" title="Ocupado">${s}</div>`
+        const reservaSlot = reservasDelDia.find(r => r.hora.slice(0,5) === s);
+        return reservaSlot
+          ? `<div class="slot ocupado" title="Ver / modificar esta cita" style="cursor:pointer" onclick="abrirModalCita('${reservaSlot.id}')">${s}</div>`
           : `<div class="slot libre" title="Reservar este hueco" onclick="reservarDesdeSlot('${medico.id}','${fecha}','${s}')">${s}</div>`;
       }).join('')}</div>`;
     }
