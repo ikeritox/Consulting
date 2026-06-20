@@ -1160,6 +1160,41 @@ const supabaseListo = window.supabase
   ? Promise.resolve()
   : new Promise(resolve => window.addEventListener('supabase-listo', resolve, { once: true }));
 
+/* ---------- Restaurar sesión al refrescar la página ----------
+   Supabase ya guarda la sesión (access + refresh token) en localStorage
+   y la renueva sola en segundo plano. Lo único que faltaba es que, al
+   cargar la página, comprobemos si ya hay una sesión válida y, si es
+   así, entremos directo a la app en vez de mostrar la landing pública. */
+(async () => {
+  await supabaseListo;
+  const { data } = await window.supabase.auth.getSession();
+  if (!data.session) return; // no había sesión: se queda en la landing, como ahora
+
+  const usuario = await buscarTrabajadorPorAuthId(data.session.user.id);
+  if (!usuario) { await window.supabase.auth.signOut(); return; }
+
+  entrarApp(usuario);
+})();
+
+// Dado un usuario ya autenticado en Supabase Auth, busca su ficha de
+// trabajador (clínica, rol, saldo de vacaciones...). Se usa tanto al hacer
+// login como al restaurar una sesión ya existente (p. ej. tras refrescar).
+async function buscarTrabajadorPorAuthId(authUserId) {
+  const { data: trabajador, error } = await window.supabase
+    .from('trabajadores')
+    .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre)')
+    .eq('auth_user_id', authUserId)
+    .single();
+  if (error || !trabajador) return null;
+  return {
+    id: trabajador.id,
+    nombre: trabajador.nombre,
+    rol: trabajador.rol,
+    clinicaId: trabajador.clinica_id,
+    clinica: trabajador.clinicas ? trabajador.clinicas.nombre : 'Tu clínica',
+  };
+}
+
 document.getElementById('formLogin').addEventListener('submit', async e => {
   e.preventDefault();
   const email = document.getElementById('log-email').value.trim().toLowerCase();
@@ -1178,28 +1213,18 @@ document.getElementById('formLogin').addEventListener('submit', async e => {
   // El login en Auth ha funcionado. Ahora buscamos el trabajador vinculado
   // a este usuario, que es lo que nos dice su clínica y su rol (RLS se
   // encarga de que esta consulta solo pueda devolver SU propia fila).
-  const { data: trabajador, error: errTrab } = await window.supabase
-    .from('trabajadores')
-    .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre)')
-    .eq('auth_user_id', data.user.id)
-    .single();
+  const usuario = await buscarTrabajadorPorAuthId(data.user.id);
 
-  if (errTrab || !trabajador) {
+  if (!usuario) {
     mostrarAviso('error', 'Tu usuario existe pero no está vinculado a ninguna clínica. Contacta con Punto Base.');
     await window.supabase.auth.signOut();
     return;
   }
 
-  mostrarAviso('ok', `¡Hola, ${trabajador.nombre}! Entrando en tu agenda…`);
+  mostrarAviso('ok', `¡Hola, ${usuario.nombre}! Entrando en tu agenda…`);
   setTimeout(() => {
     cerrarModal(); e.target.reset();
-    entrarApp({
-      id: trabajador.id,
-      nombre: trabajador.nombre,
-      rol: trabajador.rol,
-      clinicaId: trabajador.clinica_id,
-      clinica: trabajador.clinicas ? trabajador.clinicas.nombre : 'Tu clínica',
-    });
+    entrarApp(usuario);
   }, 500);
 });
 
