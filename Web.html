@@ -966,6 +966,49 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
   </div>
 </div>
 
+<!-- ============ MODAL DETALLE DE CITA ============ -->
+<div class="modal-fondo" id="modalCitaFondo" role="dialog" aria-modal="true" aria-labelledby="modalCitaTitulo">
+  <div class="modal">
+    <button class="cerrar-modal" onclick="cerrarModalCita()" aria-label="Cerrar">✕</button>
+    <h3 id="modalCitaTitulo" style="margin-bottom:6px;font-size:1.35rem">Detalle de la cita</h3>
+    <p class="sub" id="modalCitaEstado" style="margin-bottom:20px"></p>
+
+    <div class="aviso-modal" id="avisoModalCita"></div>
+
+    <form id="formEditarCita">
+      <div class="campo-grupo">
+        <label>Paciente</label>
+        <input type="text" id="mcita-paciente" disabled>
+      </div>
+      <div class="campo-grupo">
+        <label>Médico</label>
+        <input type="text" id="mcita-medico" disabled>
+      </div>
+      <div class="fila-doble">
+        <div class="campo-grupo">
+          <label for="mcita-fecha">Día</label>
+          <input type="date" id="mcita-fecha">
+        </div>
+        <div class="campo-grupo">
+          <label for="mcita-hora">Hora libre</label>
+          <select id="mcita-hora"></select>
+        </div>
+      </div>
+      <div class="campo-grupo">
+        <label for="mcita-motivo">Motivo de la cita</label>
+        <input type="text" id="mcita-motivo">
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button type="submit" class="btn btn-primario" style="flex:1">Guardar cambios</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button type="button" class="btn btn-fantasma" style="flex:1" id="btnConfirmarCita" onclick="confirmarDesdeModal()">✓ Confirmar</button>
+        <button type="button" class="btn btn-fantasma" style="flex:1;color:var(--sello);border-color:var(--sello)" onclick="eliminarCitaDesdeModal()">Eliminar cita</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- ============ MODAL LOGIN / REGISTRO ============ -->
 <div class="modal-fondo" id="modalFondo" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
   <div class="modal">
@@ -1427,7 +1470,7 @@ function renderPanel() {
     const citasHTML = delDia.length
       ? delDia.map(r => {
           const med = medicoPorId(r.trabajador_id), pac = pacientePorId(r.paciente_id);
-          return `<div class="cita-mini" style="border-left-color:${colorMedico(r.trabajador_id)}">
+          return `<div class="cita-mini" style="border-left-color:${colorMedico(r.trabajador_id)};cursor:pointer" onclick="abrirModalCita('${r.id}')">
             <span class="hora">${r.hora.slice(0,5)}</span>
             <span class="pac">${pac ? pac.nombre : '—'}</span>
             <span class="med">${med ? med.nombre : '—'}</span>
@@ -1446,8 +1489,8 @@ function renderPanel() {
   cont.innerHTML = pend.length ? pend.map(r => {
     const med = medicoPorId(r.trabajador_id), pac = pacientePorId(r.paciente_id);
     return `<li class="cita-fila">
-      <span class="chora">${fmtFecha(r.fecha).replace(' de ',' ')}<br>${r.hora.slice(0,5)}</span>
-      <span class="cinfo"><strong>${pac ? pac.nombre : '—'}</strong><span>${med ? med.nombre : '—'} · ${r.motivo || 'Sin motivo indicado'}</span></span>
+      <span class="chora" style="cursor:pointer" onclick="abrirModalCita('${r.id}')">${fmtFecha(r.fecha).replace(' de ',' ')}<br>${r.hora.slice(0,5)}</span>
+      <span class="cinfo" style="cursor:pointer" onclick="abrirModalCita('${r.id}')"><strong>${pac ? pac.nombre : '—'}</strong><span>${med ? med.nombre : '—'} · ${r.motivo || 'Sin motivo indicado'}</span></span>
       ${chipEstado(r.estado)}
       <span class="cacc">
         <button class="btn-mini ok" onclick="confirmarReserva('${r.id}')">✓ Confirmar</button>
@@ -1466,6 +1509,108 @@ async function cancelarReserva(id) {
   const { error } = await window.supabase.from('citas').update({ estado: 'cancelada' }).eq('id', id);
   if (error) { console.error(error); return; }
   const r = reservas.find(x => x.id === id); if (r) r.estado = 'cancelada';
+  renderPanel(); renderAgenda(); renderPacientes();
+}
+
+/* ---------- MODAL DE DETALLE / EDICIÓN DE CITA ---------- */
+const modalCitaFondo = document.getElementById('modalCitaFondo');
+const avisoModalCita = document.getElementById('avisoModalCita');
+let citaAbiertaId = null;
+
+function abrirModalCita(id) {
+  const r = reservas.find(x => x.id === id);
+  if (!r) return;
+  citaAbiertaId = id;
+
+  const med = medicoPorId(r.trabajador_id), pac = pacientePorId(r.paciente_id);
+  document.getElementById('mcita-paciente').value = pac ? pac.nombre : '—';
+  document.getElementById('mcita-medico').value = med ? med.nombre : '—';
+  document.getElementById('mcita-fecha').value = r.fecha;
+  document.getElementById('mcita-motivo').value = r.motivo || '';
+  document.getElementById('modalCitaEstado').innerHTML = chipEstado(r.estado);
+  document.getElementById('btnConfirmarCita').style.display = r.estado === 'pendiente' ? '' : 'none';
+  limpiarAvisoModalCita();
+
+  actualizarHorasModalCita(r.hora.slice(0,5));
+
+  modalCitaFondo.classList.add('abierto');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarModalCita() {
+  modalCitaFondo.classList.remove('abierto');
+  document.body.style.overflow = '';
+  citaAbiertaId = null;
+  limpiarAvisoModalCita();
+}
+function mostrarAvisoModalCita(tipo, mensaje) { avisoModalCita.className = 'aviso-modal ' + tipo; avisoModalCita.textContent = mensaje; }
+function limpiarAvisoModalCita() { avisoModalCita.className = 'aviso-modal'; avisoModalCita.textContent = ''; }
+modalCitaFondo.addEventListener('click', e => { if (e.target === modalCitaFondo) cerrarModalCita(); });
+
+// Recalcula los huecos libres del médico para el día seleccionado, e incluye
+// siempre la hora original de la cita (aunque ya esté "ocupada" por ella misma).
+function actualizarHorasModalCita(horaSeleccionada) {
+  const r = reservas.find(x => x.id === citaAbiertaId);
+  if (!r) return;
+  const fecha = document.getElementById('mcita-fecha').value;
+  const libres = new Set(slotsLibres(r.trabajador_id, fecha));
+  if (fecha === r.fecha) libres.add(r.hora.slice(0,5)); // su propio hueco sigue siendo válido
+  const horas = [...libres].sort();
+  const selHora = document.getElementById('mcita-hora');
+  selHora.innerHTML = horas.length
+    ? horas.map(h => `<option value="${h}">${h}</option>`).join('')
+    : '<option value="">Sin huecos ese día</option>';
+  if (horaSeleccionada && horas.includes(horaSeleccionada)) selHora.value = horaSeleccionada;
+}
+document.getElementById('mcita-fecha').addEventListener('change', () => actualizarHorasModalCita());
+
+document.getElementById('formEditarCita').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!citaAbiertaId) return;
+  const r = reservas.find(x => x.id === citaAbiertaId);
+  if (!r) return;
+
+  const fecha = document.getElementById('mcita-fecha').value;
+  const hora = document.getElementById('mcita-hora').value;
+  const motivo = document.getElementById('mcita-motivo').value.trim();
+
+  if (!fecha || !hora) { mostrarAvisoModalCita('error', 'Elige un día y un hueco libre.'); return; }
+  if (!motivo) { mostrarAvisoModalCita('error', 'Indica el motivo de la cita.'); return; }
+
+  const { error } = await window.supabase
+    .from('citas')
+    .update({ fecha, hora, motivo })
+    .eq('id', citaAbiertaId);
+
+  if (error) {
+    mostrarAvisoModalCita('error', error.code === '23505' ? 'Ese hueco ya está ocupado.' : 'No se han podido guardar los cambios.');
+    console.error(error);
+    return;
+  }
+
+  r.fecha = fecha; r.hora = hora; r.motivo = motivo;
+  mostrarAvisoModalCita('ok', '✓ Cita actualizada.');
+  renderPanel(); renderAgenda(); renderPacientes();
+}); 
+
+async function confirmarDesdeModal() {
+  if (!citaAbiertaId) return;
+  await confirmarReserva(citaAbiertaId);
+  cerrarModalCita();
+}
+
+async function eliminarCitaDesdeModal() {
+  if (!citaAbiertaId) return;
+  if (!confirm('¿Eliminar esta cita? Esta acción no se puede deshacer.')) return;
+
+  const { error } = await window.supabase.from('citas').delete().eq('id', citaAbiertaId);
+  if (error) {
+    mostrarAvisoModalCita('error', 'No se ha podido eliminar la cita.');
+    console.error(error);
+    return;
+  }
+
+  reservas = reservas.filter(x => x.id !== citaAbiertaId);
+  cerrarModalCita();
   renderPanel(); renderAgenda(); renderPacientes();
 }
 
