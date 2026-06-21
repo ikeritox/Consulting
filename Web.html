@@ -352,6 +352,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 .slot{border:1px solid var(--linea);border-radius:8px;padding:8px 4px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:.82rem;font-weight:600;background:var(--blanco);color:var(--tinta-suave)}
 .slot.libre{border-color:var(--verde-fiscal);color:var(--verde-fiscal);cursor:pointer}
 .slot.libre:hover{background:var(--verde-claro)}
+.slot.libre.elegido{background:var(--verde-fiscal);color:#fff;box-shadow:0 0 0 2px var(--verde-claro)}
 .slot.ocupado{background:var(--papel);text-decoration:line-through;opacity:.75}
 
 /* Reservar: vista previa WhatsApp */
@@ -784,54 +785,63 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         <button class="volver-apps" onclick="cambiarPanel('apps')">← Volver a inicio</button>
         <h2>Reservar hora</h2>
         <p class="sub">Elige paciente, médico y hueco libre. Al guardar, el paciente recibe un WhatsApp de confirmación.</p>
-        <div class="grid-app">
-          <form class="tarjeta" id="formReserva">
+
+        <form id="formReserva">
+          <div class="tarjeta" style="margin-bottom:20px">
             <h3>Nueva cita</h3>
-            <div class="campo-grupo">
-              <label for="rsv-paciente">Paciente</label>
-              <select id="rsv-paciente"></select>
-            </div>
-            <div id="rsv-nuevo" style="display:none">
-              <div class="campo-grupo">
-                <label for="rsv-nuevo-nombre">Nombre del nuevo paciente</label>
-                <input type="text" id="rsv-nuevo-nombre" placeholder="Ej.: Marta Giralt">
-              </div>
-              <div class="campo-grupo">
-                <label for="rsv-nuevo-tel">Teléfono (con WhatsApp)</label>
-                <input type="text" id="rsv-nuevo-tel" placeholder="Ej.: 612 345 678">
-              </div>
-            </div>
-            <div class="campo-grupo">
-              <label for="rsv-medico">Médico</label>
-              <select id="rsv-medico"></select>
-            </div>
             <div class="fila-doble">
               <div class="campo-grupo">
-                <label for="rsv-fecha">Día</label>
-                <input type="date" id="rsv-fecha">
+                <label for="rsv-paciente">Paciente</label>
+                <select id="rsv-paciente"></select>
               </div>
               <div class="campo-grupo">
-                <label for="rsv-hora">Hora libre</label>
-                <select id="rsv-hora"></select>
+                <label for="rsv-medico">Médico</label>
+                <select id="rsv-medico"></select>
               </div>
             </div>
-            <div class="campo-grupo">
+            <div id="rsv-nuevo" style="display:none">
+              <div class="fila-doble">
+                <div class="campo-grupo">
+                  <label for="rsv-nuevo-nombre">Nombre del nuevo paciente</label>
+                  <input type="text" id="rsv-nuevo-nombre" placeholder="Ej.: Marta Giralt">
+                </div>
+                <div class="campo-grupo">
+                  <label for="rsv-nuevo-tel">Teléfono (con WhatsApp)</label>
+                  <input type="text" id="rsv-nuevo-tel" placeholder="Ej.: 612 345 678">
+                </div>
+              </div>
+            </div>
+            <div class="campo-grupo" style="margin-bottom:0">
               <label for="rsv-motivo">Motivo de la cita</label>
               <input type="text" id="rsv-motivo" placeholder="Ej.: Revisión anual">
             </div>
-            <p class="aviso-resv" id="avisoResv"></p>
-            <button type="submit" class="btn btn-primario btn-bloque" style="margin-top:6px">Reservar y enviar WhatsApp</button>
-          </form>
-
-          <div class="tarjeta">
-            <h3>Vista previa del WhatsApp</h3>
-            <div class="wa-preview">
-              <div class="wa-cab">💬 WhatsApp · Clínica Montjuïc</div>
-              <div class="wa-burbuja" id="waBurbuja"></div>
-              <div class="wa-hora" id="waHora"></div>
-            </div>
-            <p class="sub" style="margin-top:16px;font-size:.85rem">El paciente responde <strong>SÍ</strong> para confirmar o <strong>NO</strong> para cancelar. El estado se actualiza solo en el panel.</p>
           </div>
+
+          <div class="tarjeta" style="margin-bottom:20px">
+            <h3>Elige el hueco</h3>
+            <p class="sub" style="margin-bottom:14px">Los huecos en verde están libres. Los grises ya están ocupados.</p>
+            <div class="semana-nav">
+              <button type="button" onclick="moverSemanaReserva(-1)">‹ Anterior</button>
+              <span class="rango" id="rangoSemanaReserva"></span>
+              <button type="button" onclick="moverSemanaReserva(1)">Siguiente ›</button>
+              <button type="button" onclick="irHoyReserva()" style="margin-left:auto">Hoy</button>
+            </div>
+            <div id="reservaDias"></div>
+            <p class="sub" id="rsvHuecoElegido" style="margin-top:14px;font-weight:600;color:var(--tinta)"></p>
+          </div>
+
+          <p class="aviso-resv" id="avisoResv"></p>
+          <button type="submit" class="btn btn-primario btn-bloque btn-grande">Reservar y enviar WhatsApp</button>
+        </form>
+
+        <div class="tarjeta" style="margin-top:20px;max-width:480px">
+          <h3>Vista previa del WhatsApp</h3>
+          <div class="wa-preview">
+            <div class="wa-cab">💬 WhatsApp · Clínica Montjuïc</div>
+            <div class="wa-burbuja" id="waBurbuja"></div>
+            <div class="wa-hora" id="waHora"></div>
+          </div>
+          <p class="sub" style="margin-top:16px;font-size:.85rem">El paciente responde <strong>SÍ</strong> para confirmar o <strong>NO</strong> para cancelar. El estado se actualiza solo en el panel.</p>
         </div>
       </div>
 
@@ -1770,13 +1780,19 @@ function renderAgenda() {
 }
 function seleccionarMedico(id) { agendaMedicoId = id; renderAgenda(); }
 function reservarDesdeSlot(medicoId, fecha, hora) {
-  cambiarPanel('reservar');
+  cambiarPanel('reservar'); // esto ya llama a prepararReserva(), que resetea la selección
   document.getElementById('rsv-medico').value = medicoId;
-  document.getElementById('rsv-fecha').value = fecha;
-  actualizarHoras(() => { document.getElementById('rsv-hora').value = hora; actualizarPreviewWA(); });
+  // Calculamos a qué semana (offset) pertenece la fecha pedida, para que el
+  // grid se abra mostrando justo esa semana en vez de la actual.
+  reservaOffset = Math.round((new Date(fecha + 'T00:00:00') - inicioSemana(0)) / (7 * 24 * 60 * 60 * 1000));
+  elegirHuecoReserva(fecha, hora);
 }
 
 /* ---------- RESERVAR HORA ---------- */
+/* ---------- Selector visual de hueco (grid semanal, igual que en Agenda) ---------- */
+let reservaOffset = 0;
+let reservaFechaHoraElegida = null; // { fecha, hora } o null si nada seleccionado aún
+
 function prepararReserva() {
   const selPac = document.getElementById('rsv-paciente');
   selPac.innerHTML = pacientes.map(p => `<option value="${p.id}">${p.nombre}${p.telefono ? ' · ' + p.telefono : ''}</option>`).join('')
@@ -1785,21 +1801,70 @@ function prepararReserva() {
   selMed.innerHTML = medicos.length
     ? medicos.map(m => `<option value="${m.id}">${m.nombre}${m.especialidad ? ' · ' + m.especialidad : ''}</option>`).join('')
     : '<option value="">Sin médicos disponibles</option>';
-  document.getElementById('rsv-fecha').value = hoyISO();
-  document.getElementById('rsv-fecha').min = hoyISO();
-  actualizarHoras();
-}
-function actualizarHoras(despues) {
-  const medicoId = document.getElementById('rsv-medico').value;
-  const fecha = document.getElementById('rsv-fecha').value;
-  const libres = medicoId ? slotsLibres(medicoId, fecha) : [];
-  const selHora = document.getElementById('rsv-hora');
-  selHora.innerHTML = libres.length
-    ? libres.map(s => `<option value="${s}">${s}</option>`).join('')
-    : '<option value="">Sin huecos ese día</option>';
+  reservaOffset = 0;
+  reservaFechaHoraElegida = null;
+  renderGridReserva();
   actualizarPreviewWA();
-  if (typeof despues === 'function') despues();
 }
+function moverSemanaReserva(d) { reservaOffset += d; renderGridReserva(); }
+function irHoyReserva() { reservaOffset = 0; renderGridReserva(); }
+
+function elegirHuecoReserva(fecha, hora) {
+  reservaFechaHoraElegida = { fecha, hora };
+  renderGridReserva();
+  actualizarPreviewWA();
+}
+
+function renderGridReserva() {
+  document.getElementById('rangoSemanaReserva').textContent = rangoSemanaTxt(reservaOffset);
+  const medicoId = document.getElementById('rsv-medico').value;
+  const cont = document.getElementById('reservaDias');
+  const elegido = document.getElementById('rsvHuecoElegido');
+
+  if (!medicoId) {
+    cont.innerHTML = '<p class="vacio">Elige primero un médico para ver su disponibilidad.</p>';
+    elegido.textContent = '';
+    return;
+  }
+  const medico = medicoPorId(medicoId);
+  const hoy = hoyISO();
+
+  cont.innerHTML = diasSemana(reservaOffset).map(d => {
+    const fecha = iso(d);
+    const esLibre = diaLibre(medicoId, fecha);
+    let cuerpo;
+    if (esLibre) {
+      cuerpo = '<div class="agenda-libre">🌴 Día libre / vacaciones</div>';
+    } else {
+      const ocupadosHoras = reservas
+        .filter(r => r.trabajador_id === medicoId && r.fecha === fecha && r.estado !== 'cancelada')
+        .map(r => r.hora.slice(0,5));
+      const slots = generarSlots(medico);
+      cuerpo = `<div class="slots-grid">${slots.map(s => {
+        const ocupada = ocupadosHoras.includes(s);
+        const seleccionado = reservaFechaHoraElegida && reservaFechaHoraElegida.fecha === fecha && reservaFechaHoraElegida.hora === s;
+        if (ocupada) return `<div class="slot ocupado" title="Ocupado">${s}</div>`;
+        return `<div class="slot libre${seleccionado ? ' elegido' : ''}" title="Elegir este hueco" onclick="elegirHuecoReserva('${fecha}','${s}')">${s}</div>`;
+      }).join('')}</div>`;
+    }
+    return `<div class="agenda-dia">
+      <div class="ad-cab">
+        <h4 style="text-transform:capitalize">${fmtFechaLarga(fecha)}${fecha === hoy ? ' · hoy' : ''}</h4>
+      </div>
+      ${cuerpo}
+    </div>`;
+  }).join('');
+
+  elegido.textContent = reservaFechaHoraElegida
+    ? `Hueco elegido: ${fmtFechaLarga(reservaFechaHoraElegida.fecha)} a las ${reservaFechaHoraElegida.hora}`
+    : 'Todavía no has elegido un hueco.';
+}
+document.getElementById('rsv-medico').addEventListener('change', () => {
+  reservaFechaHoraElegida = null;
+  renderGridReserva();
+  actualizarPreviewWA();
+});
+
 function actualizarPreviewWA() {
   const selPac = document.getElementById('rsv-paciente');
   let nombrePac;
@@ -1810,15 +1875,12 @@ function actualizarPreviewWA() {
     nombrePac = p ? p.nombre.split(' ')[0] : 'el paciente';
   }
   const med = medicoPorId(document.getElementById('rsv-medico').value);
-  const fecha = document.getElementById('rsv-fecha').value;
-  const hora = document.getElementById('rsv-hora').value;
-  const fechaTxt = fecha ? fmtFechaLarga(fecha) : '—';
+  const fechaTxt = reservaFechaHoraElegida ? fmtFechaLarga(reservaFechaHoraElegida.fecha) : '—';
+  const hora = reservaFechaHoraElegida ? reservaFechaHoraElegida.hora : '';
   const burbuja = document.getElementById('waBurbuja');
   burbuja.innerHTML = `Hola ${nombrePac}, te confirmamos tu cita en <strong>${(usuarioActual && usuarioActual.clinica) || 'la clínica'}</strong> con <strong>${med ? med.nombre : '—'}</strong> el <strong>${fechaTxt}</strong>${hora ? ' a las <strong>' + hora + '</strong>' : ''}.<br><br>Responde <strong>SÍ</strong> para confirmar o <strong>NO</strong> para cancelar.`;
   document.getElementById('waHora').textContent = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 }
-['rsv-medico','rsv-fecha'].forEach(id => document.getElementById(id).addEventListener('change', () => actualizarHoras()));
-document.getElementById('rsv-hora').addEventListener('change', actualizarPreviewWA);
 document.getElementById('rsv-paciente').addEventListener('change', e => {
   document.getElementById('rsv-nuevo').style.display = e.target.value === 'nuevo' ? 'block' : 'none';
   actualizarPreviewWA();
@@ -1830,14 +1892,13 @@ document.getElementById('formReserva').addEventListener('submit', async e => {
   const aviso = document.getElementById('avisoResv');
   const selPac = document.getElementById('rsv-paciente');
   const medicoId = document.getElementById('rsv-medico').value;
-  const fecha = document.getElementById('rsv-fecha').value;
-  const hora = document.getElementById('rsv-hora').value;
   const motivo = document.getElementById('rsv-motivo').value.trim();
 
   if (!medicoId) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Esta clínica no tiene médicos dados de alta todavía.'; return; }
-  if (!fecha || !hora) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Elige un día y un hueco libre.'; return; }
+  if (!reservaFechaHoraElegida) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Elige un hueco libre en el calendario.'; return; }
   if (!motivo) { aviso.className = 'aviso-resv error'; aviso.textContent = 'Indica el motivo de la cita.'; return; }
 
+  const { fecha, hora } = reservaFechaHoraElegida;
   const sb = window.supabase;
   const clinicaId = usuarioActual.clinicaId;
 
@@ -1863,7 +1924,8 @@ document.getElementById('formReserva').addEventListener('submit', async e => {
   // tabla "citas" es la última línea de defensa real contra dobles reservas)
   if (!slotsLibres(medicoId, fecha).includes(hora)) {
     aviso.className = 'aviso-resv error'; aviso.textContent = 'Ese hueco se acaba de ocupar. Elige otro.';
-    actualizarHoras(); return;
+    reservaFechaHoraElegida = null;
+    renderGridReserva(); return;
   }
 
   // Crear la cita en Supabase (en producción: además, POST a Outlook + WhatsApp por Twilio)
@@ -1885,7 +1947,8 @@ document.getElementById('formReserva').addEventListener('submit', async e => {
       ? 'Ese hueco se acaba de ocupar. Elige otro.'
       : 'No se ha podido guardar la cita.';
     console.error(errCita);
-    actualizarHoras();
+    reservaFechaHoraElegida = null;
+    renderGridReserva();
     return;
   }
 
