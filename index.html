@@ -1280,7 +1280,7 @@ const supabaseListo = window.supabase
 async function buscarTrabajadorPorAuthId(authUserId) {
   const { data: trabajador, error } = await window.supabase
     .from('trabajadores')
-    .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre)')
+    .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
     .eq('auth_user_id', authUserId)
     .single();
   if (error || !trabajador) return null;
@@ -1290,6 +1290,7 @@ async function buscarTrabajadorPorAuthId(authUserId) {
     rol: trabajador.rol,
     clinicaId: trabajador.clinica_id,
     clinica: trabajador.clinicas ? trabajador.clinicas.nombre : 'Tu clínica',
+    tipo: trabajador.clinicas ? (trabajador.clinicas.tipo || 'clinica') : 'clinica',
   };
 }
 
@@ -1462,8 +1463,19 @@ async function cargarDatosClinica() {
 
   if (!agendaMedicoId && medicos.length) agendaMedicoId = medicos[0].id;
 }
-
 /* ---------- Entrada / salida de la app ---------- */
+async function cargarModulo(tipo) {
+  if (tipo === 'almacen') {
+    const modulo = await import('./modulos/almacen.js');
+    await modulo.initAlmacen();
+  } else {
+    // módulo clínica: comportamiento original
+    await cargarDatosClinica();
+    cambiarPanel('panel');
+    renderTodo();
+  }
+}
+
 async function entrarApp(usuario) {
   usuarioActual = usuario;
   document.getElementById('appNombre').textContent = usuario.nombre;
@@ -1471,15 +1483,16 @@ async function entrarApp(usuario) {
   app.classList.add('abierta');
   document.body.style.overflow = 'hidden';
 
-  await cargarDatosClinica();
-  cambiarPanel('panel');
-  renderTodo();
+await cargarModulo(usuario.tipo);
 }
 async function salirApp() {
   await window.supabase.auth.signOut();
   usuarioActual = null;
   medicos = []; pacientes = []; reservas = []; diasLibresTodos = [];
   todosTrabajadores = []; solicitudesVacaciones = [];
+  // Limpiar CSS del módulo almacén si fue cargado
+  const almCSS = document.getElementById('alm-css');
+  if (almCSS) almCSS.remove();
   app.classList.remove('abierta');
   document.body.style.overflow = '';
 }
