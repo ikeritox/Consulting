@@ -1508,7 +1508,6 @@ async function cargarSelectorDevSiProcede(authUserId) {
   const sel = document.getElementById('selectorEmpresaDev');
   sel.style.display = 'block';
 
-  // Carga todos los trabajadores de la clínica actual
   const { data: trabajadores } = await window.supabase
     .from('trabajadores')
     .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
@@ -1540,48 +1539,8 @@ async function cargarSelectorDevSiProcede(authUserId) {
     document.getElementById('appNombre').textContent = usuarioActual.nombre;
     document.getElementById('appClinica').textContent = usuarioActual.clinica;
 
-    // Recarga datos con el nuevo usuario activo
     await cargarDatosClinica();
     renderTodo();
-  };
-}
-    // Busca primero tu propia fila en esa empresa
-    let { data: trab } = await window.supabase
-      .from('trabajadores')
-      .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
-      .eq('clinica_id', clinicaId)
-      .eq('auth_user_id', DEV_AUTH_USER_ID)
-      .maybeSingle();
-
-    // Si no tienes fila propia, coge el primer trabajador activo
-    if (!trab) {
-      const { data: fallback } = await window.supabase
-        .from('trabajadores')
-        .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
-        .eq('clinica_id', clinicaId)
-        .eq('activo', true)
-        .order('nombre')
-        .limit(1)
-        .single();
-      trab = fallback;
-    }
-
-    if (!trab) { alert('Esta empresa no tiene trabajadores activos.'); return; }
-
-    usuarioActual = {
-      id: trab.id,
-      nombre: trab.nombre,
-      rol: trab.rol,
-      clinicaId: trab.clinica_id,
-      clinica: trab.clinicas?.nombre || 'Empresa',
-      tipo: trab.clinicas?.tipo || 'clinica',
-    };
-
-    document.getElementById('appNombre').textContent = usuarioActual.nombre;
-    document.getElementById('appClinica').textContent = usuarioActual.clinica;
-
-    await cargarModulo(usuarioActual.tipo);
-    await cargarSelectorDevSiProcede(DEV_AUTH_USER_ID);
   };
 }
 
