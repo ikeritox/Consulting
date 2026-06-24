@@ -760,8 +760,9 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
         <button class="app-tab" data-panel="vacaciones">Vacaciones</button>
       </div>
       <div class="app-user">
-        <span>Hola, <strong id="appNombre"></strong></span>
-        <button class="btn btn-fantasma" style="padding:8px 16px;font-size:.85rem" onclick="salirApp()">Cerrar sesión</button>
+      <span>Hola, <strong id="appNombre"></strong></span>
+      <select id="selectorEmpresaDev" style="display:none;padding:7px 12px;border:1.5px solid var(--linea);border-radius:9px;font-family:inherit;font-size:.85rem;background:var(--papel);color:var(--tinta)" onchange="window._devCambiarEmpresa(this.value)"></select>
+      <button class="btn btn-fantasma" style="padding:8px 16px;font-size:.85rem" onclick="salirApp()">Cerrar sesión</button>
       </div>
     </div>
   </div>
@@ -1483,7 +1484,65 @@ async function entrarApp(usuario) {
   app.classList.add('abierta');
   document.body.style.overflow = 'hidden';
 
-await cargarModulo(usuario.tipo);
+  await cargarModulo(usuario.tipo);
+
+  // Nueva línea — solo actúa si eres tú
+  const { data } = await window.supabase.auth.getSession();
+  if (data.session) await cargarSelectorDevSiProcede(data.session.user.id);
+}
+const DEV_AUTH_USER_ID = 'd1338591-c8b4-4e2a-9e83-95c4e234d639';
+
+async function cargarSelectorDevSiProcede(authUserId) {
+  if (authUserId !== DEV_AUTH_USER_ID) return;
+
+  // Política superadmin necesaria en Supabase (ver abajo)
+  const { data: clinicas } = await window.supabase
+    .from('clinicas')
+    .select('id, nombre, tipo')
+    .order('nombre');
+
+  if (!clinicas || clinicas.length < 2) return;
+
+  const sel = document.getElementById('selectorEmpresaDev');
+  sel.style.display = 'block';
+  sel.innerHTML = clinicas.map(c =>
+    `<option value="${c.id}" ${c.id === usuarioActual.clinicaId ? 'selected' : ''}>
+      🏢 ${c.nombre}
+    </option>`
+  ).join('');
+
+  window._devCambiarEmpresa = async (clinicaId) => {
+    const { data: trab } = await window.supabase
+      .from('trabajadores')
+      .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
+      .eq('clinica_id', clinicaId)
+      .eq('activo', true)
+      .order('nombre')
+      .limit(1)
+      .single();
+
+    if (!trab) { alert('Esta empresa no tiene trabajadores activos.'); return; }
+
+    // Limpia el módulo actual si era almacén
+    const almCSS = document.getElementById('alm-css');
+    if (almCSS) almCSS.remove();
+
+    usuarioActual = {
+      id: trab.id,
+      nombre: trab.nombre,
+      rol: trab.rol,
+      clinicaId: trab.clinica_id,
+      clinica: trab.clinicas?.nombre || 'Empresa',
+      tipo: trab.clinicas?.tipo || 'clinica',
+    };
+
+    document.getElementById('appNombre').textContent = usuarioActual.nombre;
+    document.getElementById('appClinica').textContent = usuarioActual.clinica;
+
+    await cargarModulo(usuarioActual.tipo);
+    // Recarga el selector con la nueva selección
+    await cargarSelectorDevSiProcede(DEV_AUTH_USER_ID);
+  };
 }
 async function salirApp() {
   await window.supabase.auth.signOut();
