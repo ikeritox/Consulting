@@ -1505,44 +1505,46 @@ const DEV_AUTH_USER_ID = 'd1338591-c8b4-4e2a-9e83-95c4e234d639';
 async function cargarSelectorDevSiProcede(authUserId) {
   if (authUserId !== DEV_AUTH_USER_ID) return;
 
-  const { data: clinicas } = await window.supabase
-    .from('clinicas')
-    .select('id, nombre, tipo')
-    .order('nombre');
-
-  if (!clinicas || clinicas.length < 2) return;
-
   const sel = document.getElementById('selectorEmpresaDev');
   sel.style.display = 'block';
-  sel.innerHTML = clinicas.map(c =>
-    `<option value="${c.id}|${c.tipo}" ${c.id === usuarioActual.clinicaId ? 'selected' : ''}>
-      ${c.nombre}
+
+  // Carga todos los trabajadores de la clínica actual
+  const { data: trabajadores } = await window.supabase
+    .from('trabajadores')
+    .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
+    .eq('clinica_id', usuarioActual.clinicaId)
+    .eq('activo', true)
+    .order('nombre');
+
+  if (!trabajadores || !trabajadores.length) return;
+
+  sel.innerHTML = trabajadores.map(t =>
+    `<option value="${t.id}" ${t.id === usuarioActual.id ? 'selected' : ''}>
+      ${t.nombre} · ${t.rol}
     </option>`
   ).join('');
 
-  window._devCambiarEmpresa = async (valor) => {
-    const [clinicaId, tipo] = valor.split('|');
+  window._devCambiarEmpresa = async (trabajadorId) => {
+    const trab = trabajadores.find(t => t.id === trabajadorId);
+    if (!trab) return;
 
-    const almCSS = document.getElementById('alm-css');
-    if (almCSS) almCSS.remove();
+    usuarioActual = {
+      id: trab.id,
+      nombre: trab.nombre,
+      rol: trab.rol,
+      clinicaId: trab.clinica_id,
+      clinica: trab.clinicas?.nombre || 'Empresa',
+      tipo: trab.clinicas?.tipo || 'clinica',
+    };
 
-    const tabContainer = document.querySelector('.app-tabs');
-    const contenedor = document.querySelector('.app-cuerpo .contenedor');
+    document.getElementById('appNombre').textContent = usuarioActual.nombre;
+    document.getElementById('appClinica').textContent = usuarioActual.clinica;
 
-    if (tipo === 'clinica') {
-      tabContainer.innerHTML = `
-        <button class="app-tab activo" data-panel="panel">Panel de la semana</button>
-        <button class="app-tab" data-panel="agenda">Agenda de médicos</button>
-        <button class="app-tab" data-panel="reservar">Reservar hora</button>
-        <button class="app-tab" data-panel="pacientes">Pacientes</button>
-        <button class="app-tab" data-panel="vacaciones">Vacaciones</button>
-      `;
-      tabContainer.querySelectorAll('.app-tab').forEach(t =>
-        t.addEventListener('click', () => cambiarPanel(t.dataset.panel))
-      );
-      contenedor.innerHTML = document.getElementById('_clinica_panels_backup').innerHTML;
-    }
-
+    // Recarga datos con el nuevo usuario activo
+    await cargarDatosClinica();
+    renderTodo();
+  };
+}
     // Busca primero tu propia fila en esa empresa
     let { data: trab } = await window.supabase
       .from('trabajadores')
