@@ -740,7 +740,7 @@ footer p{font-size:.88rem;color:var(--tinta-suave)}
 <div class="app" id="app">
   <div class="app-top">
     <div class="contenedor app-top-inner">
-      <a href="#" class="logo" onclick="event.preventDefault(); cambiarPanel('apps')">
+      <a href="#" class="logo" onclick="event.preventDefault(); if(document.getElementById('panel-apps')) cambiarPanel('apps');">
         <svg width="34" height="34" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <rect x="14" y="8" width="9" height="38" rx="4" fill="#07213F"/>
           <path d="M23 8 h8 a14 14 0 0 1 0 28 h-8 Z" fill="#07213F"/>
@@ -1478,6 +1478,16 @@ async function cargarModulo(tipo) {
 }
 
 async function entrarApp(usuario) {
+  // Backup de paneles de clínica para poder restaurarlos al cambiar empresa
+  const contenedor = document.querySelector('.app-cuerpo .contenedor');
+  if (!document.getElementById('_clinica_panels_backup')) {
+    const backup = document.createElement('div');
+    backup.id = '_clinica_panels_backup';
+    backup.style.display = 'none';
+    backup.innerHTML = contenedor.innerHTML;
+    document.body.appendChild(backup);
+  }
+
   usuarioActual = usuario;
   document.getElementById('appNombre').textContent = usuario.nombre;
   document.getElementById('appClinica').textContent = usuario.clinica || 'Área de clientes';
@@ -1486,7 +1496,7 @@ async function entrarApp(usuario) {
 
   await cargarModulo(usuario.tipo);
 
-  // Nueva línea — solo actúa si eres tú
+  // Solo actúa si eres tú
   const { data } = await window.supabase.auth.getSession();
   if (data.session) await cargarSelectorDevSiProcede(data.session.user.id);
 }
@@ -1495,7 +1505,6 @@ const DEV_AUTH_USER_ID = 'd1338591-c8b4-4e2a-9e83-95c4e234d639';
 async function cargarSelectorDevSiProcede(authUserId) {
   if (authUserId !== DEV_AUTH_USER_ID) return;
 
-  // Política superadmin necesaria en Supabase (ver abajo)
   const { data: clinicas } = await window.supabase
     .from('clinicas')
     .select('id, nombre, tipo')
@@ -1506,26 +1515,56 @@ async function cargarSelectorDevSiProcede(authUserId) {
   const sel = document.getElementById('selectorEmpresaDev');
   sel.style.display = 'block';
   sel.innerHTML = clinicas.map(c =>
-    `<option value="${c.id}" ${c.id === usuarioActual.clinicaId ? 'selected' : ''}>
-      🏢 ${c.nombre}
+    `<option value="${c.id}|${c.tipo}" ${c.id === usuarioActual.clinicaId ? 'selected' : ''}>
+      ${c.nombre}
     </option>`
   ).join('');
 
-  window._devCambiarEmpresa = async (clinicaId) => {
-    const { data: trab } = await window.supabase
+  window._devCambiarEmpresa = async (valor) => {
+    const [clinicaId, tipo] = valor.split('|');
+
+    const almCSS = document.getElementById('alm-css');
+    if (almCSS) almCSS.remove();
+
+    const tabContainer = document.querySelector('.app-tabs');
+    const contenedor = document.querySelector('.app-cuerpo .contenedor');
+
+    if (tipo === 'clinica') {
+      tabContainer.innerHTML = `
+        <button class="app-tab activo" data-panel="panel">Panel de la semana</button>
+        <button class="app-tab" data-panel="agenda">Agenda de médicos</button>
+        <button class="app-tab" data-panel="reservar">Reservar hora</button>
+        <button class="app-tab" data-panel="pacientes">Pacientes</button>
+        <button class="app-tab" data-panel="vacaciones">Vacaciones</button>
+      `;
+      tabContainer.querySelectorAll('.app-tab').forEach(t =>
+        t.addEventListener('click', () => cambiarPanel(t.dataset.panel))
+      );
+      contenedor.innerHTML = document.getElementById('_clinica_panels_backup').innerHTML;
+    }
+
+    // Busca primero tu propia fila en esa empresa
+    let { data: trab } = await window.supabase
       .from('trabajadores')
       .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
       .eq('clinica_id', clinicaId)
-      .eq('activo', true)
-      .order('nombre')
-      .limit(1)
-      .single();
+      .eq('auth_user_id', DEV_AUTH_USER_ID)
+      .maybeSingle();
+
+    // Si no tienes fila propia, coge el primer trabajador activo
+    if (!trab) {
+      const { data: fallback } = await window.supabase
+        .from('trabajadores')
+        .select('id, nombre, rol, clinica_id, dias_vacaciones_anuales, clinicas(nombre, tipo)')
+        .eq('clinica_id', clinicaId)
+        .eq('activo', true)
+        .order('nombre')
+        .limit(1)
+        .single();
+      trab = fallback;
+    }
 
     if (!trab) { alert('Esta empresa no tiene trabajadores activos.'); return; }
-
-    // Limpia el módulo actual si era almacén
-    const almCSS = document.getElementById('alm-css');
-    if (almCSS) almCSS.remove();
 
     usuarioActual = {
       id: trab.id,
@@ -1540,10 +1579,12 @@ async function cargarSelectorDevSiProcede(authUserId) {
     document.getElementById('appClinica').textContent = usuarioActual.clinica;
 
     await cargarModulo(usuarioActual.tipo);
-    // Recarga el selector con la nueva selección
     await cargarSelectorDevSiProcede(DEV_AUTH_USER_ID);
   };
 }
+
+
+
 async function salirApp() {
   await window.supabase.auth.signOut();
   usuarioActual = null;
@@ -1554,8 +1595,11 @@ async function salirApp() {
   if (almCSS) almCSS.remove();
   app.classList.remove('abierta');
   document.body.style.overflow = '';
+  const backup = document.getElementById('_clinica_panels_backup');
+  if (backup) backup.remove();
 }
 function cambiarPanel(nombre) {
+  if (!document.getElementById('panel-' + nombre)) return;
   document.querySelectorAll('.app-tab').forEach(t => t.classList.toggle('activo', t.dataset.panel === nombre));
   document.querySelectorAll('.app-panel').forEach(p => p.classList.toggle('activo', p.id === 'panel-' + nombre));
   document.querySelector('.app-cuerpo').scrollTop = 0;
